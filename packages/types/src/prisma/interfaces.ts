@@ -30,7 +30,7 @@ export type stripe_status = "created" | "succeeded" | "updated" | "failed" | "de
 
 export type transaction_status = "PENDING" | "COMPLETED" | "DENIED";
 
-export type usage_mode = "last_saved" | "min5" | "day_" | "cycle_";
+export type usage_mode = "last_saved" | "min5" | "day" | "cycle";
 
 export type user_min_right = "read" | "upload" | "write" | "admin";
 
@@ -39,6 +39,12 @@ export type user_role = "read" | "upload" | "write" | "admin";
 export type user_status = "ONLINE" | "OFFLINE" | "BUSY" | "AWAY";
 
 export type volatility = "HIGH" | "MEDIUM" | "LOW";
+
+export type RainType = "GAME" | "CHAT" | "MANUAL";
+
+export type MemberRole = "ADMIN" | "MEMBER" | "GUEST";
+
+export type InvitationStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 
 export interface Achievement {
   id: string;
@@ -63,7 +69,7 @@ export interface User {
   createdAt: Date;
   updatedAt: Date | null;
   twoFactorEnabled: boolean | null;
-  role: string | null;
+  role: MemberRole | null;
   banned: boolean | null;
   banReason: string | null;
   banExpires: Date | null;
@@ -179,7 +185,7 @@ export interface Profile {
   shopId: string;
   operator: Operator;
   userProfileUseridtouser: User;
-  gamesession: Gamesession[];
+  gamesession: GameSession[];
   tournamententry: Tournamententry[];
   transactions: Transaction[];
 }
@@ -233,7 +239,7 @@ export interface Game {
   password: string | null;
   category: GameCategory;
   operator: Operator | null;
-  gamesession: Gamesession[];
+  gamesession: GameSession[];
   tournamentgame: Tournamentgame[];
 }
 
@@ -288,8 +294,8 @@ export interface Invitation {
   organizationId: string;
   email: string;
   role: string | null;
-  status: string;
   expiresAt: Date;
+  status: InvitationStatus;
   inviterId: string;
   user: User;
   organization: Organization;
@@ -311,18 +317,18 @@ export interface Chatmessage {
   createdAt: Date;
   userId: string;
   roomId: string | null;
-  chatroom: Chatroom | null;
+  chatroom: ChatRoom | null;
   user: User;
 }
 
-export interface Chatroom {
+export interface ChatRoom {
   id: string;
   name: string;
   isGameRoom: boolean;
   createdAt: Date;
   gameSessionId: string | null;
   chatmessage: Chatmessage[];
-  gamesession: Gamesession | null;
+  gamesession: GameSession | null;
 }
 
 export interface Friendship {
@@ -336,7 +342,7 @@ export interface Friendship {
   userFriendshipUseridtouser: User;
 }
 
-export interface Gamesession {
+export interface GameSession {
   id: string;
   startTime: Date;
   endTime: Date | null;
@@ -348,7 +354,7 @@ export interface Gamesession {
   tournamentId: string | null;
   active: boolean;
   profileId: string;
-  chatroom: Chatroom[];
+  chatRoom: ChatRoom[];
   game: Game;
   profile: Profile;
   tournament: Tournament | null;
@@ -405,7 +411,7 @@ export interface Tournament {
   updatedAt: Date | null;
   operatorId: string;
   leaderboard: JsonValue | null;
-  gamesession: Gamesession[];
+  gamesession: GameSession[];
   operator: Operator;
   tournamententry: Tournamententry[];
   tournamentgame: Tournamentgame[];
@@ -456,7 +462,7 @@ export interface Transaction {
   gameSessionId: string | null;
   profileId: string | null;
   cashtag: string | null;
-  gamesession: Gamesession | null;
+  gamesession: GameSession | null;
   profile: Profile | null;
   product: Product | null;
   productid: string | null;
@@ -493,7 +499,7 @@ export interface RainHistory {
   id: string;
   userId: string;
   amount: number;
-  rainType: string;
+  rainType: RainType;
   createdAt: Date;
   RainBet: RainBet[];
   user: User;
@@ -571,7 +577,7 @@ export interface VipInfo {
   now_cash_back: number | null;
   yesterday_cash_back: number | null;
   history_cash_back: number | null;
-  gamesession: Gamesession[];
+  gamesession: GameSession[];
   operator: Operator | null;
   transactions: Transaction[];
   user: User | null;

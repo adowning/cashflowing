@@ -1,20 +1,22 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./client"
+  provider      = "prisma-client-js"
+  output        = "./client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 generator typescriptInterfaces {
-  provider          = "ts-node ./node_modules/.bin/prisma-generator-typescript-interfaces"
+  // provider          = "ts-node /home/ash/Documents/cashflow/packages/db/node_modules/.bin/prisma-generator-typescript-interfaces"
+  provider          = "ts-node /home/ash/Documents/cashflow/node_modules/.bin/prisma-generator-typescript-interfaces"
   output            = "../../types/src/prisma/interfaces.ts"
   optionalRelations = "false"
-  client            = "../../../../node_modules/.prisma/client"
+  client            = "../prisma/client"
   prettier          = "false"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model Achievement {
@@ -42,7 +44,7 @@ model User {
   createdAt                          DateTime          @default(now())
   updatedAt                          DateTime?         @updatedAt
   twoFactorEnabled                   Boolean?
-  role                               String?
+  role                               MemberRole?
   banned                             Boolean?
   banReason                          String?
   banExpires                         DateTime?
@@ -174,7 +176,7 @@ model Profile {
   shopId                  String
   operator                Operator          @relation(fields: [shopId], references: [id], onDelete: Cascade)
   userProfileUseridtouser User              @relation("profile_userIdTouser", fields: [userId], references: [id], onDelete: Cascade)
-  gamesession             Gamesession[]
+  gamesession             GameSession[]
   tournamententry         Tournamententry[]
   transactions            Transaction[]
 
@@ -233,7 +235,7 @@ model Game {
   password                     String?
   category                     GameCategory     @default(SLOTS)
   operator                     Operator?        @relation(fields: [operatorId], references: [id])
-  gamesession                  Gamesession[]
+  gamesession                  GameSession[]
   tournamentgame               Tournamentgame[]
 
   @@map("games")
@@ -291,19 +293,20 @@ model Member {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique(name: "userId_organizationId", [organizationId, userId])
   @@map("members")
 }
 
 model Invitation {
-  id             String       @id @default(cuid())
+  id             String           @id @default(cuid())
   organizationId String
   email          String
   role           String?
-  status         String
   expiresAt      DateTime
+  status         InvitationStatus @default(PENDING)
   inviterId      String
-  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User             @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@map("invitations")
 }
@@ -326,7 +329,7 @@ model Chatmessage {
   createdAt DateTime    @default(now())
   userId    String
   roomId    String?
-  chatroom  Chatroom?   @relation(fields: [roomId], references: [id])
+  chatroom  ChatRoom?   @relation(fields: [roomId], references: [id])
   user      User        @relation(fields: [userId], references: [id])
 
   @@index([channel], map: "chat_channel_idx")
@@ -334,14 +337,14 @@ model Chatmessage {
   @@map("chatmessages")
 }
 
-model Chatroom {
+model ChatRoom {
   id            String        @id @default(cuid())
   name          String
   isGameRoom    Boolean       @default(false)
   createdAt     DateTime      @default(now())
-  gameSessionId String?       @unique // Assuming one chatroom per game session
+  gameSessionId String? // Assuming one chatroom per game session
   chatmessage   Chatmessage[]
-  gamesession   Gamesession?  @relation(fields: [gameSessionId], references: [id])
+  gamesession   GameSession?  @relation(fields: [gameSessionId], references: [id])
 
   @@map("chatrooms")
 }
@@ -360,7 +363,7 @@ model Friendship {
   @@map("friendships")
 }
 
-model Gamesession {
+model GameSession {
   id           String        @id @default(cuid())
   startTime    DateTime      @default(now())
   endTime      DateTime?
@@ -372,7 +375,7 @@ model Gamesession {
   tournamentId String?
   active       Boolean       @default(false)
   profileId    String
-  chatroom     Chatroom[]
+  chatRoom     ChatRoom[]
   game         Game          @relation(fields: [gameId], references: [id])
   profile      Profile       @relation(fields: [profileId], references: [id])
   tournament   Tournament?   @relation(fields: [tournamentId], references: [id])
@@ -438,7 +441,7 @@ model Tournament {
   updatedAt       DateTime?         @updatedAt
   operatorId      String
   leaderboard     Json?
-  gamesession     Gamesession[]
+  gamesession     GameSession[]
   operator        Operator          @relation(fields: [operatorId], references: [id])
   tournamententry Tournamententry[]
   tournamentgame  Tournamentgame[]
@@ -498,7 +501,7 @@ model Transaction {
   gameSessionId  String?
   profileId      String?
   cashtag        String?
-  gamesession    Gamesession?      @relation(fields: [gameSessionId], references: [id])
+  gamesession    GameSession?      @relation(fields: [gameSessionId], references: [id])
   profile        Profile?          @relation(fields: [profileId], references: [id])
   product        Product?          @relation("ProductToTransaction", fields: [productid], references: [id])
   productid      String?
@@ -544,7 +547,7 @@ model RainHistory {
   id         String       @id @default(cuid())
   userId     String
   amount     Int
-  rainType   String
+  rainType   RainType
   createdAt  DateTime     @default(now())
   RainBet    RainBet[]
   user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -628,7 +631,7 @@ model VipInfo {
   now_cash_back                Int?          @default(0)
   yesterday_cash_back          Int?          @default(0)
   history_cash_back            Int?          @default(0)
-  gamesession                  Gamesession[]
+  gamesession                  GameSession[]
   operator                     Operator?     @relation(fields: [operatorId], references: [id])
   transactions                 Transaction[]
   user                         User?         @relation(fields: [userid], references: [id])
@@ -766,8 +769,8 @@ enum transaction_status {
 enum usage_mode {
   last_saved
   min5
-  day_       @map("\"day\"")
-  cycle_     @map("\"cycle\"")
+  day
+  cycle
 }
 
 enum user_min_right {
@@ -795,4 +798,22 @@ enum volatility {
   HIGH
   MEDIUM
   LOW
+}
+
+enum RainType {
+  GAME
+  CHAT
+  MANUAL
+}
+
+enum MemberRole {
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
