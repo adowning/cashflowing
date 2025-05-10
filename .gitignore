@@ -12,6 +12,7 @@ bun.lockb
 
 # Prisma
 packages/db/node_modules/
+packages/db/prisma/client/
 packages/db/dist/
 packages/db/src/generated/ # If you generate client into src
 node_modules/.prisma/client/ # Default output for Prisma client
