@@ -12,14 +12,23 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.7.0",
+    "@prevalentware/prisma-canela": "^0.1.6",
     "@prisma/extension-optimize": "^1.1.8",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@zenstackhq/openapi": "^2.14.2",
+    "@zenstackhq/runtime": "2.14.2",
+    "@zenstackhq/server": "^2.14.2",
+    "@zenstackhq/tanstack-query": "^2.14.2",
     "bcryptjs": "^3.0.2"
   },
   "devDependencies": {
+    "@hey-api/client-axios": "^0.7.0",
+    "@hey-api/openapi-ts": "^0.67.3",
     "bun-types": "latest",
     "prisma-generator-typescript-interfaces": "^2.1.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "zenstack": "2.14.2"
   },
   "prisma": {
     "seed": "src/seed.ts",

@@ -182,7 +182,7 @@ exports.Prisma.AccountScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.PlatformSessionScalarFieldEnum = {
+exports.Prisma.SessionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   activeGameId: 'activeGameId',
@@ -388,7 +388,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   title: 'title',
   description: 'description',
   url: 'url',
-  type: 'type',
+  productType: 'productType',
   bonusCode: 'bonusCode',
   bonusTotalInCredits: 'bonusTotalInCredits',
   priceInCents: 'priceInCents',
@@ -405,7 +405,7 @@ exports.Prisma.ProductScalarFieldEnum = {
 
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
-  type: 'type',
+  notficationType: 'notficationType',
   title: 'title',
   message: 'message',
   isRead: 'isRead',
@@ -450,7 +450,7 @@ exports.Prisma.TournamentgameScalarFieldEnum = {
 
 exports.Prisma.TransactionScalarFieldEnum = {
   id: 'id',
-  type: 'type',
+  transactionType: 'transactionType',
   amount: 'amount',
   amountCredits: 'amountCredits',
   buyerCashtag: 'buyerCashtag',
@@ -696,7 +696,7 @@ exports.Prisma.ModelName = {
   Achievement: 'Achievement',
   User: 'User',
   Account: 'Account',
-  PlatformSession: 'PlatformSession',
+  Session: 'Session',
   Operator: 'Operator',
   Message: 'Message',
   Profile: 'Profile',

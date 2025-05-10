@@ -97,7 +97,7 @@ export interface User {
   RainHistory: RainHistory[];
   RainTip: RainTip[];
   RainWinner: RainWinner[];
-  sessions: PlatformSession[];
+  sessions: Session[];
   accounts: Account[];
   chatmessage: Chatmessage[];
   friendshipFriendshipFriendidtouser: Friendship[];
@@ -128,7 +128,7 @@ export interface Account {
   user: User;
 }
 
-export interface PlatformSession {
+export interface Session {
   id: string;
   userId: string;
   activeGameId: string | null;
@@ -368,7 +368,7 @@ export interface Product {
   title: string;
   description: string;
   url: string;
-  type: string;
+  productType: string;
   bonusCode: string | null;
   bonusTotalInCredits: number;
   priceInCents: number;
@@ -387,7 +387,7 @@ export interface Product {
 
 export interface Notification {
   id: string;
-  type: NotificationType;
+  notficationType: NotificationType;
   title: string;
   message: string;
   isRead: boolean;
@@ -442,7 +442,7 @@ export interface Tournamentgame {
 
 export interface Transaction {
   id: string;
-  type: TransactionType;
+  transactionType: TransactionType;
   amount: number;
   amountCredits: number;
   buyerCashtag: string | null;

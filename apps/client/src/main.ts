@@ -1,18 +1,17 @@
 // Client entry point (e.g., main.ts for Vue, main.tsx for React)
 // Setup your client framework here (Vue, React, Svelte, etc.)
 // apps/client/src/main.ts
-import { createApp } from 'vue'
-import App from './App.vue'
-import { router } from './router/index'
-import './services'
+import { createApp } from "vue";
+import App from "./App.vue";
+import { router } from "./router/index";
 // Import Tailwind CSS base styles
-import './assets/main.css'
+import "./assets/main.css";
 
 // Example of importing a shared type
-import type { User } from '@cashflow/types'
+import type { User } from "@cashflow/types";
 
 // const app = createApp(App)
-var app = createApp(App)
+var app = createApp(App);
 
 // Example usage of a shared type (for demonstration)
 // const exampleUser: User = {
@@ -25,7 +24,7 @@ var app = createApp(App)
 // console.log('Example user from shared types:', exampleUser)
 // import { router } from '@/router'
 // import Vue3Marquee from 'vue3-marquee'
-import { resetAllStores, setupStore } from './stores'
+import { resetAllStores, setupStore } from "./stores";
 // import { posthog } from 'posthog-js'
 // import InlineSvg from 'vue-inline-svg'
 
@@ -45,11 +44,11 @@ import { resetAllStores, setupStore } from './stores'
 // })
 // app.use(VueQueryPlugin)
 // ;(window as any).posthog = posthog
-await setupStore(app)
+await setupStore(app);
 // app.component('inline-svg', InlineSvg)
 // resetAllStores()
-app.use(router)
+app.use(router);
 // app.use(Vue3Marquee)
-app.mount('#app')
+app.mount("#app");
 // const playerId = ''
 // startSubscriptions()

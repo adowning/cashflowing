@@ -2,6 +2,7 @@
 import { PrismaClient as OriginalPrismaClient } from "../prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { withOptimize } from "@prisma/extension-optimize";
+import { enhance } from "@zenstackhq/runtime";
 
 // Export all individual types from @prisma/client if needed elsewhere
 export * from "../prisma/client";
@@ -16,4 +17,4 @@ const apiKey = process.env.OPTIMIZE_API_KEY || "";
 const prisma = new OriginalPrismaClient().$extends(withAccelerate());
 //   .$extends(withOptimize({ apiKey }));
 
-export default prisma;
+export default enhance(prisma);

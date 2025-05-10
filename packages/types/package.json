@@ -10,5 +10,8 @@
   "devDependencies": {
     "bun-types": "latest",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "better-auth": "^1.2.7"
   }
 }

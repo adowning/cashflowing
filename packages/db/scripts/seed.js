@@ -1,10 +1,11 @@
-import { PrismaClient } from '../prisma/client'
+// import { PrismaClient } from '../prisma/client'
 import { faker } from '@faker-js/faker'
 import bcrypt from 'bcryptjs'
 import { loadGames } from './loadgames.js'
 import { addVipInfo } from './addVipInfo.js'
 import { createClient } from '@supabase/supabase-js'
 import { seedProducts } from './seedProducts.js'
+import prisma from '../src/index'
 // import { createClient } from '@supabase/supabase-js'
 // Create a single supabase client for interacting with your database
 // const supabase = createClient(
@@ -15,7 +16,7 @@ const supabaseUrl = 'https://pykjixfuargqkjkgxsyc.supabase.co'
 const supabaseKey =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5a2ppeGZ1YXJncWtqa2d4c3ljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDczMDEyMjIsImV4cCI6MjAyMjg3NzIyMn0.t2ayCugyEAii4KHDG0rWRZcvQcILYtF_-UApm0XGlKg'
 const supabase = createClient(supabaseUrl, supabaseKey)
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 console.log(faker.uuid)
 // Helper function to get a random element from an array
 const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)]

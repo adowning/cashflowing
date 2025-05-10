@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { useCashflowSocket } from '@/composables/useZilaWebsocket'
-import { eventBus } from '@/composables/eventBus'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppBarStore } from '@/stores/appBar'
 import { useAuthStore } from '@/stores/auth'
-import { useDepositStore } from '@/stores/deposit'
 // import { useUserStore } from '@/stores/user'
 import { useSocketStore } from '@/stores/socket'
+import { useDepositStore } from '@/stores/deposit'
 // import { useCurrencyStore } from '@/stores/currency'
-import { WSStatus } from 'zilaws-client'
 
 // const { api } = useRequest()
 const shopOpen = ref(false)

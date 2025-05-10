@@ -320,6 +320,8 @@
     "initializeWebSocket": true,
     "useCashflowSocket": true,
     "useDisplay": true,
-    "useSupabaseAuth": true
+    "useSupabaseAuth": true,
+    "eventobject": true,
+    "useEventManager": true
   }
 }

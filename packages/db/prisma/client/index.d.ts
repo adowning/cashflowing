@@ -29,10 +29,10 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
 /**
- * Model PlatformSession
+ * Model Session
  * 
  */
-export type PlatformSession = $Result.DefaultSelection<Prisma.$PlatformSessionPayload>
+export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
 /**
  * Model Operator
  * 
@@ -658,14 +658,14 @@ export class PrismaClient<
   get account(): Prisma.AccountDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.platformSession`: Exposes CRUD operations for the **PlatformSession** model.
+   * `prisma.session`: Exposes CRUD operations for the **Session** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more PlatformSessions
-    * const platformSessions = await prisma.platformSession.findMany()
+    * // Fetch zero or more Sessions
+    * const sessions = await prisma.session.findMany()
     * ```
     */
-  get platformSession(): Prisma.PlatformSessionDelegate<ExtArgs, ClientOptions>;
+  get session(): Prisma.SessionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.operator`: Exposes CRUD operations for the **Operator** model.
@@ -1379,7 +1379,7 @@ export namespace Prisma {
     Achievement: 'Achievement',
     User: 'User',
     Account: 'Account',
-    PlatformSession: 'PlatformSession',
+    Session: 'Session',
     Operator: 'Operator',
     Message: 'Message',
     Profile: 'Profile',
@@ -1425,7 +1425,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "achievement" | "user" | "account" | "platformSession" | "operator" | "message" | "profile" | "game" | "operatorgame" | "verification" | "organization" | "member" | "invitation" | "twoFactor" | "chatmessage" | "chatRoom" | "friendship" | "gameSession" | "product" | "notification" | "tournament" | "tournamententry" | "tournamentgame" | "transaction" | "userachievement" | "rainBet" | "rainHistory" | "rainTip" | "rainWinner" | "vipInfo" | "eventLog"
+      modelProps: "achievement" | "user" | "account" | "session" | "operator" | "message" | "profile" | "game" | "operatorgame" | "verification" | "organization" | "member" | "invitation" | "twoFactor" | "chatmessage" | "chatRoom" | "friendship" | "gameSession" | "product" | "notification" | "tournament" | "tournamententry" | "tournamentgame" | "transaction" | "userachievement" | "rainBet" | "rainHistory" | "rainTip" | "rainWinner" | "vipInfo" | "eventLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1651,77 +1651,77 @@ export namespace Prisma {
           }
         }
       }
-      PlatformSession: {
-        payload: Prisma.$PlatformSessionPayload<ExtArgs>
-        fields: Prisma.PlatformSessionFieldRefs
+      Session: {
+        payload: Prisma.$SessionPayload<ExtArgs>
+        fields: Prisma.SessionFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.PlatformSessionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload> | null
+            args: Prisma.SessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.PlatformSessionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>
+            args: Prisma.SessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
           }
           findFirst: {
-            args: Prisma.PlatformSessionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload> | null
+            args: Prisma.SessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.PlatformSessionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>
+            args: Prisma.SessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
           }
           findMany: {
-            args: Prisma.PlatformSessionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>[]
+            args: Prisma.SessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
           }
           create: {
-            args: Prisma.PlatformSessionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>
+            args: Prisma.SessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
           }
           createMany: {
-            args: Prisma.PlatformSessionCreateManyArgs<ExtArgs>
+            args: Prisma.SessionCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.PlatformSessionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>[]
+            args: Prisma.SessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
           }
           delete: {
-            args: Prisma.PlatformSessionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>
+            args: Prisma.SessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
           }
           update: {
-            args: Prisma.PlatformSessionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>
+            args: Prisma.SessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
           }
           deleteMany: {
-            args: Prisma.PlatformSessionDeleteManyArgs<ExtArgs>
+            args: Prisma.SessionDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.PlatformSessionUpdateManyArgs<ExtArgs>
+            args: Prisma.SessionUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.PlatformSessionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>[]
+            args: Prisma.SessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
           }
           upsert: {
-            args: Prisma.PlatformSessionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PlatformSessionPayload>
+            args: Prisma.SessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
           }
           aggregate: {
-            args: Prisma.PlatformSessionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePlatformSession>
+            args: Prisma.SessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSession>
           }
           groupBy: {
-            args: Prisma.PlatformSessionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PlatformSessionGroupByOutputType>[]
+            args: Prisma.SessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SessionGroupByOutputType>[]
           }
           count: {
-            args: Prisma.PlatformSessionCountArgs<ExtArgs>
-            result: $Utils.Optional<PlatformSessionCountAggregateOutputType> | number
+            args: Prisma.SessionCountArgs<ExtArgs>
+            result: $Utils.Optional<SessionCountAggregateOutputType> | number
           }
         }
       }
@@ -3810,7 +3810,7 @@ export namespace Prisma {
     achievement?: AchievementOmit
     user?: UserOmit
     account?: AccountOmit
-    platformSession?: PlatformSessionOmit
+    session?: SessionOmit
     operator?: OperatorOmit
     message?: MessageOmit
     profile?: ProfileOmit
@@ -4059,7 +4059,7 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
   }
 
   /**
@@ -6302,7 +6302,7 @@ export namespace Prisma {
       RainHistory: Prisma.$RainHistoryPayload<ExtArgs>[]
       RainTip: Prisma.$RainTipPayload<ExtArgs>[]
       RainWinner: Prisma.$RainWinnerPayload<ExtArgs>[]
-      sessions: Prisma.$PlatformSessionPayload<ExtArgs>[]
+      sessions: Prisma.$SessionPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       chatmessage: Prisma.$ChatmessagePayload<ExtArgs>[]
       friendshipFriendshipFriendidtouser: Prisma.$FriendshipPayload<ExtArgs>[]
@@ -6748,7 +6748,7 @@ export namespace Prisma {
     RainHistory<T extends User$RainHistoryArgs<ExtArgs> = {}>(args?: Subset<T, User$RainHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RainHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     RainTip<T extends User$RainTipArgs<ExtArgs> = {}>(args?: Subset<T, User$RainTipArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RainTipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     RainWinner<T extends User$RainWinnerArgs<ExtArgs> = {}>(args?: Subset<T, User$RainWinnerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RainWinnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     chatmessage<T extends User$chatmessageArgs<ExtArgs> = {}>(args?: Subset<T, User$chatmessageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatmessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     friendshipFriendshipFriendidtouser<T extends User$friendshipFriendshipFriendidtouserArgs<ExtArgs> = {}>(args?: Subset<T, User$friendshipFriendshipFriendidtouserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FriendshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7357,23 +7357,23 @@ export namespace Prisma {
    */
   export type User$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
-    where?: PlatformSessionWhereInput
-    orderBy?: PlatformSessionOrderByWithRelationInput | PlatformSessionOrderByWithRelationInput[]
-    cursor?: PlatformSessionWhereUniqueInput
+    include?: SessionInclude<ExtArgs> | null
+    where?: SessionWhereInput
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    cursor?: SessionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: PlatformSessionScalarFieldEnum | PlatformSessionScalarFieldEnum[]
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
   }
 
   /**
@@ -8817,16 +8817,16 @@ export namespace Prisma {
 
 
   /**
-   * Model PlatformSession
+   * Model Session
    */
 
-  export type AggregatePlatformSession = {
-    _count: PlatformSessionCountAggregateOutputType | null
-    _min: PlatformSessionMinAggregateOutputType | null
-    _max: PlatformSessionMaxAggregateOutputType | null
+  export type AggregateSession = {
+    _count: SessionCountAggregateOutputType | null
+    _min: SessionMinAggregateOutputType | null
+    _max: SessionMaxAggregateOutputType | null
   }
 
-  export type PlatformSessionMinAggregateOutputType = {
+  export type SessionMinAggregateOutputType = {
     id: string | null
     userId: string | null
     activeGameId: string | null
@@ -8840,7 +8840,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type PlatformSessionMaxAggregateOutputType = {
+  export type SessionMaxAggregateOutputType = {
     id: string | null
     userId: string | null
     activeGameId: string | null
@@ -8854,7 +8854,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type PlatformSessionCountAggregateOutputType = {
+  export type SessionCountAggregateOutputType = {
     id: number
     userId: number
     activeGameId: number
@@ -8870,7 +8870,7 @@ export namespace Prisma {
   }
 
 
-  export type PlatformSessionMinAggregateInputType = {
+  export type SessionMinAggregateInputType = {
     id?: true
     userId?: true
     activeGameId?: true
@@ -8884,7 +8884,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type PlatformSessionMaxAggregateInputType = {
+  export type SessionMaxAggregateInputType = {
     id?: true
     userId?: true
     activeGameId?: true
@@ -8898,7 +8898,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type PlatformSessionCountAggregateInputType = {
+  export type SessionCountAggregateInputType = {
     id?: true
     userId?: true
     activeGameId?: true
@@ -8913,79 +8913,79 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type PlatformSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which PlatformSession to aggregate.
+     * Filter which Session to aggregate.
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of PlatformSessions to fetch.
+     * Determine the order of Sessions to fetch.
      */
-    orderBy?: PlatformSessionOrderByWithRelationInput | PlatformSessionOrderByWithRelationInput[]
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: PlatformSessionWhereUniqueInput
+    cursor?: SessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` PlatformSessions from the position of the cursor.
+     * Take `±n` Sessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` PlatformSessions.
+     * Skip the first `n` Sessions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned PlatformSessions
+     * Count returned Sessions
     **/
-    _count?: true | PlatformSessionCountAggregateInputType
+    _count?: true | SessionCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: PlatformSessionMinAggregateInputType
+    _min?: SessionMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: PlatformSessionMaxAggregateInputType
+    _max?: SessionMaxAggregateInputType
   }
 
-  export type GetPlatformSessionAggregateType<T extends PlatformSessionAggregateArgs> = {
-        [P in keyof T & keyof AggregatePlatformSession]: P extends '_count' | 'count'
+  export type GetSessionAggregateType<T extends SessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSession]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregatePlatformSession[P]>
-      : GetScalarType<T[P], AggregatePlatformSession[P]>
+        : GetScalarType<T[P], AggregateSession[P]>
+      : GetScalarType<T[P], AggregateSession[P]>
   }
 
 
 
 
-  export type PlatformSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlatformSessionWhereInput
-    orderBy?: PlatformSessionOrderByWithAggregationInput | PlatformSessionOrderByWithAggregationInput[]
-    by: PlatformSessionScalarFieldEnum[] | PlatformSessionScalarFieldEnum
-    having?: PlatformSessionScalarWhereWithAggregatesInput
+  export type SessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionWhereInput
+    orderBy?: SessionOrderByWithAggregationInput | SessionOrderByWithAggregationInput[]
+    by: SessionScalarFieldEnum[] | SessionScalarFieldEnum
+    having?: SessionScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: PlatformSessionCountAggregateInputType | true
-    _min?: PlatformSessionMinAggregateInputType
-    _max?: PlatformSessionMaxAggregateInputType
+    _count?: SessionCountAggregateInputType | true
+    _min?: SessionMinAggregateInputType
+    _max?: SessionMaxAggregateInputType
   }
 
-  export type PlatformSessionGroupByOutputType = {
+  export type SessionGroupByOutputType = {
     id: string
     userId: string
     activeGameId: string | null
@@ -8997,26 +8997,26 @@ export namespace Prisma {
     active: boolean
     token: string
     updatedAt: Date | null
-    _count: PlatformSessionCountAggregateOutputType | null
-    _min: PlatformSessionMinAggregateOutputType | null
-    _max: PlatformSessionMaxAggregateOutputType | null
+    _count: SessionCountAggregateOutputType | null
+    _min: SessionMinAggregateOutputType | null
+    _max: SessionMaxAggregateOutputType | null
   }
 
-  type GetPlatformSessionGroupByPayload<T extends PlatformSessionGroupByArgs> = Prisma.PrismaPromise<
+  type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<PlatformSessionGroupByOutputType, T['by']> &
+      PickEnumerable<SessionGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof PlatformSessionGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof SessionGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], PlatformSessionGroupByOutputType[P]>
-            : GetScalarType<T[P], PlatformSessionGroupByOutputType[P]>
+              : GetScalarType<T[P], SessionGroupByOutputType[P]>
+            : GetScalarType<T[P], SessionGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type PlatformSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type SessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     activeGameId?: boolean
@@ -9029,9 +9029,9 @@ export namespace Prisma {
     token?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["platformSession"]>
+  }, ExtArgs["result"]["session"]>
 
-  export type PlatformSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type SessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     activeGameId?: boolean
@@ -9044,9 +9044,9 @@ export namespace Prisma {
     token?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["platformSession"]>
+  }, ExtArgs["result"]["session"]>
 
-  export type PlatformSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type SessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     activeGameId?: boolean
@@ -9059,9 +9059,9 @@ export namespace Prisma {
     token?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["platformSession"]>
+  }, ExtArgs["result"]["session"]>
 
-  export type PlatformSessionSelectScalar = {
+  export type SessionSelectScalar = {
     id?: boolean
     userId?: boolean
     activeGameId?: boolean
@@ -9075,19 +9075,19 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type PlatformSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "activeGameId" | "ipAddress" | "userAgent" | "expiresAt" | "createdAt" | "refreshToken" | "active" | "token" | "updatedAt", ExtArgs["result"]["platformSession"]>
-  export type PlatformSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "activeGameId" | "ipAddress" | "userAgent" | "expiresAt" | "createdAt" | "refreshToken" | "active" | "token" | "updatedAt", ExtArgs["result"]["session"]>
+  export type SessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type PlatformSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type PlatformSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
-  export type $PlatformSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "PlatformSession"
+  export type $SessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Session"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
     }
@@ -9103,136 +9103,136 @@ export namespace Prisma {
       active: boolean
       token: string
       updatedAt: Date | null
-    }, ExtArgs["result"]["platformSession"]>
+    }, ExtArgs["result"]["session"]>
     composites: {}
   }
 
-  type PlatformSessionGetPayload<S extends boolean | null | undefined | PlatformSessionDefaultArgs> = $Result.GetResult<Prisma.$PlatformSessionPayload, S>
+  type SessionGetPayload<S extends boolean | null | undefined | SessionDefaultArgs> = $Result.GetResult<Prisma.$SessionPayload, S>
 
-  type PlatformSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PlatformSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PlatformSessionCountAggregateInputType | true
+  type SessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SessionCountAggregateInputType | true
     }
 
-  export interface PlatformSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlatformSession'], meta: { name: 'PlatformSession' } }
+  export interface SessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Session'], meta: { name: 'Session' } }
     /**
-     * Find zero or one PlatformSession that matches the filter.
-     * @param {PlatformSessionFindUniqueArgs} args - Arguments to find a PlatformSession
+     * Find zero or one Session that matches the filter.
+     * @param {SessionFindUniqueArgs} args - Arguments to find a Session
      * @example
-     * // Get one PlatformSession
-     * const platformSession = await prisma.platformSession.findUnique({
+     * // Get one Session
+     * const session = await prisma.session.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends PlatformSessionFindUniqueArgs>(args: SelectSubset<T, PlatformSessionFindUniqueArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends SessionFindUniqueArgs>(args: SelectSubset<T, SessionFindUniqueArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one PlatformSession that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Session that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {PlatformSessionFindUniqueOrThrowArgs} args - Arguments to find a PlatformSession
+     * @param {SessionFindUniqueOrThrowArgs} args - Arguments to find a Session
      * @example
-     * // Get one PlatformSession
-     * const platformSession = await prisma.platformSession.findUniqueOrThrow({
+     * // Get one Session
+     * const session = await prisma.session.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends PlatformSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatformSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends SessionFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first PlatformSession that matches the filter.
+     * Find the first Session that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionFindFirstArgs} args - Arguments to find a PlatformSession
+     * @param {SessionFindFirstArgs} args - Arguments to find a Session
      * @example
-     * // Get one PlatformSession
-     * const platformSession = await prisma.platformSession.findFirst({
+     * // Get one Session
+     * const session = await prisma.session.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends PlatformSessionFindFirstArgs>(args?: SelectSubset<T, PlatformSessionFindFirstArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends SessionFindFirstArgs>(args?: SelectSubset<T, SessionFindFirstArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first PlatformSession that matches the filter or
+     * Find the first Session that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionFindFirstOrThrowArgs} args - Arguments to find a PlatformSession
+     * @param {SessionFindFirstOrThrowArgs} args - Arguments to find a Session
      * @example
-     * // Get one PlatformSession
-     * const platformSession = await prisma.platformSession.findFirstOrThrow({
+     * // Get one Session
+     * const session = await prisma.session.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends PlatformSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatformSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends SessionFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more PlatformSessions that matches the filter.
+     * Find zero or more Sessions that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {SessionFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all PlatformSessions
-     * const platformSessions = await prisma.platformSession.findMany()
+     * // Get all Sessions
+     * const sessions = await prisma.session.findMany()
      * 
-     * // Get first 10 PlatformSessions
-     * const platformSessions = await prisma.platformSession.findMany({ take: 10 })
+     * // Get first 10 Sessions
+     * const sessions = await prisma.session.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const platformSessionWithIdOnly = await prisma.platformSession.findMany({ select: { id: true } })
+     * const sessionWithIdOnly = await prisma.session.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends PlatformSessionFindManyArgs>(args?: SelectSubset<T, PlatformSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends SessionFindManyArgs>(args?: SelectSubset<T, SessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a PlatformSession.
-     * @param {PlatformSessionCreateArgs} args - Arguments to create a PlatformSession.
+     * Create a Session.
+     * @param {SessionCreateArgs} args - Arguments to create a Session.
      * @example
-     * // Create one PlatformSession
-     * const PlatformSession = await prisma.platformSession.create({
+     * // Create one Session
+     * const Session = await prisma.session.create({
      *   data: {
-     *     // ... data to create a PlatformSession
+     *     // ... data to create a Session
      *   }
      * })
      * 
      */
-    create<T extends PlatformSessionCreateArgs>(args: SelectSubset<T, PlatformSessionCreateArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends SessionCreateArgs>(args: SelectSubset<T, SessionCreateArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many PlatformSessions.
-     * @param {PlatformSessionCreateManyArgs} args - Arguments to create many PlatformSessions.
+     * Create many Sessions.
+     * @param {SessionCreateManyArgs} args - Arguments to create many Sessions.
      * @example
-     * // Create many PlatformSessions
-     * const platformSession = await prisma.platformSession.createMany({
+     * // Create many Sessions
+     * const session = await prisma.session.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends PlatformSessionCreateManyArgs>(args?: SelectSubset<T, PlatformSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends SessionCreateManyArgs>(args?: SelectSubset<T, SessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many PlatformSessions and returns the data saved in the database.
-     * @param {PlatformSessionCreateManyAndReturnArgs} args - Arguments to create many PlatformSessions.
+     * Create many Sessions and returns the data saved in the database.
+     * @param {SessionCreateManyAndReturnArgs} args - Arguments to create many Sessions.
      * @example
-     * // Create many PlatformSessions
-     * const platformSession = await prisma.platformSession.createManyAndReturn({
+     * // Create many Sessions
+     * const session = await prisma.session.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many PlatformSessions and only return the `id`
-     * const platformSessionWithIdOnly = await prisma.platformSession.createManyAndReturn({
+     * // Create many Sessions and only return the `id`
+     * const sessionWithIdOnly = await prisma.session.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -9242,28 +9242,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends PlatformSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatformSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends SessionCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a PlatformSession.
-     * @param {PlatformSessionDeleteArgs} args - Arguments to delete one PlatformSession.
+     * Delete a Session.
+     * @param {SessionDeleteArgs} args - Arguments to delete one Session.
      * @example
-     * // Delete one PlatformSession
-     * const PlatformSession = await prisma.platformSession.delete({
+     * // Delete one Session
+     * const Session = await prisma.session.delete({
      *   where: {
-     *     // ... filter to delete one PlatformSession
+     *     // ... filter to delete one Session
      *   }
      * })
      * 
      */
-    delete<T extends PlatformSessionDeleteArgs>(args: SelectSubset<T, PlatformSessionDeleteArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends SessionDeleteArgs>(args: SelectSubset<T, SessionDeleteArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one PlatformSession.
-     * @param {PlatformSessionUpdateArgs} args - Arguments to update one PlatformSession.
+     * Update one Session.
+     * @param {SessionUpdateArgs} args - Arguments to update one Session.
      * @example
-     * // Update one PlatformSession
-     * const platformSession = await prisma.platformSession.update({
+     * // Update one Session
+     * const session = await prisma.session.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9273,30 +9273,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends PlatformSessionUpdateArgs>(args: SelectSubset<T, PlatformSessionUpdateArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends SessionUpdateArgs>(args: SelectSubset<T, SessionUpdateArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more PlatformSessions.
-     * @param {PlatformSessionDeleteManyArgs} args - Arguments to filter PlatformSessions to delete.
+     * Delete zero or more Sessions.
+     * @param {SessionDeleteManyArgs} args - Arguments to filter Sessions to delete.
      * @example
-     * // Delete a few PlatformSessions
-     * const { count } = await prisma.platformSession.deleteMany({
+     * // Delete a few Sessions
+     * const { count } = await prisma.session.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends PlatformSessionDeleteManyArgs>(args?: SelectSubset<T, PlatformSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends SessionDeleteManyArgs>(args?: SelectSubset<T, SessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more PlatformSessions.
+     * Update zero or more Sessions.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {SessionUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many PlatformSessions
-     * const platformSession = await prisma.platformSession.updateMany({
+     * // Update many Sessions
+     * const session = await prisma.session.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9306,14 +9306,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends PlatformSessionUpdateManyArgs>(args: SelectSubset<T, PlatformSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends SessionUpdateManyArgs>(args: SelectSubset<T, SessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more PlatformSessions and returns the data updated in the database.
-     * @param {PlatformSessionUpdateManyAndReturnArgs} args - Arguments to update many PlatformSessions.
+     * Update zero or more Sessions and returns the data updated in the database.
+     * @param {SessionUpdateManyAndReturnArgs} args - Arguments to update many Sessions.
      * @example
-     * // Update many PlatformSessions
-     * const platformSession = await prisma.platformSession.updateManyAndReturn({
+     * // Update many Sessions
+     * const session = await prisma.session.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9322,8 +9322,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more PlatformSessions and only return the `id`
-     * const platformSessionWithIdOnly = await prisma.platformSession.updateManyAndReturn({
+     * // Update zero or more Sessions and only return the `id`
+     * const sessionWithIdOnly = await prisma.session.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -9336,56 +9336,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends PlatformSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatformSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends SessionUpdateManyAndReturnArgs>(args: SelectSubset<T, SessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one PlatformSession.
-     * @param {PlatformSessionUpsertArgs} args - Arguments to update or create a PlatformSession.
+     * Create or update one Session.
+     * @param {SessionUpsertArgs} args - Arguments to update or create a Session.
      * @example
-     * // Update or create a PlatformSession
-     * const platformSession = await prisma.platformSession.upsert({
+     * // Update or create a Session
+     * const session = await prisma.session.upsert({
      *   create: {
-     *     // ... data to create a PlatformSession
+     *     // ... data to create a Session
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the PlatformSession we want to update
+     *     // ... the filter for the Session we want to update
      *   }
      * })
      */
-    upsert<T extends PlatformSessionUpsertArgs>(args: SelectSubset<T, PlatformSessionUpsertArgs<ExtArgs>>): Prisma__PlatformSessionClient<$Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends SessionUpsertArgs>(args: SelectSubset<T, SessionUpsertArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of PlatformSessions.
+     * Count the number of Sessions.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionCountArgs} args - Arguments to filter PlatformSessions to count.
+     * @param {SessionCountArgs} args - Arguments to filter Sessions to count.
      * @example
-     * // Count the number of PlatformSessions
-     * const count = await prisma.platformSession.count({
+     * // Count the number of Sessions
+     * const count = await prisma.session.count({
      *   where: {
-     *     // ... the filter for the PlatformSessions we want to count
+     *     // ... the filter for the Sessions we want to count
      *   }
      * })
     **/
-    count<T extends PlatformSessionCountArgs>(
-      args?: Subset<T, PlatformSessionCountArgs>,
+    count<T extends SessionCountArgs>(
+      args?: Subset<T, SessionCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], PlatformSessionCountAggregateOutputType>
+          : GetScalarType<T['select'], SessionCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a PlatformSession.
+     * Allows you to perform aggregations operations on a Session.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {SessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -9405,13 +9405,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends PlatformSessionAggregateArgs>(args: Subset<T, PlatformSessionAggregateArgs>): Prisma.PrismaPromise<GetPlatformSessionAggregateType<T>>
+    aggregate<T extends SessionAggregateArgs>(args: Subset<T, SessionAggregateArgs>): Prisma.PrismaPromise<GetSessionAggregateType<T>>
 
     /**
-     * Group by PlatformSession.
+     * Group by Session.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PlatformSessionGroupByArgs} args - Group by arguments.
+     * @param {SessionGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -9426,14 +9426,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends PlatformSessionGroupByArgs,
+      T extends SessionGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PlatformSessionGroupByArgs['orderBy'] }
-        : { orderBy?: PlatformSessionGroupByArgs['orderBy'] },
+        ? { orderBy: SessionGroupByArgs['orderBy'] }
+        : { orderBy?: SessionGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -9482,20 +9482,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, PlatformSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatformSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, SessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the PlatformSession model
+   * Fields of the Session model
    */
-  readonly fields: PlatformSessionFieldRefs;
+  readonly fields: SessionFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for PlatformSession.
+   * The delegate class that acts as a "Promise-like" for Session.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__PlatformSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__SessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -9524,431 +9524,431 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the PlatformSession model
+   * Fields of the Session model
    */
-  interface PlatformSessionFieldRefs {
-    readonly id: FieldRef<"PlatformSession", 'String'>
-    readonly userId: FieldRef<"PlatformSession", 'String'>
-    readonly activeGameId: FieldRef<"PlatformSession", 'String'>
-    readonly ipAddress: FieldRef<"PlatformSession", 'String'>
-    readonly userAgent: FieldRef<"PlatformSession", 'String'>
-    readonly expiresAt: FieldRef<"PlatformSession", 'DateTime'>
-    readonly createdAt: FieldRef<"PlatformSession", 'DateTime'>
-    readonly refreshToken: FieldRef<"PlatformSession", 'String'>
-    readonly active: FieldRef<"PlatformSession", 'Boolean'>
-    readonly token: FieldRef<"PlatformSession", 'String'>
-    readonly updatedAt: FieldRef<"PlatformSession", 'DateTime'>
+  interface SessionFieldRefs {
+    readonly id: FieldRef<"Session", 'String'>
+    readonly userId: FieldRef<"Session", 'String'>
+    readonly activeGameId: FieldRef<"Session", 'String'>
+    readonly ipAddress: FieldRef<"Session", 'String'>
+    readonly userAgent: FieldRef<"Session", 'String'>
+    readonly expiresAt: FieldRef<"Session", 'DateTime'>
+    readonly createdAt: FieldRef<"Session", 'DateTime'>
+    readonly refreshToken: FieldRef<"Session", 'String'>
+    readonly active: FieldRef<"Session", 'Boolean'>
+    readonly token: FieldRef<"Session", 'String'>
+    readonly updatedAt: FieldRef<"Session", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * PlatformSession findUnique
+   * Session findUnique
    */
-  export type PlatformSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * Filter, which PlatformSession to fetch.
+     * Filter, which Session to fetch.
      */
-    where: PlatformSessionWhereUniqueInput
+    where: SessionWhereUniqueInput
   }
 
   /**
-   * PlatformSession findUniqueOrThrow
+   * Session findUniqueOrThrow
    */
-  export type PlatformSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * Filter, which PlatformSession to fetch.
+     * Filter, which Session to fetch.
      */
-    where: PlatformSessionWhereUniqueInput
+    where: SessionWhereUniqueInput
   }
 
   /**
-   * PlatformSession findFirst
+   * Session findFirst
    */
-  export type PlatformSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * Filter, which PlatformSession to fetch.
+     * Filter, which Session to fetch.
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of PlatformSessions to fetch.
+     * Determine the order of Sessions to fetch.
      */
-    orderBy?: PlatformSessionOrderByWithRelationInput | PlatformSessionOrderByWithRelationInput[]
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for PlatformSessions.
+     * Sets the position for searching for Sessions.
      */
-    cursor?: PlatformSessionWhereUniqueInput
+    cursor?: SessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` PlatformSessions from the position of the cursor.
+     * Take `±n` Sessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` PlatformSessions.
+     * Skip the first `n` Sessions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of PlatformSessions.
+     * Filter by unique combinations of Sessions.
      */
-    distinct?: PlatformSessionScalarFieldEnum | PlatformSessionScalarFieldEnum[]
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
   }
 
   /**
-   * PlatformSession findFirstOrThrow
+   * Session findFirstOrThrow
    */
-  export type PlatformSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * Filter, which PlatformSession to fetch.
+     * Filter, which Session to fetch.
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of PlatformSessions to fetch.
+     * Determine the order of Sessions to fetch.
      */
-    orderBy?: PlatformSessionOrderByWithRelationInput | PlatformSessionOrderByWithRelationInput[]
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for PlatformSessions.
+     * Sets the position for searching for Sessions.
      */
-    cursor?: PlatformSessionWhereUniqueInput
+    cursor?: SessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` PlatformSessions from the position of the cursor.
+     * Take `±n` Sessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` PlatformSessions.
+     * Skip the first `n` Sessions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of PlatformSessions.
+     * Filter by unique combinations of Sessions.
      */
-    distinct?: PlatformSessionScalarFieldEnum | PlatformSessionScalarFieldEnum[]
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
   }
 
   /**
-   * PlatformSession findMany
+   * Session findMany
    */
-  export type PlatformSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * Filter, which PlatformSessions to fetch.
+     * Filter, which Sessions to fetch.
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of PlatformSessions to fetch.
+     * Determine the order of Sessions to fetch.
      */
-    orderBy?: PlatformSessionOrderByWithRelationInput | PlatformSessionOrderByWithRelationInput[]
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing PlatformSessions.
+     * Sets the position for listing Sessions.
      */
-    cursor?: PlatformSessionWhereUniqueInput
+    cursor?: SessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` PlatformSessions from the position of the cursor.
+     * Take `±n` Sessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` PlatformSessions.
+     * Skip the first `n` Sessions.
      */
     skip?: number
-    distinct?: PlatformSessionScalarFieldEnum | PlatformSessionScalarFieldEnum[]
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
   }
 
   /**
-   * PlatformSession create
+   * Session create
    */
-  export type PlatformSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * The data needed to create a PlatformSession.
+     * The data needed to create a Session.
      */
-    data: XOR<PlatformSessionCreateInput, PlatformSessionUncheckedCreateInput>
+    data: XOR<SessionCreateInput, SessionUncheckedCreateInput>
   }
 
   /**
-   * PlatformSession createMany
+   * Session createMany
    */
-  export type PlatformSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many PlatformSessions.
+     * The data used to create many Sessions.
      */
-    data: PlatformSessionCreateManyInput | PlatformSessionCreateManyInput[]
+    data: SessionCreateManyInput | SessionCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * PlatformSession createManyAndReturn
+   * Session createManyAndReturn
    */
-  export type PlatformSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelectCreateManyAndReturn<ExtArgs> | null
+    select?: SessionSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
-     * The data used to create many PlatformSessions.
+     * The data used to create many Sessions.
      */
-    data: PlatformSessionCreateManyInput | PlatformSessionCreateManyInput[]
+    data: SessionCreateManyInput | SessionCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: SessionIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * PlatformSession update
+   * Session update
    */
-  export type PlatformSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * The data needed to update a PlatformSession.
+     * The data needed to update a Session.
      */
-    data: XOR<PlatformSessionUpdateInput, PlatformSessionUncheckedUpdateInput>
+    data: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
     /**
-     * Choose, which PlatformSession to update.
+     * Choose, which Session to update.
      */
-    where: PlatformSessionWhereUniqueInput
+    where: SessionWhereUniqueInput
   }
 
   /**
-   * PlatformSession updateMany
+   * Session updateMany
    */
-  export type PlatformSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update PlatformSessions.
+     * The data used to update Sessions.
      */
-    data: XOR<PlatformSessionUpdateManyMutationInput, PlatformSessionUncheckedUpdateManyInput>
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyInput>
     /**
-     * Filter which PlatformSessions to update
+     * Filter which Sessions to update
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
-     * Limit how many PlatformSessions to update.
+     * Limit how many Sessions to update.
      */
     limit?: number
   }
 
   /**
-   * PlatformSession updateManyAndReturn
+   * Session updateManyAndReturn
    */
-  export type PlatformSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: SessionSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
-     * The data used to update PlatformSessions.
+     * The data used to update Sessions.
      */
-    data: XOR<PlatformSessionUpdateManyMutationInput, PlatformSessionUncheckedUpdateManyInput>
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyInput>
     /**
-     * Filter which PlatformSessions to update
+     * Filter which Sessions to update
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
-     * Limit how many PlatformSessions to update.
+     * Limit how many Sessions to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: SessionIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * PlatformSession upsert
+   * Session upsert
    */
-  export type PlatformSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * The filter to search for the PlatformSession to update in case it exists.
+     * The filter to search for the Session to update in case it exists.
      */
-    where: PlatformSessionWhereUniqueInput
+    where: SessionWhereUniqueInput
     /**
-     * In case the PlatformSession found by the `where` argument doesn't exist, create a new PlatformSession with this data.
+     * In case the Session found by the `where` argument doesn't exist, create a new Session with this data.
      */
-    create: XOR<PlatformSessionCreateInput, PlatformSessionUncheckedCreateInput>
+    create: XOR<SessionCreateInput, SessionUncheckedCreateInput>
     /**
-     * In case the PlatformSession was found with the provided `where` argument, update it with this data.
+     * In case the Session was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<PlatformSessionUpdateInput, PlatformSessionUncheckedUpdateInput>
+    update: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
   }
 
   /**
-   * PlatformSession delete
+   * Session delete
    */
-  export type PlatformSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
     /**
-     * Filter which PlatformSession to delete.
+     * Filter which Session to delete.
      */
-    where: PlatformSessionWhereUniqueInput
+    where: SessionWhereUniqueInput
   }
 
   /**
-   * PlatformSession deleteMany
+   * Session deleteMany
    */
-  export type PlatformSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which PlatformSessions to delete
+     * Filter which Sessions to delete
      */
-    where?: PlatformSessionWhereInput
+    where?: SessionWhereInput
     /**
-     * Limit how many PlatformSessions to delete.
+     * Limit how many Sessions to delete.
      */
     limit?: number
   }
 
   /**
-   * PlatformSession without action
+   * Session without action
    */
-  export type PlatformSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlatformSession
+     * Select specific fields to fetch from the Session
      */
-    select?: PlatformSessionSelect<ExtArgs> | null
+    select?: SessionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlatformSession
+     * Omit specific fields from the Session
      */
-    omit?: PlatformSessionOmit<ExtArgs> | null
+    omit?: SessionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlatformSessionInclude<ExtArgs> | null
+    include?: SessionInclude<ExtArgs> | null
   }
 
 
@@ -26430,7 +26430,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     url: string | null
-    type: string | null
+    productType: string | null
     bonusCode: string | null
     bonusTotalInCredits: number | null
     priceInCents: number | null
@@ -26450,7 +26450,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     url: string | null
-    type: string | null
+    productType: string | null
     bonusCode: string | null
     bonusTotalInCredits: number | null
     priceInCents: number | null
@@ -26470,7 +26470,7 @@ export namespace Prisma {
     title: number
     description: number
     url: number
-    type: number
+    productType: number
     bonusCode: number
     bonusTotalInCredits: number
     priceInCents: number
@@ -26512,7 +26512,7 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
-    type?: true
+    productType?: true
     bonusCode?: true
     bonusTotalInCredits?: true
     priceInCents?: true
@@ -26532,7 +26532,7 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
-    type?: true
+    productType?: true
     bonusCode?: true
     bonusTotalInCredits?: true
     priceInCents?: true
@@ -26552,7 +26552,7 @@ export namespace Prisma {
     title?: true
     description?: true
     url?: true
-    type?: true
+    productType?: true
     bonusCode?: true
     bonusTotalInCredits?: true
     priceInCents?: true
@@ -26659,7 +26659,7 @@ export namespace Prisma {
     title: string
     description: string
     url: string
-    type: string
+    productType: string
     bonusCode: string | null
     bonusTotalInCredits: number
     priceInCents: number
@@ -26698,7 +26698,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
-    type?: boolean
+    productType?: boolean
     bonusCode?: boolean
     bonusTotalInCredits?: boolean
     priceInCents?: boolean
@@ -26721,7 +26721,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
-    type?: boolean
+    productType?: boolean
     bonusCode?: boolean
     bonusTotalInCredits?: boolean
     priceInCents?: boolean
@@ -26742,7 +26742,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
-    type?: boolean
+    productType?: boolean
     bonusCode?: boolean
     bonusTotalInCredits?: boolean
     priceInCents?: boolean
@@ -26763,7 +26763,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     url?: boolean
-    type?: boolean
+    productType?: boolean
     bonusCode?: boolean
     bonusTotalInCredits?: boolean
     priceInCents?: boolean
@@ -26778,7 +26778,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "url" | "type" | "bonusCode" | "bonusTotalInCredits" | "priceInCents" | "amountToReceiveInCredits" | "bestValue" | "discountInCents" | "bonusSpins" | "isPromo" | "totalDiscountInCents" | "shopId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "url" | "productType" | "bonusCode" | "bonusTotalInCredits" | "priceInCents" | "amountToReceiveInCredits" | "bestValue" | "discountInCents" | "bonusSpins" | "isPromo" | "totalDiscountInCents" | "shopId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     operator?: boolean | Product$operatorArgs<ExtArgs>
     transactions?: boolean | Product$transactionsArgs<ExtArgs>
@@ -26802,7 +26802,7 @@ export namespace Prisma {
       title: string
       description: string
       url: string
-      type: string
+      productType: string
       bonusCode: string | null
       bonusTotalInCredits: number
       priceInCents: number
@@ -27244,7 +27244,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
     readonly url: FieldRef<"Product", 'String'>
-    readonly type: FieldRef<"Product", 'String'>
+    readonly productType: FieldRef<"Product", 'String'>
     readonly bonusCode: FieldRef<"Product", 'String'>
     readonly bonusTotalInCredits: FieldRef<"Product", 'Int'>
     readonly priceInCents: FieldRef<"Product", 'Int'>
@@ -27726,7 +27726,7 @@ export namespace Prisma {
 
   export type NotificationMinAggregateOutputType = {
     id: string | null
-    type: $Enums.NotificationType | null
+    notficationType: $Enums.NotificationType | null
     title: string | null
     message: string | null
     isRead: boolean | null
@@ -27737,7 +27737,7 @@ export namespace Prisma {
 
   export type NotificationMaxAggregateOutputType = {
     id: string | null
-    type: $Enums.NotificationType | null
+    notficationType: $Enums.NotificationType | null
     title: string | null
     message: string | null
     isRead: boolean | null
@@ -27748,7 +27748,7 @@ export namespace Prisma {
 
   export type NotificationCountAggregateOutputType = {
     id: number
-    type: number
+    notficationType: number
     title: number
     message: number
     isRead: number
@@ -27762,7 +27762,7 @@ export namespace Prisma {
 
   export type NotificationMinAggregateInputType = {
     id?: true
-    type?: true
+    notficationType?: true
     title?: true
     message?: true
     isRead?: true
@@ -27773,7 +27773,7 @@ export namespace Prisma {
 
   export type NotificationMaxAggregateInputType = {
     id?: true
-    type?: true
+    notficationType?: true
     title?: true
     message?: true
     isRead?: true
@@ -27784,7 +27784,7 @@ export namespace Prisma {
 
   export type NotificationCountAggregateInputType = {
     id?: true
-    type?: true
+    notficationType?: true
     title?: true
     message?: true
     isRead?: true
@@ -27869,7 +27869,7 @@ export namespace Prisma {
 
   export type NotificationGroupByOutputType = {
     id: string
-    type: $Enums.NotificationType
+    notficationType: $Enums.NotificationType
     title: string
     message: string
     isRead: boolean
@@ -27898,7 +27898,7 @@ export namespace Prisma {
 
   export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    type?: boolean
+    notficationType?: boolean
     title?: boolean
     message?: boolean
     isRead?: boolean
@@ -27911,7 +27911,7 @@ export namespace Prisma {
 
   export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    type?: boolean
+    notficationType?: boolean
     title?: boolean
     message?: boolean
     isRead?: boolean
@@ -27924,7 +27924,7 @@ export namespace Prisma {
 
   export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    type?: boolean
+    notficationType?: boolean
     title?: boolean
     message?: boolean
     isRead?: boolean
@@ -27937,7 +27937,7 @@ export namespace Prisma {
 
   export type NotificationSelectScalar = {
     id?: boolean
-    type?: boolean
+    notficationType?: boolean
     title?: boolean
     message?: boolean
     isRead?: boolean
@@ -27947,7 +27947,7 @@ export namespace Prisma {
     userId?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "title" | "message" | "isRead" | "readAt" | "metadata" | "createdAt" | "userId", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "notficationType" | "title" | "message" | "isRead" | "readAt" | "metadata" | "createdAt" | "userId", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -27965,7 +27965,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      type: $Enums.NotificationType
+      notficationType: $Enums.NotificationType
       title: string
       message: string
       isRead: boolean
@@ -28398,7 +28398,7 @@ export namespace Prisma {
    */
   interface NotificationFieldRefs {
     readonly id: FieldRef<"Notification", 'String'>
-    readonly type: FieldRef<"Notification", 'NotificationType'>
+    readonly notficationType: FieldRef<"Notification", 'NotificationType'>
     readonly title: FieldRef<"Notification", 'String'>
     readonly message: FieldRef<"Notification", 'String'>
     readonly isRead: FieldRef<"Notification", 'Boolean'>
@@ -32355,7 +32355,7 @@ export namespace Prisma {
 
   export type TransactionMinAggregateOutputType = {
     id: string | null
-    type: $Enums.TransactionType | null
+    transactionType: $Enums.TransactionType | null
     amount: number | null
     amountCredits: number | null
     buyerCashtag: string | null
@@ -32379,7 +32379,7 @@ export namespace Prisma {
 
   export type TransactionMaxAggregateOutputType = {
     id: string | null
-    type: $Enums.TransactionType | null
+    transactionType: $Enums.TransactionType | null
     amount: number | null
     amountCredits: number | null
     buyerCashtag: string | null
@@ -32403,7 +32403,7 @@ export namespace Prisma {
 
   export type TransactionCountAggregateOutputType = {
     id: number
-    type: number
+    transactionType: number
     amount: number
     amountCredits: number
     buyerCashtag: number
@@ -32441,7 +32441,7 @@ export namespace Prisma {
 
   export type TransactionMinAggregateInputType = {
     id?: true
-    type?: true
+    transactionType?: true
     amount?: true
     amountCredits?: true
     buyerCashtag?: true
@@ -32465,7 +32465,7 @@ export namespace Prisma {
 
   export type TransactionMaxAggregateInputType = {
     id?: true
-    type?: true
+    transactionType?: true
     amount?: true
     amountCredits?: true
     buyerCashtag?: true
@@ -32489,7 +32489,7 @@ export namespace Prisma {
 
   export type TransactionCountAggregateInputType = {
     id?: true
-    type?: true
+    transactionType?: true
     amount?: true
     amountCredits?: true
     buyerCashtag?: true
@@ -32602,7 +32602,7 @@ export namespace Prisma {
 
   export type TransactionGroupByOutputType = {
     id: string
-    type: $Enums.TransactionType
+    transactionType: $Enums.TransactionType
     amount: number
     amountCredits: number
     buyerCashtag: string | null
@@ -32647,7 +32647,7 @@ export namespace Prisma {
 
   export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    type?: boolean
+    transactionType?: boolean
     amount?: boolean
     amountCredits?: boolean
     buyerCashtag?: boolean
@@ -32677,7 +32677,7 @@ export namespace Prisma {
 
   export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    type?: boolean
+    transactionType?: boolean
     amount?: boolean
     amountCredits?: boolean
     buyerCashtag?: boolean
@@ -32707,7 +32707,7 @@ export namespace Prisma {
 
   export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    type?: boolean
+    transactionType?: boolean
     amount?: boolean
     amountCredits?: boolean
     buyerCashtag?: boolean
@@ -32737,7 +32737,7 @@ export namespace Prisma {
 
   export type TransactionSelectScalar = {
     id?: boolean
-    type?: boolean
+    transactionType?: boolean
     amount?: boolean
     amountCredits?: boolean
     buyerCashtag?: boolean
@@ -32761,7 +32761,7 @@ export namespace Prisma {
     vipInfoId?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "amount" | "amountCredits" | "buyerCashtag" | "buyerUserId" | "username" | "cashiername" | "cashierAvatar" | "cashierId" | "reference" | "status" | "metadata" | "isRealMoney" | "paymentMethod" | "paymentDetails" | "createdAt" | "processedAt" | "gameSessionId" | "profileId" | "cashtag" | "productid" | "vipInfoId", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transactionType" | "amount" | "amountCredits" | "buyerCashtag" | "buyerUserId" | "username" | "cashiername" | "cashierAvatar" | "cashierId" | "reference" | "status" | "metadata" | "isRealMoney" | "paymentMethod" | "paymentDetails" | "createdAt" | "processedAt" | "gameSessionId" | "profileId" | "cashtag" | "productid" | "vipInfoId", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gamesession?: boolean | Transaction$gamesessionArgs<ExtArgs>
     profile?: boolean | Transaction$profileArgs<ExtArgs>
@@ -32791,7 +32791,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      type: $Enums.TransactionType
+      transactionType: $Enums.TransactionType
       amount: number
       amountCredits: number
       buyerCashtag: string | null
@@ -33241,7 +33241,7 @@ export namespace Prisma {
    */
   interface TransactionFieldRefs {
     readonly id: FieldRef<"Transaction", 'String'>
-    readonly type: FieldRef<"Transaction", 'TransactionType'>
+    readonly transactionType: FieldRef<"Transaction", 'TransactionType'>
     readonly amount: FieldRef<"Transaction", 'Int'>
     readonly amountCredits: FieldRef<"Transaction", 'Int'>
     readonly buyerCashtag: FieldRef<"Transaction", 'String'>
@@ -42368,7 +42368,7 @@ export namespace Prisma {
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
-  export const PlatformSessionScalarFieldEnum: {
+  export const SessionScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
     activeGameId: 'activeGameId',
@@ -42382,7 +42382,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type PlatformSessionScalarFieldEnum = (typeof PlatformSessionScalarFieldEnum)[keyof typeof PlatformSessionScalarFieldEnum]
+  export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
   export const OperatorScalarFieldEnum: {
@@ -42619,7 +42619,7 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     url: 'url',
-    type: 'type',
+    productType: 'productType',
     bonusCode: 'bonusCode',
     bonusTotalInCredits: 'bonusTotalInCredits',
     priceInCents: 'priceInCents',
@@ -42639,7 +42639,7 @@ export namespace Prisma {
 
   export const NotificationScalarFieldEnum: {
     id: 'id',
-    type: 'type',
+    notficationType: 'notficationType',
     title: 'title',
     message: 'message',
     isRead: 'isRead',
@@ -42696,7 +42696,7 @@ export namespace Prisma {
 
   export const TransactionScalarFieldEnum: {
     id: 'id',
-    type: 'type',
+    transactionType: 'transactionType',
     amount: 'amount',
     amountCredits: 'amountCredits',
     buyerCashtag: 'buyerCashtag',
@@ -43259,7 +43259,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryListRelationFilter
     RainTip?: RainTipListRelationFilter
     RainWinner?: RainWinnerListRelationFilter
-    sessions?: PlatformSessionListRelationFilter
+    sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
     chatmessage?: ChatmessageListRelationFilter
     friendshipFriendshipFriendidtouser?: FriendshipListRelationFilter
@@ -43312,7 +43312,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryOrderByRelationAggregateInput
     RainTip?: RainTipOrderByRelationAggregateInput
     RainWinner?: RainWinnerOrderByRelationAggregateInput
-    sessions?: PlatformSessionOrderByRelationAggregateInput
+    sessions?: SessionOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     chatmessage?: ChatmessageOrderByRelationAggregateInput
     friendshipFriendshipFriendidtouser?: FriendshipOrderByRelationAggregateInput
@@ -43368,7 +43368,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryListRelationFilter
     RainTip?: RainTipListRelationFilter
     RainWinner?: RainWinnerListRelationFilter
-    sessions?: PlatformSessionListRelationFilter
+    sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
     chatmessage?: ChatmessageListRelationFilter
     friendshipFriendshipFriendidtouser?: FriendshipListRelationFilter
@@ -43555,25 +43555,25 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
   }
 
-  export type PlatformSessionWhereInput = {
-    AND?: PlatformSessionWhereInput | PlatformSessionWhereInput[]
-    OR?: PlatformSessionWhereInput[]
-    NOT?: PlatformSessionWhereInput | PlatformSessionWhereInput[]
-    id?: StringFilter<"PlatformSession"> | string
-    userId?: StringFilter<"PlatformSession"> | string
-    activeGameId?: StringNullableFilter<"PlatformSession"> | string | null
-    ipAddress?: StringNullableFilter<"PlatformSession"> | string | null
-    userAgent?: StringNullableFilter<"PlatformSession"> | string | null
-    expiresAt?: DateTimeFilter<"PlatformSession"> | Date | string
-    createdAt?: DateTimeFilter<"PlatformSession"> | Date | string
-    refreshToken?: StringNullableFilter<"PlatformSession"> | string | null
-    active?: BoolFilter<"PlatformSession"> | boolean
-    token?: StringFilter<"PlatformSession"> | string
-    updatedAt?: DateTimeNullableFilter<"PlatformSession"> | Date | string | null
+  export type SessionWhereInput = {
+    AND?: SessionWhereInput | SessionWhereInput[]
+    OR?: SessionWhereInput[]
+    NOT?: SessionWhereInput | SessionWhereInput[]
+    id?: StringFilter<"Session"> | string
+    userId?: StringFilter<"Session"> | string
+    activeGameId?: StringNullableFilter<"Session"> | string | null
+    ipAddress?: StringNullableFilter<"Session"> | string | null
+    userAgent?: StringNullableFilter<"Session"> | string | null
+    expiresAt?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
+    refreshToken?: StringNullableFilter<"Session"> | string | null
+    active?: BoolFilter<"Session"> | boolean
+    token?: StringFilter<"Session"> | string
+    updatedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
-  export type PlatformSessionOrderByWithRelationInput = {
+  export type SessionOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
     activeGameId?: SortOrderInput | SortOrder
@@ -43588,25 +43588,25 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
   }
 
-  export type PlatformSessionWhereUniqueInput = Prisma.AtLeast<{
+  export type SessionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     refreshToken?: string
     token?: string
-    AND?: PlatformSessionWhereInput | PlatformSessionWhereInput[]
-    OR?: PlatformSessionWhereInput[]
-    NOT?: PlatformSessionWhereInput | PlatformSessionWhereInput[]
-    userId?: StringFilter<"PlatformSession"> | string
-    activeGameId?: StringNullableFilter<"PlatformSession"> | string | null
-    ipAddress?: StringNullableFilter<"PlatformSession"> | string | null
-    userAgent?: StringNullableFilter<"PlatformSession"> | string | null
-    expiresAt?: DateTimeFilter<"PlatformSession"> | Date | string
-    createdAt?: DateTimeFilter<"PlatformSession"> | Date | string
-    active?: BoolFilter<"PlatformSession"> | boolean
-    updatedAt?: DateTimeNullableFilter<"PlatformSession"> | Date | string | null
+    AND?: SessionWhereInput | SessionWhereInput[]
+    OR?: SessionWhereInput[]
+    NOT?: SessionWhereInput | SessionWhereInput[]
+    userId?: StringFilter<"Session"> | string
+    activeGameId?: StringNullableFilter<"Session"> | string | null
+    ipAddress?: StringNullableFilter<"Session"> | string | null
+    userAgent?: StringNullableFilter<"Session"> | string | null
+    expiresAt?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
+    active?: BoolFilter<"Session"> | boolean
+    updatedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "refreshToken" | "token">
 
-  export type PlatformSessionOrderByWithAggregationInput = {
+  export type SessionOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     activeGameId?: SortOrderInput | SortOrder
@@ -43618,26 +43618,26 @@ export namespace Prisma {
     active?: SortOrder
     token?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
-    _count?: PlatformSessionCountOrderByAggregateInput
-    _max?: PlatformSessionMaxOrderByAggregateInput
-    _min?: PlatformSessionMinOrderByAggregateInput
+    _count?: SessionCountOrderByAggregateInput
+    _max?: SessionMaxOrderByAggregateInput
+    _min?: SessionMinOrderByAggregateInput
   }
 
-  export type PlatformSessionScalarWhereWithAggregatesInput = {
-    AND?: PlatformSessionScalarWhereWithAggregatesInput | PlatformSessionScalarWhereWithAggregatesInput[]
-    OR?: PlatformSessionScalarWhereWithAggregatesInput[]
-    NOT?: PlatformSessionScalarWhereWithAggregatesInput | PlatformSessionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PlatformSession"> | string
-    userId?: StringWithAggregatesFilter<"PlatformSession"> | string
-    activeGameId?: StringNullableWithAggregatesFilter<"PlatformSession"> | string | null
-    ipAddress?: StringNullableWithAggregatesFilter<"PlatformSession"> | string | null
-    userAgent?: StringNullableWithAggregatesFilter<"PlatformSession"> | string | null
-    expiresAt?: DateTimeWithAggregatesFilter<"PlatformSession"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"PlatformSession"> | Date | string
-    refreshToken?: StringNullableWithAggregatesFilter<"PlatformSession"> | string | null
-    active?: BoolWithAggregatesFilter<"PlatformSession"> | boolean
-    token?: StringWithAggregatesFilter<"PlatformSession"> | string
-    updatedAt?: DateTimeNullableWithAggregatesFilter<"PlatformSession"> | Date | string | null
+  export type SessionScalarWhereWithAggregatesInput = {
+    AND?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
+    OR?: SessionScalarWhereWithAggregatesInput[]
+    NOT?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Session"> | string
+    userId?: StringWithAggregatesFilter<"Session"> | string
+    activeGameId?: StringNullableWithAggregatesFilter<"Session"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"Session"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"Session"> | string | null
+    expiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    refreshToken?: StringNullableWithAggregatesFilter<"Session"> | string | null
+    active?: BoolWithAggregatesFilter<"Session"> | boolean
+    token?: StringWithAggregatesFilter<"Session"> | string
+    updatedAt?: DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
   }
 
   export type OperatorWhereInput = {
@@ -44863,7 +44863,7 @@ export namespace Prisma {
     title?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     url?: StringFilter<"Product"> | string
-    type?: StringFilter<"Product"> | string
+    productType?: StringFilter<"Product"> | string
     bonusCode?: StringNullableFilter<"Product"> | string | null
     bonusTotalInCredits?: IntFilter<"Product"> | number
     priceInCents?: IntFilter<"Product"> | number
@@ -44885,7 +44885,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
-    type?: SortOrder
+    productType?: SortOrder
     bonusCode?: SortOrderInput | SortOrder
     bonusTotalInCredits?: SortOrder
     priceInCents?: SortOrder
@@ -44910,7 +44910,7 @@ export namespace Prisma {
     title?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     url?: StringFilter<"Product"> | string
-    type?: StringFilter<"Product"> | string
+    productType?: StringFilter<"Product"> | string
     bonusCode?: StringNullableFilter<"Product"> | string | null
     bonusTotalInCredits?: IntFilter<"Product"> | number
     priceInCents?: IntFilter<"Product"> | number
@@ -44932,7 +44932,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
-    type?: SortOrder
+    productType?: SortOrder
     bonusCode?: SortOrderInput | SortOrder
     bonusTotalInCredits?: SortOrder
     priceInCents?: SortOrder
@@ -44960,7 +44960,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Product"> | string
     description?: StringWithAggregatesFilter<"Product"> | string
     url?: StringWithAggregatesFilter<"Product"> | string
-    type?: StringWithAggregatesFilter<"Product"> | string
+    productType?: StringWithAggregatesFilter<"Product"> | string
     bonusCode?: StringNullableWithAggregatesFilter<"Product"> | string | null
     bonusTotalInCredits?: IntWithAggregatesFilter<"Product"> | number
     priceInCents?: IntWithAggregatesFilter<"Product"> | number
@@ -44980,7 +44980,7 @@ export namespace Prisma {
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     id?: StringFilter<"Notification"> | string
-    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     isRead?: BoolFilter<"Notification"> | boolean
@@ -44993,7 +44993,7 @@ export namespace Prisma {
 
   export type NotificationOrderByWithRelationInput = {
     id?: SortOrder
-    type?: SortOrder
+    notficationType?: SortOrder
     title?: SortOrder
     message?: SortOrder
     isRead?: SortOrder
@@ -45009,7 +45009,7 @@ export namespace Prisma {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
-    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     isRead?: BoolFilter<"Notification"> | boolean
@@ -45022,7 +45022,7 @@ export namespace Prisma {
 
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
-    type?: SortOrder
+    notficationType?: SortOrder
     title?: SortOrder
     message?: SortOrder
     isRead?: SortOrder
@@ -45040,7 +45040,7 @@ export namespace Prisma {
     OR?: NotificationScalarWhereWithAggregatesInput[]
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Notification"> | string
-    type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
     title?: StringWithAggregatesFilter<"Notification"> | string
     message?: StringWithAggregatesFilter<"Notification"> | string
     isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
@@ -45291,7 +45291,7 @@ export namespace Prisma {
     OR?: TransactionWhereInput[]
     NOT?: TransactionWhereInput | TransactionWhereInput[]
     id?: StringFilter<"Transaction"> | string
-    type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
     amount?: IntFilter<"Transaction"> | number
     amountCredits?: IntFilter<"Transaction"> | number
     buyerCashtag?: StringNullableFilter<"Transaction"> | string | null
@@ -45321,7 +45321,7 @@ export namespace Prisma {
 
   export type TransactionOrderByWithRelationInput = {
     id?: SortOrder
-    type?: SortOrder
+    transactionType?: SortOrder
     amount?: SortOrder
     amountCredits?: SortOrder
     buyerCashtag?: SortOrderInput | SortOrder
@@ -45354,7 +45354,7 @@ export namespace Prisma {
     AND?: TransactionWhereInput | TransactionWhereInput[]
     OR?: TransactionWhereInput[]
     NOT?: TransactionWhereInput | TransactionWhereInput[]
-    type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
     amount?: IntFilter<"Transaction"> | number
     amountCredits?: IntFilter<"Transaction"> | number
     buyerCashtag?: StringNullableFilter<"Transaction"> | string | null
@@ -45384,7 +45384,7 @@ export namespace Prisma {
 
   export type TransactionOrderByWithAggregationInput = {
     id?: SortOrder
-    type?: SortOrder
+    transactionType?: SortOrder
     amount?: SortOrder
     amountCredits?: SortOrder
     buyerCashtag?: SortOrderInput | SortOrder
@@ -45418,7 +45418,7 @@ export namespace Prisma {
     OR?: TransactionScalarWhereWithAggregatesInput[]
     NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Transaction"> | string
-    type?: EnumTransactionTypeWithAggregatesFilter<"Transaction"> | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeWithAggregatesFilter<"Transaction"> | $Enums.TransactionType
     amount?: IntWithAggregatesFilter<"Transaction"> | number
     amountCredits?: IntWithAggregatesFilter<"Transaction"> | number
     buyerCashtag?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
@@ -46244,7 +46244,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -46297,7 +46297,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -46350,7 +46350,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -46403,7 +46403,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -46633,7 +46633,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PlatformSessionCreateInput = {
+  export type SessionCreateInput = {
     id?: string
     activeGameId?: string | null
     ipAddress?: string | null
@@ -46647,7 +46647,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutSessionsInput
   }
 
-  export type PlatformSessionUncheckedCreateInput = {
+  export type SessionUncheckedCreateInput = {
     id?: string
     userId: string
     activeGameId?: string | null
@@ -46661,7 +46661,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
   }
 
-  export type PlatformSessionUpdateInput = {
+  export type SessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46675,7 +46675,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutSessionsNestedInput
   }
 
-  export type PlatformSessionUncheckedUpdateInput = {
+  export type SessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46689,7 +46689,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PlatformSessionCreateManyInput = {
+  export type SessionCreateManyInput = {
     id?: string
     userId: string
     activeGameId?: string | null
@@ -46703,7 +46703,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
   }
 
-  export type PlatformSessionUpdateManyMutationInput = {
+  export type SessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46716,7 +46716,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PlatformSessionUncheckedUpdateManyInput = {
+  export type SessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48086,7 +48086,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -48107,7 +48107,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -48128,7 +48128,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -48149,7 +48149,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -48170,7 +48170,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -48190,7 +48190,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -48209,7 +48209,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -48226,7 +48226,7 @@ export namespace Prisma {
 
   export type NotificationCreateInput = {
     id?: string
-    type: $Enums.NotificationType
+    notficationType?: $Enums.NotificationType
     title: string
     message: string
     isRead?: boolean
@@ -48238,7 +48238,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedCreateInput = {
     id?: string
-    type: $Enums.NotificationType
+    notficationType?: $Enums.NotificationType
     title: string
     message: string
     isRead?: boolean
@@ -48250,7 +48250,7 @@ export namespace Prisma {
 
   export type NotificationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -48262,7 +48262,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -48274,7 +48274,7 @@ export namespace Prisma {
 
   export type NotificationCreateManyInput = {
     id?: string
-    type: $Enums.NotificationType
+    notficationType?: $Enums.NotificationType
     title: string
     message: string
     isRead?: boolean
@@ -48286,7 +48286,7 @@ export namespace Prisma {
 
   export type NotificationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -48297,7 +48297,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -48546,7 +48546,7 @@ export namespace Prisma {
 
   export type TransactionCreateInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -48572,7 +48572,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedCreateInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -48598,7 +48598,7 @@ export namespace Prisma {
 
   export type TransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48624,7 +48624,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48650,7 +48650,7 @@ export namespace Prisma {
 
   export type TransactionCreateManyInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -48676,7 +48676,7 @@ export namespace Prisma {
 
   export type TransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48698,7 +48698,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48868,7 +48868,7 @@ export namespace Prisma {
   export type RainHistoryCreateInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetCreateNestedManyWithoutRainHistoryInput
     user: UserCreateNestedOneWithoutRainHistoryInput
@@ -48880,7 +48880,7 @@ export namespace Prisma {
     id?: string
     userId: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetUncheckedCreateNestedManyWithoutRainHistoryInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutRainHistoryInput
@@ -48913,7 +48913,7 @@ export namespace Prisma {
     id?: string
     userId: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
   }
 
@@ -49765,10 +49765,10 @@ export namespace Prisma {
     none?: RainWinnerWhereInput
   }
 
-  export type PlatformSessionListRelationFilter = {
-    every?: PlatformSessionWhereInput
-    some?: PlatformSessionWhereInput
-    none?: PlatformSessionWhereInput
+  export type SessionListRelationFilter = {
+    every?: SessionWhereInput
+    some?: SessionWhereInput
+    none?: SessionWhereInput
   }
 
   export type AccountListRelationFilter = {
@@ -49848,7 +49848,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type PlatformSessionOrderByRelationAggregateInput = {
+  export type SessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -50110,7 +50110,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type PlatformSessionCountOrderByAggregateInput = {
+  export type SessionCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     activeGameId?: SortOrder
@@ -50124,7 +50124,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type PlatformSessionMaxOrderByAggregateInput = {
+  export type SessionMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     activeGameId?: SortOrder
@@ -50138,7 +50138,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type PlatformSessionMinOrderByAggregateInput = {
+  export type SessionMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     activeGameId?: SortOrder
@@ -51122,7 +51122,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
-    type?: SortOrder
+    productType?: SortOrder
     bonusCode?: SortOrder
     bonusTotalInCredits?: SortOrder
     priceInCents?: SortOrder
@@ -51152,7 +51152,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
-    type?: SortOrder
+    productType?: SortOrder
     bonusCode?: SortOrder
     bonusTotalInCredits?: SortOrder
     priceInCents?: SortOrder
@@ -51172,7 +51172,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     url?: SortOrder
-    type?: SortOrder
+    productType?: SortOrder
     bonusCode?: SortOrder
     bonusTotalInCredits?: SortOrder
     priceInCents?: SortOrder
@@ -51206,7 +51206,7 @@ export namespace Prisma {
 
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
-    type?: SortOrder
+    notficationType?: SortOrder
     title?: SortOrder
     message?: SortOrder
     isRead?: SortOrder
@@ -51218,7 +51218,7 @@ export namespace Prisma {
 
   export type NotificationMaxOrderByAggregateInput = {
     id?: SortOrder
-    type?: SortOrder
+    notficationType?: SortOrder
     title?: SortOrder
     message?: SortOrder
     isRead?: SortOrder
@@ -51229,7 +51229,7 @@ export namespace Prisma {
 
   export type NotificationMinOrderByAggregateInput = {
     id?: SortOrder
-    type?: SortOrder
+    notficationType?: SortOrder
     title?: SortOrder
     message?: SortOrder
     isRead?: SortOrder
@@ -51416,7 +51416,7 @@ export namespace Prisma {
 
   export type TransactionCountOrderByAggregateInput = {
     id?: SortOrder
-    type?: SortOrder
+    transactionType?: SortOrder
     amount?: SortOrder
     amountCredits?: SortOrder
     buyerCashtag?: SortOrder
@@ -51447,7 +51447,7 @@ export namespace Prisma {
 
   export type TransactionMaxOrderByAggregateInput = {
     id?: SortOrder
-    type?: SortOrder
+    transactionType?: SortOrder
     amount?: SortOrder
     amountCredits?: SortOrder
     buyerCashtag?: SortOrder
@@ -51471,7 +51471,7 @@ export namespace Prisma {
 
   export type TransactionMinOrderByAggregateInput = {
     id?: SortOrder
-    type?: SortOrder
+    transactionType?: SortOrder
     amount?: SortOrder
     amountCredits?: SortOrder
     buyerCashtag?: SortOrder
@@ -52107,11 +52107,11 @@ export namespace Prisma {
     connect?: RainWinnerWhereUniqueInput | RainWinnerWhereUniqueInput[]
   }
 
-  export type PlatformSessionCreateNestedManyWithoutUserInput = {
-    create?: XOR<PlatformSessionCreateWithoutUserInput, PlatformSessionUncheckedCreateWithoutUserInput> | PlatformSessionCreateWithoutUserInput[] | PlatformSessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PlatformSessionCreateOrConnectWithoutUserInput | PlatformSessionCreateOrConnectWithoutUserInput[]
-    createMany?: PlatformSessionCreateManyUserInputEnvelope
-    connect?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
+  export type SessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
   export type AccountCreateNestedManyWithoutUserInput = {
@@ -52232,11 +52232,11 @@ export namespace Prisma {
     connect?: RainWinnerWhereUniqueInput | RainWinnerWhereUniqueInput[]
   }
 
-  export type PlatformSessionUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<PlatformSessionCreateWithoutUserInput, PlatformSessionUncheckedCreateWithoutUserInput> | PlatformSessionCreateWithoutUserInput[] | PlatformSessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PlatformSessionCreateOrConnectWithoutUserInput | PlatformSessionCreateOrConnectWithoutUserInput[]
-    createMany?: PlatformSessionCreateManyUserInputEnvelope
-    connect?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
+  export type SessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -52419,18 +52419,18 @@ export namespace Prisma {
     deleteMany?: RainWinnerScalarWhereInput | RainWinnerScalarWhereInput[]
   }
 
-  export type PlatformSessionUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PlatformSessionCreateWithoutUserInput, PlatformSessionUncheckedCreateWithoutUserInput> | PlatformSessionCreateWithoutUserInput[] | PlatformSessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PlatformSessionCreateOrConnectWithoutUserInput | PlatformSessionCreateOrConnectWithoutUserInput[]
-    upsert?: PlatformSessionUpsertWithWhereUniqueWithoutUserInput | PlatformSessionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PlatformSessionCreateManyUserInputEnvelope
-    set?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    disconnect?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    delete?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    connect?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    update?: PlatformSessionUpdateWithWhereUniqueWithoutUserInput | PlatformSessionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PlatformSessionUpdateManyWithWhereWithoutUserInput | PlatformSessionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PlatformSessionScalarWhereInput | PlatformSessionScalarWhereInput[]
+  export type SessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -52667,18 +52667,18 @@ export namespace Prisma {
     deleteMany?: RainWinnerScalarWhereInput | RainWinnerScalarWhereInput[]
   }
 
-  export type PlatformSessionUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PlatformSessionCreateWithoutUserInput, PlatformSessionUncheckedCreateWithoutUserInput> | PlatformSessionCreateWithoutUserInput[] | PlatformSessionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PlatformSessionCreateOrConnectWithoutUserInput | PlatformSessionCreateOrConnectWithoutUserInput[]
-    upsert?: PlatformSessionUpsertWithWhereUniqueWithoutUserInput | PlatformSessionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PlatformSessionCreateManyUserInputEnvelope
-    set?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    disconnect?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    delete?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    connect?: PlatformSessionWhereUniqueInput | PlatformSessionWhereUniqueInput[]
-    update?: PlatformSessionUpdateWithWhereUniqueWithoutUserInput | PlatformSessionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PlatformSessionUpdateManyWithWhereWithoutUserInput | PlatformSessionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PlatformSessionScalarWhereInput | PlatformSessionScalarWhereInput[]
+  export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -55192,7 +55192,7 @@ export namespace Prisma {
   export type RainHistoryCreateWithoutUserInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetCreateNestedManyWithoutRainHistoryInput
     RainTip?: RainTipCreateNestedManyWithoutRainHistoryInput
@@ -55202,7 +55202,7 @@ export namespace Prisma {
   export type RainHistoryUncheckedCreateWithoutUserInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetUncheckedCreateNestedManyWithoutRainHistoryInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutRainHistoryInput
@@ -55267,7 +55267,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PlatformSessionCreateWithoutUserInput = {
+  export type SessionCreateWithoutUserInput = {
     id?: string
     activeGameId?: string | null
     ipAddress?: string | null
@@ -55280,7 +55280,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
   }
 
-  export type PlatformSessionUncheckedCreateWithoutUserInput = {
+  export type SessionUncheckedCreateWithoutUserInput = {
     id?: string
     activeGameId?: string | null
     ipAddress?: string | null
@@ -55293,13 +55293,13 @@ export namespace Prisma {
     updatedAt?: Date | string | null
   }
 
-  export type PlatformSessionCreateOrConnectWithoutUserInput = {
-    where: PlatformSessionWhereUniqueInput
-    create: XOR<PlatformSessionCreateWithoutUserInput, PlatformSessionUncheckedCreateWithoutUserInput>
+  export type SessionCreateOrConnectWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
   }
 
-  export type PlatformSessionCreateManyUserInputEnvelope = {
-    data: PlatformSessionCreateManyUserInput | PlatformSessionCreateManyUserInput[]
+  export type SessionCreateManyUserInputEnvelope = {
+    data: SessionCreateManyUserInput | SessionCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -55477,7 +55477,7 @@ export namespace Prisma {
 
   export type NotificationCreateWithoutUserInput = {
     id?: string
-    type: $Enums.NotificationType
+    notficationType?: $Enums.NotificationType
     title: string
     message: string
     isRead?: boolean
@@ -55488,7 +55488,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedCreateWithoutUserInput = {
     id?: string
-    type: $Enums.NotificationType
+    notficationType?: $Enums.NotificationType
     title: string
     message: string
     isRead?: boolean
@@ -55878,37 +55878,37 @@ export namespace Prisma {
     wonAt?: DateTimeFilter<"RainWinner"> | Date | string
   }
 
-  export type PlatformSessionUpsertWithWhereUniqueWithoutUserInput = {
-    where: PlatformSessionWhereUniqueInput
-    update: XOR<PlatformSessionUpdateWithoutUserInput, PlatformSessionUncheckedUpdateWithoutUserInput>
-    create: XOR<PlatformSessionCreateWithoutUserInput, PlatformSessionUncheckedCreateWithoutUserInput>
+  export type SessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
+    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
   }
 
-  export type PlatformSessionUpdateWithWhereUniqueWithoutUserInput = {
-    where: PlatformSessionWhereUniqueInput
-    data: XOR<PlatformSessionUpdateWithoutUserInput, PlatformSessionUncheckedUpdateWithoutUserInput>
+  export type SessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    data: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
   }
 
-  export type PlatformSessionUpdateManyWithWhereWithoutUserInput = {
-    where: PlatformSessionScalarWhereInput
-    data: XOR<PlatformSessionUpdateManyMutationInput, PlatformSessionUncheckedUpdateManyWithoutUserInput>
+  export type SessionUpdateManyWithWhereWithoutUserInput = {
+    where: SessionScalarWhereInput
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type PlatformSessionScalarWhereInput = {
-    AND?: PlatformSessionScalarWhereInput | PlatformSessionScalarWhereInput[]
-    OR?: PlatformSessionScalarWhereInput[]
-    NOT?: PlatformSessionScalarWhereInput | PlatformSessionScalarWhereInput[]
-    id?: StringFilter<"PlatformSession"> | string
-    userId?: StringFilter<"PlatformSession"> | string
-    activeGameId?: StringNullableFilter<"PlatformSession"> | string | null
-    ipAddress?: StringNullableFilter<"PlatformSession"> | string | null
-    userAgent?: StringNullableFilter<"PlatformSession"> | string | null
-    expiresAt?: DateTimeFilter<"PlatformSession"> | Date | string
-    createdAt?: DateTimeFilter<"PlatformSession"> | Date | string
-    refreshToken?: StringNullableFilter<"PlatformSession"> | string | null
-    active?: BoolFilter<"PlatformSession"> | boolean
-    token?: StringFilter<"PlatformSession"> | string
-    updatedAt?: DateTimeNullableFilter<"PlatformSession"> | Date | string | null
+  export type SessionScalarWhereInput = {
+    AND?: SessionScalarWhereInput | SessionScalarWhereInput[]
+    OR?: SessionScalarWhereInput[]
+    NOT?: SessionScalarWhereInput | SessionScalarWhereInput[]
+    id?: StringFilter<"Session"> | string
+    userId?: StringFilter<"Session"> | string
+    activeGameId?: StringNullableFilter<"Session"> | string | null
+    ipAddress?: StringNullableFilter<"Session"> | string | null
+    userAgent?: StringNullableFilter<"Session"> | string | null
+    expiresAt?: DateTimeFilter<"Session"> | Date | string
+    createdAt?: DateTimeFilter<"Session"> | Date | string
+    refreshToken?: StringNullableFilter<"Session"> | string | null
+    active?: BoolFilter<"Session"> | boolean
+    token?: StringFilter<"Session"> | string
+    updatedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -56096,7 +56096,7 @@ export namespace Prisma {
     OR?: NotificationScalarWhereInput[]
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     id?: StringFilter<"Notification"> | string
-    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
     title?: StringFilter<"Notification"> | string
     message?: StringFilter<"Notification"> | string
     isRead?: BoolFilter<"Notification"> | boolean
@@ -56336,7 +56336,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
     friendshipFriendshipUseridtouser?: FriendshipCreateNestedManyWithoutUserFriendshipUseridtouserInput
@@ -56388,7 +56388,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
     friendshipFriendshipUseridtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipUseridtouserInput
@@ -56456,7 +56456,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
     friendshipFriendshipUseridtouser?: FriendshipUpdateManyWithoutUserFriendshipUseridtouserNestedInput
@@ -56508,7 +56508,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
     friendshipFriendshipUseridtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipUseridtouserNestedInput
@@ -56783,7 +56783,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -56835,7 +56835,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -57013,7 +57013,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -57033,7 +57033,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -57269,7 +57269,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -57321,7 +57321,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -57444,7 +57444,7 @@ export namespace Prisma {
     title?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     url?: StringFilter<"Product"> | string
-    type?: StringFilter<"Product"> | string
+    productType?: StringFilter<"Product"> | string
     bonusCode?: StringNullableFilter<"Product"> | string | null
     bonusTotalInCredits?: IntFilter<"Product"> | number
     priceInCents?: IntFilter<"Product"> | number
@@ -57644,7 +57644,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -57696,7 +57696,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -57789,7 +57789,7 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutProfileInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -57814,7 +57814,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedCreateWithoutProfileInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -57943,7 +57943,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -57995,7 +57995,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -58080,7 +58080,7 @@ export namespace Prisma {
     OR?: TransactionScalarWhereInput[]
     NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
     id?: StringFilter<"Transaction"> | string
-    type?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFilter<"Transaction"> | $Enums.TransactionType
     amount?: IntFilter<"Transaction"> | number
     amountCredits?: IntFilter<"Transaction"> | number
     buyerCashtag?: StringNullableFilter<"Transaction"> | string | null
@@ -58446,7 +58446,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -58498,7 +58498,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -58597,7 +58597,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -58649,7 +58649,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -58701,7 +58701,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -58753,7 +58753,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -58846,7 +58846,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -58898,7 +58898,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -58981,7 +58981,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -59033,7 +59033,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -59101,7 +59101,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -59153,7 +59153,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -59226,7 +59226,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
     friendshipFriendshipUseridtouser?: FriendshipCreateNestedManyWithoutUserFriendshipUseridtouserInput
@@ -59278,7 +59278,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
     friendshipFriendshipUseridtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipUseridtouserInput
@@ -59373,7 +59373,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
     friendshipFriendshipUseridtouser?: FriendshipUpdateManyWithoutUserFriendshipUseridtouserNestedInput
@@ -59425,7 +59425,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
     friendshipFriendshipUseridtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipUseridtouserNestedInput
@@ -59601,7 +59601,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipUseridtouser?: FriendshipCreateNestedManyWithoutUserFriendshipUseridtouserInput
@@ -59653,7 +59653,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipUseridtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipUseridtouserInput
@@ -59710,7 +59710,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -59762,7 +59762,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -59830,7 +59830,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipUseridtouser?: FriendshipUpdateManyWithoutUserFriendshipUseridtouserNestedInput
@@ -59882,7 +59882,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipUseridtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipUseridtouserNestedInput
@@ -59945,7 +59945,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -59997,7 +59997,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -60221,7 +60221,7 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutGamesessionInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -60246,7 +60246,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedCreateWithoutGamesessionInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -60798,7 +60798,7 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutProductInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -60823,7 +60823,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedCreateWithoutProductInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -60958,7 +60958,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -61010,7 +61010,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -61078,7 +61078,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -61130,7 +61130,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -61488,7 +61488,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -61540,7 +61540,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -61696,7 +61696,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -61748,7 +61748,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -62144,7 +62144,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -62164,7 +62164,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -62399,7 +62399,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -62419,7 +62419,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -62619,7 +62619,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -62671,7 +62671,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -62772,7 +62772,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -62824,7 +62824,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -62840,7 +62840,7 @@ export namespace Prisma {
   export type RainHistoryCreateWithoutRainBetInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutRainHistoryInput
     RainTip?: RainTipCreateNestedManyWithoutRainHistoryInput
@@ -62851,7 +62851,7 @@ export namespace Prisma {
     id?: string
     userId: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainTip?: RainTipUncheckedCreateNestedManyWithoutRainHistoryInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutRainHistoryInput
@@ -62900,7 +62900,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -62952,7 +62952,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63051,7 +63051,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -63103,7 +63103,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -63183,7 +63183,7 @@ export namespace Prisma {
     RainBet?: RainBetCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63235,7 +63235,7 @@ export namespace Prisma {
     RainBet?: RainBetUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63367,7 +63367,7 @@ export namespace Prisma {
     RainBet?: RainBetUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -63419,7 +63419,7 @@ export namespace Prisma {
     RainBet?: RainBetUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -63468,7 +63468,7 @@ export namespace Prisma {
   export type RainHistoryCreateWithoutRainTipInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetCreateNestedManyWithoutRainHistoryInput
     user: UserCreateNestedOneWithoutRainHistoryInput
@@ -63479,7 +63479,7 @@ export namespace Prisma {
     id?: string
     userId: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetUncheckedCreateNestedManyWithoutRainHistoryInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutRainHistoryInput
@@ -63528,7 +63528,7 @@ export namespace Prisma {
     RainBet?: RainBetCreateNestedManyWithoutUserInput
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63580,7 +63580,7 @@ export namespace Prisma {
     RainBet?: RainBetUncheckedCreateNestedManyWithoutUserInput
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63679,7 +63679,7 @@ export namespace Prisma {
     RainBet?: RainBetUpdateManyWithoutUserNestedInput
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -63731,7 +63731,7 @@ export namespace Prisma {
     RainBet?: RainBetUncheckedUpdateManyWithoutUserNestedInput
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -63748,7 +63748,7 @@ export namespace Prisma {
   export type RainHistoryCreateWithoutRainWinnerInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetCreateNestedManyWithoutRainHistoryInput
     user: UserCreateNestedOneWithoutRainHistoryInput
@@ -63759,7 +63759,7 @@ export namespace Prisma {
     id?: string
     userId: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
     RainBet?: RainBetUncheckedCreateNestedManyWithoutRainHistoryInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutRainHistoryInput
@@ -63808,7 +63808,7 @@ export namespace Prisma {
     RainBet?: RainBetCreateNestedManyWithoutUserInput
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63860,7 +63860,7 @@ export namespace Prisma {
     RainBet?: RainBetUncheckedCreateNestedManyWithoutUserInput
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -63959,7 +63959,7 @@ export namespace Prisma {
     RainBet?: RainBetUpdateManyWithoutUserNestedInput
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -64011,7 +64011,7 @@ export namespace Prisma {
     RainBet?: RainBetUncheckedUpdateManyWithoutUserNestedInput
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -64110,7 +64110,7 @@ export namespace Prisma {
 
   export type TransactionCreateWithoutVipInfoInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -64135,7 +64135,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedCreateWithoutVipInfoInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -64207,7 +64207,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryCreateNestedManyWithoutUserInput
     RainTip?: RainTipCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -64259,7 +64259,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedCreateNestedManyWithoutUserInput
     RainTip?: RainTipUncheckedCreateNestedManyWithoutUserInput
     RainWinner?: RainWinnerUncheckedCreateNestedManyWithoutUserInput
-    sessions?: PlatformSessionUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     chatmessage?: ChatmessageUncheckedCreateNestedManyWithoutUserInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedCreateNestedManyWithoutUserFriendshipFriendidtouserInput
@@ -64406,7 +64406,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -64458,7 +64458,7 @@ export namespace Prisma {
     RainHistory?: RainHistoryUncheckedUpdateManyWithoutUserNestedInput
     RainTip?: RainTipUncheckedUpdateManyWithoutUserNestedInput
     RainWinner?: RainWinnerUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: PlatformSessionUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     chatmessage?: ChatmessageUncheckedUpdateManyWithoutUserNestedInput
     friendshipFriendshipFriendidtouser?: FriendshipUncheckedUpdateManyWithoutUserFriendshipFriendidtouserNestedInput
@@ -64549,7 +64549,7 @@ export namespace Prisma {
   export type RainHistoryCreateManyUserInput = {
     id?: string
     amount: number
-    rainType: $Enums.RainType
+    rainType?: $Enums.RainType
     createdAt?: Date | string
   }
 
@@ -64567,7 +64567,7 @@ export namespace Prisma {
     wonAt?: Date | string
   }
 
-  export type PlatformSessionCreateManyUserInput = {
+  export type SessionCreateManyUserInput = {
     id?: string
     activeGameId?: string | null
     ipAddress?: string | null
@@ -64638,7 +64638,7 @@ export namespace Prisma {
 
   export type NotificationCreateManyUserInput = {
     id?: string
-    type: $Enums.NotificationType
+    notficationType?: $Enums.NotificationType
     title: string
     message: string
     isRead?: boolean
@@ -64863,7 +64863,7 @@ export namespace Prisma {
     wonAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PlatformSessionUpdateWithoutUserInput = {
+  export type SessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64876,7 +64876,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PlatformSessionUncheckedUpdateWithoutUserInput = {
+  export type SessionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64889,7 +64889,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PlatformSessionUncheckedUpdateManyWithoutUserInput = {
+  export type SessionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     activeGameId?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65072,7 +65072,7 @@ export namespace Prisma {
 
   export type NotificationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -65083,7 +65083,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -65094,7 +65094,7 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    notficationType?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     title?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -65248,7 +65248,7 @@ export namespace Prisma {
     title?: string
     description?: string
     url?: string
-    type?: string
+    productType?: string
     bonusCode?: string | null
     bonusTotalInCredits?: number
     priceInCents?: number
@@ -65529,7 +65529,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -65549,7 +65549,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -65569,7 +65569,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
+    productType?: StringFieldUpdateOperationsInput | string
     bonusCode?: NullableStringFieldUpdateOperationsInput | string | null
     bonusTotalInCredits?: IntFieldUpdateOperationsInput | number
     priceInCents?: IntFieldUpdateOperationsInput | number
@@ -65817,7 +65817,7 @@ export namespace Prisma {
 
   export type TransactionCreateManyProfileInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -65918,7 +65918,7 @@ export namespace Prisma {
 
   export type TransactionUpdateWithoutProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65943,7 +65943,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateWithoutProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -65968,7 +65968,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateManyWithoutProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66184,7 +66184,7 @@ export namespace Prisma {
 
   export type TransactionCreateManyGamesessionInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -66232,7 +66232,7 @@ export namespace Prisma {
 
   export type TransactionUpdateWithoutGamesessionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66257,7 +66257,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateWithoutGamesessionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66282,7 +66282,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateManyWithoutGamesessionInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66307,7 +66307,7 @@ export namespace Prisma {
 
   export type TransactionCreateManyProductInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -66332,7 +66332,7 @@ export namespace Prisma {
 
   export type TransactionUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66357,7 +66357,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66382,7 +66382,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66637,7 +66637,7 @@ export namespace Prisma {
 
   export type TransactionCreateManyVipInfoInput = {
     id?: string
-    type?: $Enums.TransactionType
+    transactionType?: $Enums.TransactionType
     amount?: number
     amountCredits?: number
     buyerCashtag?: string | null
@@ -66708,7 +66708,7 @@ export namespace Prisma {
 
   export type TransactionUpdateWithoutVipInfoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66733,7 +66733,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateWithoutVipInfoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66758,7 +66758,7 @@ export namespace Prisma {
 
   export type TransactionUncheckedUpdateManyWithoutVipInfoInput = {
     id?: StringFieldUpdateOperationsInput | string
-    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    transactionType?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
     amount?: IntFieldUpdateOperationsInput | number
     amountCredits?: IntFieldUpdateOperationsInput | number
     buyerCashtag?: NullableStringFieldUpdateOperationsInput | string | null

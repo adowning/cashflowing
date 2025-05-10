@@ -1,21 +1,21 @@
 <script lang="ts" setup>
-  import { useLoading } from '@/composables/useLoading'
-  import { useSupabaseAuth } from '@/composables/useSupabaseAuth'
-  import { useAppBarStore } from '@/stores/appBar'
-  import { useAuthStore } from '@/stores/auth'
-  import { useCurrencyStore } from '@/stores/currency'
-  import { useGameStore } from '@/stores/game'
-  import { useNotificationStore } from '@/stores/notifications'
-  import { useRefferalStore } from '@/stores/refferal'
-  import { useSocketStore } from '@/stores/socket'
-  import { useUserStore } from '@/stores/user'
-  import { useVipStore } from '@/stores/vip'
-  import { supabase } from '@/supabase'
+  import { useLoading } from "@/composables/useLoading";
+  import { useSupabaseAuth } from "@/composables/useSupabaseAuth";
+  import { useAppBarStore } from "@/stores/appBar";
+  import { useAuthStore } from "@/stores/auth";
+  import { useCurrencyStore } from "@/stores/currency";
+  import { useGameStore } from "@/stores/game";
+  import { useNotificationStore } from "@/stores/notifications";
+  import { useRefferalStore } from "@/stores/refferal";
+  // import { useSocketStore } from '@/stores/socket'
+  import { useUserStore } from "@/stores/user";
+  import { useVipStore } from "@/stores/vip";
+  import { supabase } from "@/supabase";
   // import { posthog } from '@/bootstrap'
-  import { loadingFadeOut } from 'virtual:app-loading'
+  import { loadingFadeOut } from "virtual:app-loading";
 
-  const signInForm = ref({ email: '', password: '' })
-  const signUpForm = ref({ email: '', password: '', username: '' })
+  const signInForm = ref({ email: "", password: "" });
+  const signUpForm = ref({ email: "", password: "", username: "" });
   const {
     // isAuthenticated,
     isLoading,
@@ -26,17 +26,17 @@
     signUpNewUser,
     signOut,
     initialAuthCheckComplete,
-  } = useSupabaseAuth()
+  } = useSupabaseAuth();
 
   const handleSignIn = async () => {
     await signInWithPassword({
       email: formData.email,
       password: formData.password,
-    })
+    });
     if (!authError.value) {
-      signInForm.value = { email: '', password: '' }
+      signInForm.value = { email: "", password: "" };
     }
-  }
+  };
 
   const handleSignUp = async () => {
     await signUpNewUser({
@@ -47,26 +47,26 @@
           username: signUpForm.value.username,
         },
       },
-    })
+    });
     if (!authError.value) {
-      signUpForm.value = { email: '', password: '', username: '' }
+      signUpForm.value = { email: "", password: "", username: "" };
     }
-  }
+  };
 
   const handleSignOut = async () => {
-    await signOut()
-  }
-  const { withLoading, stopLoading } = useLoading()
-  let x = 0
+    await signOut();
+  };
+  const { withLoading, stopLoading } = useLoading();
+  let x = 0;
   // posthog.capture('Login Page Viewed', { page: window.location.pathname })
   // var executed = false
-  const authStore = useAuthStore()
+  const authStore = useAuthStore();
 
   async function handleSignInWithGoogle(response) {
     const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: 'google',
+      provider: "google",
       token: response.credential,
-    })
+    });
   }
 
   const {
@@ -78,36 +78,37 @@
     setAuthDialogVisible,
     getSuccess,
     isAuthenticated,
-  } = authStore
-  const userStore = useUserStore()
-  const notificationStore = useNotificationStore()
-  const appBarStore = useAppBarStore()
-  const refferalStore = useRefferalStore()
-  const socketStore = useSocketStore()
-  const currencyStore = useCurrencyStore()
-  const vipStore = useVipStore()
-  const gameStore = useGameStore()
-  const { dispatchUserBalance } = userStore
-  const { dispatchVipInfo, dispatchVipLevels, dispatchVipLevelAward } = vipStore
-  const { setOverlayScrimShow } = appBarStore
-  const { setRefferalDialogShow } = refferalStore
-  const { dispatchSocketConnect } = socketStore
-  const { dispatchGameSearch, dispatchGameBigWin } = gameStore
-  const { dispatchCurrencyList } = currencyStore
-  const success = computed(() => getSuccess)
+  } = authStore;
+  const userStore = useUserStore();
+  const notificationStore = useNotificationStore();
+  const appBarStore = useAppBarStore();
+  const refferalStore = useRefferalStore();
+  // const socketStore = useSocketStore()
+  const currencyStore = useCurrencyStore();
+  const vipStore = useVipStore();
+  const gameStore = useGameStore();
+  const { dispatchUserBalance } = userStore;
+  const { dispatchVipInfo, dispatchVipLevels, dispatchVipLevelAward } =
+    vipStore;
+  const { setOverlayScrimShow } = appBarStore;
+  const { setRefferalDialogShow } = refferalStore;
+  // const { dispatchSocketConnect } = socketStore
+  const { dispatchGameSearch, dispatchGameBigWin } = gameStore;
+  const { dispatchCurrencyList } = currencyStore;
+  const success = computed(() => getSuccess);
   const formData = reactive({
-    username: 'ash',
-    email: 'ash@ash.com',
-    password: 'asdfasdf',
-    confirm: 'asdfasdf',
+    username: "ash",
+    email: "ash@ash.com",
+    password: "asdfasdf",
+    confirm: "asdfasdf",
     faceIndex: 0,
-    loginErr: '',
-    passwErr: '',
-    agentCode: '',
-    promoCode: '',
-  })
-  const errMessage = ref()
-  const currentPage = ref()
+    loginErr: "",
+    passwErr: "",
+    agentCode: "",
+    promoCode: "",
+  });
+  const errMessage = ref();
+  const currentPage = ref();
   const handleSignupFormSubmit = async () => {
     // isLoading.value = true
     const r = await withLoading(
@@ -115,24 +116,24 @@
         username: formData.username,
         password: formData.password,
         referral_code: formData.promoCode,
-        browser: '',
-        device: '',
-        model: '',
-        brand: '',
-        imei: '',
-      }),
-    )
-    console.log(authStore.getSuccess)
+        browser: "",
+        device: "",
+        model: "",
+        brand: "",
+        imei: "",
+      })
+    );
+    console.log(authStore.getSuccess);
     if (authStore.getSuccess) {
-      await withLoading(dispatchUserProfile())
-      await withLoading(dispatchUserBalance())
-      await withLoading(dispatchSocketConnect())
-      await withLoading(dispatchCurrencyList())
-      await withLoading(dispatchGameSearch(''))
-      setAuthDialogVisible(false)
-      setNickNameDialogVisible(true)
+      await withLoading(dispatchUserProfile());
+      await withLoading(dispatchUserBalance());
+      await withLoading(dispatchSocketConnect());
+      await withLoading(dispatchCurrencyList());
+      await withLoading(dispatchGameSearch(""));
+      setAuthDialogVisible(false);
+      setNickNameDialogVisible(true);
       // const toast = useToast();
-      notificationStore.addNotification('success', 'success')
+      notificationStore.addNotification("success", "success");
 
       // toast.success(t("signup.submit_result.success_text"), {
       //   timeout: 3000,
@@ -146,30 +147,30 @@
       //   icon: SuccessIcon,
       //   rtl: false,
       // });
-      console.log(process.env.NODE_ENV)
-      console.log(process.env.NODE_ENV)
+      console.log(process.env.NODE_ENV);
+      console.log(process.env.NODE_ENV);
       // if (process.env.NODE_ENV == 'development') {
       setTimeout(() => {
-        console.log('asdfasdf')
+        console.log("asdfasdf");
 
         // isLoading.value = false
-      }, 3000)
+      }, 3000);
       // } else {
       //  // isLoading.value = false
 
       // }
     } else {
-      console.log('wtf error')
+      console.log("wtf error");
       // isLoading.value = false
 
       if (
         errMessage.value ==
-        'The account you entered has been used by someone else, please input again'
+        "The account you entered has been used by someone else, please input again"
       ) {
-        currentPage.value = 'already regged' //PAGE_TYPE.ALREADY_REGISTERED;
+        currentPage.value = "already regged"; //PAGE_TYPE.ALREADY_REGISTERED;
       } else {
         // const toast = useToast();
-        notificationStore.addNotification('error', 'error')
+        notificationStore.addNotification("error", "error");
 
         // toast.success(errMessage.value, {
         //   timeout: 3000,
@@ -186,7 +187,7 @@
       }
       // }
     }
-  }
+  };
 
   const handleLoginFormSubmit = async () => {
     // isLoading.value = true
@@ -195,28 +196,28 @@
       dispatchSignIn({
         username: formData.username,
         password: formData.password,
-      }),
-    )
-    console.log(r)
-    console.log(success.value)
-    console.log(r)
+      })
+    );
+    console.log(r);
+    console.log(success.value);
+    console.log(r);
     if (r == true) {
-      await withLoading(dispatchUserProfile())
-      await withLoading(dispatchUserBalance())
-      await withLoading(dispatchCurrencyList())
-      await withLoading(dispatchVipInfo())
-      await withLoading(dispatchVipLevels())
-      await withLoading(dispatchVipLevelAward())
-      await withLoading(dispatchGameSearch('?limit=200'))
-      await withLoading(dispatchGameBigWin())
-      setOverlayScrimShow(false)
-      setRefferalDialogShow(true)
+      await withLoading(dispatchUserProfile());
+      await withLoading(dispatchUserBalance());
+      await withLoading(dispatchCurrencyList());
+      await withLoading(dispatchVipInfo());
+      await withLoading(dispatchVipLevels());
+      await withLoading(dispatchVipLevelAward());
+      await withLoading(dispatchGameSearch("?limit=200"));
+      await withLoading(dispatchGameBigWin());
+      setOverlayScrimShow(false);
+      setRefferalDialogShow(true);
       if (authStore.userInfo == undefined) {
-        throw new Error('User not found')
+        throw new Error("User not found");
       }
-      userStore.setCurrentUser(authStore.userInfo!)
-      authStore.setIsAuthenticated(true)
-      userStore.isAuthenticated = true
+      userStore.setCurrentUser(authStore.userInfo!);
+      authStore.setIsAuthenticated(true);
+      userStore.isAuthenticated = true;
       // const toast = useToast();
       // toast.success("success_text", {
       //   timeout: 3000,
@@ -232,17 +233,17 @@
 
       // });
       setTimeout(() => {
-        setAuthModalType('')
-        setAuthDialogVisible(false)
-      }, 100)
+        setAuthModalType("");
+        setAuthDialogVisible(false);
+      }, 100);
       // await dispatchSocketConnect()
       setTimeout(() => {
         // isLoading.value = false
-        notificationStore.addNotification('success', 'success')
-      }, 100)
+        notificationStore.addNotification("success", "success");
+      }, 100);
     } else {
       // const toast = useToast();
-      notificationStore.addNotification('error', 'error')
+      notificationStore.addNotification("error", "error");
 
       // toast.success("err_text", {
       //   timeout: 3000,
@@ -259,7 +260,7 @@
     }
 
     // isLoading.value = false
-  }
+  };
 
   // async function sendEmit1() {
   //   // posthog.capture('Form Submitted', { formData })
@@ -302,7 +303,7 @@
   //   //   //   router.push('/login')
   //   // }
   // }
-  const { signInWithGoogleIdToken } = useSupabaseAuth()
+  const { signInWithGoogleIdToken } = useSupabaseAuth();
 
   // const handleGoogleCredentialResponseFunctionName = 'handleSupabaseGoogleLogin'
 
@@ -340,21 +341,21 @@
   //   }
   // }
   onMounted(() => {
-    const script = document.createElement('script')
-    script.src = 'https://accounts.google.com/gsi/client'
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
     script.onload = () => {
       // Optional: Code to execute after the script is loaded
-      console.log('External script loaded')
+      console.log("External script loaded");
       // You can now use functions or variables from the external script
-    }
+    };
     script.onerror = () => {
-      console.error('Failed to load the script.')
-    }
-    document.head.appendChild(script)
+      console.error("Failed to load the script.");
+    };
+    document.head.appendChild(script);
     window.handleSignInWithGoogle = async (response: any) => {
-      console.log('handleSignInWithGoogle called')
-      handleSignInWithGoogle(response)
-    }
+      console.log("handleSignInWithGoogle called");
+      handleSignInWithGoogle(response);
+    };
     // console.log('GoogleLoginButton: Component Mounted.')
     // if (!googleClientId) {
     //   componentError.value =
@@ -380,10 +381,10 @@
     //   )
     // }
 
-    stopLoading()
+    stopLoading();
     // isLoading = false
-    loadingFadeOut()
-  })
+    loadingFadeOut();
+  });
 </script>
 
 <template>
@@ -546,7 +547,7 @@
 
   .card-side::before {
     position: absolute;
-    content: 'Log in';
+    content: "Log in";
     left: -70px;
     top: 0;
     width: 100px;
@@ -557,7 +558,7 @@
 
   .card-side::after {
     position: absolute;
-    content: 'Sign up';
+    content: "Sign up";
     left: 70px;
     top: 0;
     width: 100px;
@@ -590,7 +591,7 @@
   .slider:before {
     box-sizing: border-box;
     position: absolute;
-    content: '';
+    content: "";
     height: 20px;
     width: 20px;
     border: 2px solid var(--main-color);
