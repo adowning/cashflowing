@@ -1,0 +1,47 @@
+// apps/client/tsconfig.json
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler", // Or "NodeNext" or "Node16"
+        "strict": true,
+        "jsx": "preserve", // Required for Vue
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "lib": [
+            "ESNext",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "skipLibCheck": true,
+        "noEmit": true, // vue-tsc handles .vue emit, tsc only type checks .ts
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            // "@cashflow/types": [
+            //     "../../packages/types/src/index.ts"
+            // ] // Ensure this points to the entry point of your types package
+        },
+        "types": [
+            "vite/client",
+            "vite-plugin-app-loading/client",
+        ] // Includes types for Vite environment variables like import.meta.env
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "vite.config.ts",
+        "src/types"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ] // Reference to tsconfig for Node context
+}

@@ -1,0 +1,16 @@
+/* apps/client/src/assets/main.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles here if needed */
+body {
+  font-family: 'Inter', sans-serif; /* Example: Using Inter font */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Example custom component style (if you prefer to define some here) */
+/* .btn-primary {
+  @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+} */

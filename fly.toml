@@ -1,0 +1,53 @@
+# fly.toml app configuration file generated for my-monorepo-server
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "my-monorepo-server" # Replace with your actual Fly app name
+primary_region = "iad" # Choose a region: https://fly.io/docs/reference/regions/
+
+[build]
+  dockerfile = "docker/Dockerfile"
+  # If you have build args:
+  # [build.args]
+  #   NPM_TOKEN = "your_npm_token"
+
+[http_service]
+  internal_port = 3001 # The port your app listens on internally
+  force_https = true
+  auto_stop_machines = true # Can be true, false, or "off"
+  auto_start_machines = true
+  min_machines_running = 0 # For free tier, usually 0 or 1 if always on
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256 # Adjust based on your app's needs
+
+# Health checks
+# [[http_service.checks]]
+#   grace_period = "5s"
+#   interval = "15s"
+#   method = "GET"
+#   path = "/" # Your app's health check endpoint, or root if it responds with 2xx
+#   port = 3001
+#   protocol = "http"
+#   timeout = "2s"
+#   tls_skip_verify = false
+
+# Environment variables can be set here or via `fly secrets set VAR=VALUE`
+# [env]
+#   PORT = "3001"
+#   NODE_ENV = "production"
+  # DATABASE_URL will be set via `fly secrets set DATABASE_URL=...`
+
+# If you need a Fly Postgres database:
+# 1. Create one: `fly pg create`
+# 2. Attach it: `fly pg attach <postgres-app-name> -a my-monorepo-server`
+#    This will set the DATABASE_URL secret automatically.
+
+# For persistent storage (if needed beyond database, e.g., file uploads)
+# [[mounts]]
+#   source = "myapp_data"
+#   destination = "/data"

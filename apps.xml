@@ -1,0 +1,1689 @@
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
+The content has been processed where comments have been removed, empty lines have been removed, content has been compressed (code blocks are separated by ⋮---- delimiter).
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+4. Repository files, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: *.json
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Code comments have been removed from supported file types
+- Empty lines have been removed from all files
+- Content has been compressed - code blocks are separated by ⋮---- delimiter
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+<additional_info>
+
+</additional_info>
+
+</file_summary>
+
+<directory_structure>
+client/
+  src/
+    assets/
+      main.css
+    router/
+      index.ts
+    views/
+      AboutView.vue
+      ChatView.vue
+      HomeView.vue
+    App.vue
+    env.d.ts
+    main.ts
+  index.html
+  package.json
+  postcss.config.js
+  tailwind.config.js
+  tsconfig.json
+  tsconfig.node.json
+  vite.config.ts
+server/
+  src/
+    middlewares/
+      is-authenticated.ts
+      not-found.ts
+      on-error.ts
+    rest/
+      auth.ts
+      constans.ts
+      create-app.ts
+      create-router.ts
+      email.ts
+      jwt.ts
+      types.ts
+    routes/
+      auth.route.ts
+      currency.route.ts
+      deposit.route.ts
+      game.route.ts
+      health.route.ts
+      index.ts
+      schema.ts
+      user.route.ts
+      vip.route.ts
+    services/
+      transactions/
+        cashapp.webhook.ts
+        deposit-bonus.ts
+        deposit-xp.ts
+        deposit.ts
+        withdraw.ts
+      auth.service.ts
+      currency.service.ts
+      game.service.ts
+      update.service.ts
+      user.service.ts
+      vip.service.ts
+    sockets/
+      chat.wsroute.ts
+      handlers.ts
+      index.ts
+      publish.ts
+      router.ts
+      schema.ts
+      types.ts
+    index.ts
+  package.json
+  postman_collection.json
+  tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="client/src/assets/main.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+</file>
+
+<file path="client/src/router/index.ts">
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+⋮----
+scrollBehavior(to, from, savedPosition)
+</file>
+
+<file path="client/src/views/AboutView.vue">
+<template>
+  <div class="about">
+    <h1>About</h1>
+    <p>About page</p>
+  </div>
+</template>
+</file>
+
+<file path="client/src/views/ChatView.vue">
+<template>
+  <div class="about">
+    <h1>About</h1>
+    <p>About page</p>
+  </div>
+</template>
+</file>
+
+<file path="client/src/views/HomeView.vue">
+<template>
+  <div class="home">
+    <h1>Home</h1>
+    <p>Home page</p>
+  </div>
+</template>
+</file>
+
+<file path="client/src/App.vue">
+<template>
+  <div id="app-container" class="min-h-screen bg-gray-100 text-gray-900">
+    <header class="bg-blue-600 text-white shadow-md">
+      <nav class="container mx-auto px-6 py-3">
+        <div class="flex items-center justify-between">
+          <router-link to="/" class="text-xl font-semibold hover:text-blue-200"
+            >My App</router-link
+          >
+          <div>
+            <router-link to="/" class="px-3 py-2 rounded hover:bg-blue-700"
+              >Home</router-link
+            >
+            <router-link to="/about" class="px-3 py-2 rounded hover:bg-blue-700"
+              >About</router-link
+            >
+            <router-link to="/chat" class="px-3 py-2 rounded hover:bg-blue-700"
+              >Chat</router-link
+            >
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container mx-auto p-6">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
+      <p>
+        &copy; {{ new Date().getFullYear() }} My Monorepo. All rights reserved.
+      </p>
+    </footer>
+  </div>
+</template>
+⋮----
+&copy; {{ new Date().getFullYear() }} My Monorepo. All rights reserved.
+⋮----
+<script setup lang="ts">
+  import { RouterView, RouterLink } from 'vue-router'
+</script>
+<style scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  #app-container {
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex-grow: 1;
+  }
+</style>
+</file>
+
+<file path="client/src/env.d.ts">
+import type { DefineComponent } from 'vue'
+</file>
+
+<file path="client/src/main.ts">
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+import router from './router/index'
+⋮----
+import type { User } from '@cashflow/types'
+</file>
+
+<file path="client/index.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Monorepo Client (Vue + Vite)</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+</file>
+
+<file path="client/package.json">
+{
+  "name": "@cashflow/client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@cashflow/types": "workspace:*",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2",
+    "pinia": "^2.1.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "bun-types": "latest",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vue-tsc": "^2.0.19",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3"
+  }
+}
+</file>
+
+<file path="client/postcss.config.js">
+
+</file>
+
+<file path="client/tailwind.config.js">
+
+</file>
+
+<file path="client/tsconfig.json">
+// apps/client/tsconfig.json
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler", // Or "NodeNext" or "Node16"
+        "strict": true,
+        "jsx": "preserve", // Required for Vue
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "lib": [
+            "ESNext",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "skipLibCheck": true,
+        "noEmit": true, // vue-tsc handles .vue emit, tsc only type checks .ts
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@cashflow/types": [
+                "../../packages/types/src/index.ts"
+            ] // Ensure this points to the entry point of your types package
+        },
+        "types": [
+            "vite/client"
+        ] // Includes types for Vite environment variables like import.meta.env
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "vite.config.ts"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ] // Reference to tsconfig for Node context
+}
+</file>
+
+<file path="client/tsconfig.node.json">
+// apps/client/tsconfig.node.json
+{
+    "compilerOptions": {
+        "composite": true, // Required for project references
+        "skipLibCheck": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler", // Or "NodeNext", "Node16"
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        // "noEmit": true, // REMOVED: Conflicts with composite: true
+        "declaration": true, // ADDED: Required by composite: true
+        "declarationMap": true, // Optional: For better source mapping of declaration files
+        "emitDeclarationOnly": true, // ADDED: We only need .d.ts files, not .js files from this config
+        "outDir": "dist-node", // ADDED: Specify an output directory for declaration files (add to .gitignore)
+        "types": [
+            "bun-types"
+        ] // Or "node" if not using Bun-specific types for config
+    },
+    "include": [
+        "vite.config.ts"
+    ] // Specify files that run in Node.js context
+}
+</file>
+
+<file path="client/vite.config.ts">
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+</file>
+
+<file path="server/src/middlewares/is-authenticated.ts">
+import { createMiddleware } from "hono/factory";
+import { HTTPException } from "hono/http-exception";
+import type { AppEnv } from "../lib/types";
+</file>
+
+<file path="server/src/middlewares/not-found.ts">
+import type { NotFoundHandler } from 'hono';
+import { NOT_FOUND } from 'stoker/http-status-codes';
+import { NOT_FOUND as NOT_FOUND_MESSAGE } from 'stoker/http-status-phrases';
+const notFound: NotFoundHandler = (c) =>
+</file>
+
+<file path="server/src/middlewares/on-error.ts">
+import type { ErrorHandler } from 'hono';
+import { HTTPException } from 'hono/http-exception';
+import { INTERNAL_SERVER_ERROR } from 'stoker/http-status-codes';
+const onError: ErrorHandler = (err, c) =>
+</file>
+
+<file path="server/src/rest/auth.ts">
+import { betterAuth } from 'better-auth'
+import { prismaAdapter } from 'better-auth/adapters/prisma'
+⋮----
+import { bearer } from 'better-auth/plugins'
+import { username } from 'better-auth/plugins'
+import { resend } from './email'
+import db from '@cashflow/db'
+import { Gender, UserStatus } from '@cashflow/db/prisma/client'
+</file>
+
+<file path="server/src/rest/constans.ts">
+
+</file>
+
+<file path="server/src/rest/create-app.ts">
+import { serveStatic } from 'hono/bun'
+import { cors } from 'hono/cors'
+import { logger } from 'hono/logger'
+import { Session } from 'better-auth'
+import type { AppApi } from './types'
+import notFound from '../middlewares/not-found'
+import onError from '../middlewares/on-error'
+import { auth } from './auth'
+import { BASE_PATH } from './constans'
+import createRouter from './create-router'
+import isAuthenticated from '../middlewares/is-authenticated'
+import { Server } from 'bun'
+import { User } from '@cashflow/types'
+import { login, register } from '@/services/auth.service'
+⋮----
+type HonoEnv = {
+  Bindings: {
+    serverInstance?: Server
+  }
+  Variables: {
+    user: Partial<User> | null
+    session: Session | null
+    serverInstance?: Server
+  }
+}
+export default function createApp()
+</file>
+
+<file path="server/src/rest/create-router.ts">
+import { Hono } from 'hono';
+import type { AppEnv } from './types';
+export default function createRouter()
+</file>
+
+<file path="server/src/rest/email.ts">
+import { Resend } from "resend";
+</file>
+
+<file path="server/src/rest/jwt.ts">
+import { verify, decode, sign } from 'jsonwebtoken'
+interface JwtPayload {
+  id: string
+  sub: string
+}
+function generateAccessToken(userId: string)
+function decodeToken(token: string)
+function generateRefreshToken(userId: string)
+</file>
+
+<file path="server/src/rest/types.ts">
+import type { Env, Hono } from 'hono';
+import type { auth } from './auth';
+import type { BASE_PATH } from './constans';
+export type Fetcher = {
+  fetch: (request: Request | URL | string) => Promise<Response>;
+};
+export type AppEnv = {
+  Variables: {
+    user: typeof auth.$Infer.Session.user | null;
+    session: typeof auth.$Infer.Session.session | null;
+  };
+  Bindings: {
+    ASSETS: Fetcher;
+  };
+} & Env;
+export type AppApi = Hono<AppEnv, {}, typeof BASE_PATH>;
+export type ErrorResponse = {
+  success: false;
+  error: string;
+  isJsonError?: boolean;
+};
+export type SuccessResponse<T = void> = {
+  success: true;
+  message: string;
+} & (T extends void ? {} : { data: T });
+</file>
+
+<file path="server/src/routes/auth.route.ts">
+import { NETWORK_CONFIG } from '@cashflow/types'
+import createRouter from '../rest/create-router'
+import { login, register, me } from '../services/auth.service'
+import { zValidator } from '@hono/zod-validator'
+import { z } from 'zod'
+</file>
+
+<file path="server/src/routes/currency.route.ts">
+import { NETWORK_CONFIG, User } from '@cashflow/types'
+import createRouter from '../rest/create-router'
+import { getCurrencyList } from '@/services/currency.service'
+</file>
+
+<file path="server/src/routes/deposit.route.ts">
+import { User } from 'better-auth/types'
+import createRouter from '../rest/create-router'
+import {
+  createDeposit,
+  getDepositHistory,
+  getDepositMethods,
+} from '../services/transactions/deposit'
+import { NETWORK_CONFIG } from '@cashflow/types'
+</file>
+
+<file path="server/src/routes/game.route.ts">
+import { NETWORK_CONFIG } from '@cashflow/types'
+import createRouter from '../rest/create-router'
+import {
+  getGameList,
+  getGameGameCategory,
+  getGameSearch,
+  getGameEnter,
+  getGameUserGame,
+  getGameFavoriteGameList,
+  getGameHistory,
+  getGameBigWin,
+  getGameSpin,
+  getGameSpinPage,
+  getGameFavoriteGame,
+} from '../services/game.service'
+</file>
+
+<file path="server/src/routes/health.route.ts">
+import { OK } from 'stoker/http-status-codes'
+import createRouter from '../rest/create-router'
+</file>
+
+<file path="server/src/routes/index.ts">
+import type { AppApi } from '../rest/types'
+import { BASE_PATH } from '@cashflow/types'
+import createRouter from '../rest/create-router'
+import healthRoute from './health.route'
+import userRoute from './user.route'
+import depositRoute from './deposit.route'
+import currencyRoute from './currency.route'
+import vipRoute from './vip.route'
+import gameRoute from './game.route'
+import authRoute from './auth.route'
+export function registerRoutes(app: AppApi)
+⋮----
+export type router = typeof router
+export type AppType = typeof router
+</file>
+
+<file path="server/src/routes/schema.ts">
+
+</file>
+
+<file path="server/src/routes/user.route.ts">
+import { OK } from 'stoker/http-status-codes'
+import {
+  checkUser,
+  getUserAmount,
+  getUserBalance,
+  getUserInfo,
+  setUserCurrency,
+  suspendUser,
+  updateUserCashtag,
+  updateUserEmail,
+  updateUserInfo,
+  updateUserPassword,
+  verifyUserEmail,
+} from '../services/user.service'
+import createRouter from '../rest/create-router'
+import { NETWORK_CONFIG } from '@cashflow/types'
+</file>
+
+<file path="server/src/routes/vip.route.ts">
+import { OK } from 'stoker/http-status-codes'
+import createRouter from '../rest/create-router'
+import {
+  getVipInfo,
+  getVipLevels,
+  getVipLevelAward,
+} from '../services/vip.service'
+import { NETWORK_CONFIG } from '@cashflow/types'
+</file>
+
+<file path="server/src/services/transactions/cashapp.webhook.ts">
+import { User, VipInfo } from '@cashflow/types'
+import { BunRequest } from 'bun'
+import db from '@cashflow/db'
+import { TransactionStatus, TransactionType } from '@cashflow/db/prisma/client'
+import { calculateXpBonus } from './deposit-xp'
+import { updateUserDepositXp } from './deposit-xp'
+⋮----
+interface CashAppWebhookPayload {
+  transactionId: string
+  amount: number
+  senderName: string
+  timestamp: string
+  rawEmailSubject: string
+  cashtag: string
+}
+export async function handleCashAppWebhook(req: BunRequest)
+</file>
+
+<file path="server/src/services/transactions/deposit-bonus.ts">
+import { BonusItem as DepositBonusConfig } from '@cashflow/types'
+export function calculateBonus(
+  depositAmount: number,
+  bonusConfigs: DepositBonusConfig[],
+): number
+</file>
+
+<file path="server/src/services/transactions/deposit-xp.ts">
+import { User, VipInfo } from '@cashflow/types'
+import db from '@cashflow/db'
+export function calculateXpBonus(
+  depositAmount: number,
+  vipInfo: VipInfo,
+): number
+export async function updateUserDepositXp(
+  user: User,
+  vipInfo: VipInfo,
+  xpBonus: number,
+)
+</file>
+
+<file path="server/src/services/transactions/deposit.ts">
+import { TransactionType, TransactionStatus } from '@cashflow/db/prisma/client'
+import {
+  DepositHistoryItem,
+  DepositHistoryResponse,
+  DepositItem,
+  GetDepositHistoryResponse,
+  GetDepositResponse,
+  GetOperatorDataResponse,
+  GetPaymentItem,
+  GetProductsResponse,
+  OperatorData,
+  ProductWithoutTransactions,
+  SubmitDepositResponse,
+  User,
+} from '@cashflow/types'
+import { HonoRequest } from 'hono'
+import db from '@cashflow/db'
+export async function getDepositMethods(
+  req: Request | HonoRequest,
+  user: Partial<User>,
+): Promise<Response>
+export async function createDeposit(
+  req: Request | HonoRequest,
+  user: Partial<User>,
+): Promise<Response>
+export async function getProducts(req: HonoRequest): Promise<Response>
+export async function getOperatorData(
+  req: HonoRequest,
+  user: Partial<User>,
+): Promise<Response>
+export async function getDepositConfig(req: HonoRequest, user: User)
+export async function submitDeposit(req: HonoRequest, user: User)
+export async function getDepositHistory(req: HonoRequest, user: Partial<User>)
+⋮----
+note: tx.reference || '', // Use reference as note
+</file>
+
+<file path="server/src/services/transactions/withdraw.ts">
+import {
+  GetWithdrawalHistoryResponse,
+  GetWithdrawResponse,
+  NETWORK_CONFIG,
+  SubmitWithdrawResponse,
+  User,
+} from '@cashflow/types'
+import { HonoRequest } from 'hono'
+import db from '@cashflow/db'
+import { getUserFromHeader } from '../auth.service'
+export async function getWithdrawConfig(req: HonoRequest): Promise<Response>
+export async function submitWithdrawal(
+  req: HonoRequest,
+  user: User,
+): Promise<Response>
+export async function getWithdrawalHistory(
+  req: HonoRequest,
+  user: User,
+): Promise<Response>
+export async function withdrawalRoutes(
+  req: HonoRequest,
+  route: string,
+): Promise<Response | boolean>
+</file>
+
+<file path="server/src/services/auth.service.ts">
+import { auth } from '../rest/auth'
+import { decodeToken, generateAccessToken } from '@/rest/jwt'
+import db from '@cashflow/db'
+import { dmmfToRuntimeDataModel } from '@cashflow/db/prisma/client/runtime/library'
+import { User } from '@cashflow/types'
+import { v4 as randomUUIDv7 } from 'uuid'
+⋮----
+import { HonoRequest } from 'hono'
+⋮----
+const validateUser = async (username: string, password: string) =>
+export async function createUserWithProfileAndAccount(userData: {
+  email: string
+  username: string
+  password: string
+})
+⋮----
+// activeProfileId: '',
+⋮----
+// Create the profile linked to the new user and the default operator/bank
+⋮----
+// profileNumber: profileData.profileNumber,
+⋮----
+shopId: defaultOperator.id, // Link to the default operator
+// bankId: defaultBank.id, // Link to the default bank
+// balance: profileData.balance ?? 0, // Use provided balance or default to 0 (Int)
+// xpEarned: profileData.xpEarned ?? 0,
+// isActive: profileData.isActive ?? true,
+// lastPlayed: profileData.lastPlayed,
+// phpId: profileData.phpId,
+// Add any other required fields for Profile
+⋮----
+// Optionally update the user's activeProfileId to the newly created profile's ID
+⋮----
+export const getUserFromHeader = async (req: any): Promise<User | null> =>
+export const getUserFromToken = async (token: string): Promise<User | null> =>
+export async function me(req: HonoRequest, user: Partial<User>)
+export async function register(req: HonoRequest)
+export async function login(req: HonoRequest)
+</file>
+
+<file path="server/src/services/currency.service.ts">
+import { NETWORK_CONFIG, User } from '@cashflow/types'
+import {
+  GetCurrencyBalanceList,
+  GetCurrencyBalanceListResponse,
+} from '@cashflow/types'
+import { HonoRequest } from 'hono'
+export async function getCurrencyList(req: HonoRequest, user: User)
+</file>
+
+<file path="server/src/services/game.service.ts">
+import {
+  GameBigWinData,
+  GameBigWinItem,
+  GameCategory,
+  GameEnterBody,
+  GameEnterResponse,
+  GameHistoryItem,
+  GameHistoryResponse,
+  GameListResponse,
+  GameSearchResponse,
+  GameUserBody,
+  GetGameBigWinResponse,
+  GetGameCategoriesResponse,
+  GetGameEnterResponse,
+  GetGameFavoriteListResponse,
+  GetGameHistoryResponse,
+  GetGameSearchResponse,
+  Search,
+  User,
+} from '@cashflow/types'
+import { HonoRequest } from 'hono'
+import db from '@cashflow/db'
+import { faker } from '@faker-js/faker'
+const getRandomInt = (min: number, max: number)
+export async function getGameList(req: HonoRequest)
+export async function getGameGameCategory(req: HonoRequest): Promise<Response>
+⋮----
+image: '', // No specific image for these categories
+⋮----
+game_count: 0, // Need to implement logic to count games per bank
+⋮----
+export async function getGameSearch(req: HonoRequest): Promise<Response>
+⋮----
+const searchTerm = url.searchParams.get('q') || '' // Get search term from query params
+⋮----
+export async function getGameEnter(
+  req: HonoRequest,
+  user: Partial<User>,
+): Promise<Response>
+⋮----
+parames: '', // Parameters for the game launch
+⋮----
+export async function getGameUserGame(req: HonoRequest): Promise<Response>
+⋮----
+image: '', // Placeholder for image
+⋮----
+export async function getGameFavoriteGame(
+  req: HonoRequest,
+  user: Partial<User>,
+): Promise<Response>
+export async function getGameFavoriteGameList(
+  req: HonoRequest,
+): Promise<Response>
+export async function getGameHistory(
+  req: HonoRequest,
+  user: Partial<User>,
+): Promise<Response>
+export async function getGameBigWin(req: HonoRequest): Promise<Response>
+export async function getGameSpinPage(req: HonoRequest): Promise<Response>
+export async function getGameSpin(req: HonoRequest): Promise<Response>
+</file>
+
+<file path="server/src/services/update.service.ts">
+
+</file>
+
+<file path="server/src/services/user.service.ts">
+import prisma from '@cashflow/db'
+import {
+  GetUserAmount,
+  GetUserAmountResponseData,
+  GetUserInfoResponseData,
+  GetUserBalance,
+  GetUserBalanceResponseData,
+  UpdateEmail,
+  UpdateCashtag,
+  UpdatePassword,
+  UpdateSuspendUser,
+  GetUserEmailVerifyResponseData,
+  User,
+} from '@cashflow/types'
+import { HonoRequest } from 'hono'
+export async function getUserAmount(req: HonoRequest, user: Partial<User>)
+export async function getUserInfo(req: HonoRequest, user: Partial<User>)
+export async function getUserBalance(req: HonoRequest, user: Partial<User>)
+export async function setUserCurrency(req: HonoRequest, user: Partial<User>)
+export async function updateUserInfo(req: HonoRequest, user: Partial<User>)
+export async function updateUserEmail(req: HonoRequest, user: Partial<User>)
+export async function updateUserCashtag(req: HonoRequest, user: Partial<User>)
+export async function updateUserPassword(
+  req: HonoRequest,
+  user: Partial<User>,
+)
+export async function suspendUser(req: HonoRequest, user: Partial<User>)
+export async function checkUser(req: HonoRequest)
+export async function verifyUserEmail(req: HonoRequest, user: Partial<User>)
+</file>
+
+<file path="server/src/services/vip.service.ts">
+import {
+  GetVipInfoResponse,
+  GetVipLevelAwardResponse,
+  GetVipLevelResponse,
+  VipInfo,
+  VipLevel,
+  VipLevelAwardData,
+} from '@cashflow/types'
+export async function getVipLevels()
+export async function getVipInfo()
+⋮----
+// operator: undefined,s
+⋮----
+export async function getVipLevelAward()
+</file>
+
+<file path="server/src/sockets/chat.wsroute.ts">
+import { WebSocketRouter, publish } from '.'
+import {
+  JoinRoom,
+  NewMessage,
+  SendMessage,
+  UserJoined,
+  RoomList,
+  UserLeft,
+} from './schema'
+type WebSocketData = { roomId?: string } & Record<string, unknown>
+</file>
+
+<file path="server/src/sockets/handlers.ts">
+import type { CloseHandler, MessageHandlerEntry, OpenHandler } from "./types";
+export class WebSocketHandlers<Data = unknown>
+</file>
+
+<file path="server/src/sockets/index.ts">
+
+</file>
+
+<file path="server/src/sockets/publish.ts">
+import type { ServerWebSocket } from "bun";
+import type { ZodType } from "zod";
+import { z } from "zod";
+import type { MessageSchemaType } from "./types";
+export function publish<Schema extends MessageSchemaType>(
+  ws: ServerWebSocket<{ clientId: string } & Record<string, unknown>>,
+  topic: string,
+  schema: Schema,
+  payload: Schema["shape"] extends { payload: infer P }
+    ? P extends ZodType
+      ? z.infer<P>
+      : unknown
+    : unknown,
+  meta: Partial<z.infer<Schema["shape"]["meta"]>> = {},
+): boolean
+</file>
+
+<file path="server/src/sockets/router.ts">
+import type { Server, ServerWebSocket, WebSocketHandler } from 'bun'
+import { v4 as randomUUIDv7 } from 'uuid'
+import { z } from 'zod'
+import { WebSocketHandlers } from './handlers'
+import type {
+  CloseHandler,
+  MessageHandler,
+  MessageSchemaType,
+  OpenHandler,
+  SendFunction,
+  UpgradeOptions,
+  WebSocketData,
+  WebSocketRouterOptions,
+} from './types'
+export class WebSocketRouter<
+T extends Record<string, unknown> = Record<string, never>,
+⋮----
+constructor(options?: WebSocketRouterOptions)
+addRoutes(ws: WebSocketRouter<T>): this
+public upgrade(req: Request, options: UpgradeOptions<WebSocketData<T>>)
+onOpen(handler: OpenHandler<WebSocketData<T>>): this
+onClose(handler: CloseHandler<WebSocketData<T>>): this
+onMessage<Schema extends MessageSchemaType>(
+    schema: Schema,
+    handler: MessageHandler<Schema, WebSocketData<T>>,
+): this
+get websocket(): WebSocketHandler<WebSocketData<T>>
+private handleOpen(ws: ServerWebSocket<WebSocketData<T>>)
+private handleClose(
+    ws: ServerWebSocket<WebSocketData<T>>,
+    code: number,
+    reason?: string,
+)
+private handleMessage(
+    ws: ServerWebSocket<WebSocketData<T>>,
+    message: string | Buffer,
+)
+private createSendFunction(
+    ws: ServerWebSocket<WebSocketData<T>>,
+): SendFunction
+</file>
+
+<file path="server/src/sockets/schema.ts">
+import type { ZodLiteral, ZodObject, ZodRawShape, ZodTypeAny } from 'zod'
+import { z } from 'zod'
+⋮----
+export type ErrorCode = z.infer<typeof ErrorCode>
+⋮----
+export type BaseMessageSchema<T extends string> = ZodObject<{
+  type: ZodLiteral<T>
+  meta: typeof MessageMetadataSchema
+}>
+export type PayloadMessageSchema<
+  T extends string,
+  P extends ZodTypeAny,
+> = ZodObject<{
+  type: ZodLiteral<T>
+  meta: typeof MessageMetadataSchema
+  payload: P
+}>
+export type MessageSchemaWithCustomMeta<
+  T extends string,
+  M extends ZodRawShape,
+> = ZodObject<{
+  type: ZodLiteral<T>
+  meta: ZodObject<typeof MessageMetadataSchema.shape & M>
+}>
+export type PayloadMessageSchemaWithCustomMeta<
+  T extends string,
+  P extends ZodTypeAny,
+  M extends ZodRawShape,
+> = ZodObject<{
+  type: ZodLiteral<T>
+  meta: ZodObject<typeof MessageMetadataSchema.shape & M>
+  payload: P
+}>
+export function messageSchema<T extends string>(
+export function messageSchema<
+export function messageSchema<T extends string, P extends ZodTypeAny>(
+export function messageSchema<T extends string, M extends ZodRawShape>(
+⋮----
+export function messageSchema<
+  T extends string,
+  P extends Record<string, ZodTypeAny> | ZodTypeAny | undefined = undefined,
+  M extends ZodRawShape = Record<string, never>,
+>(
+  messageType: T,
+  payload?: P,
+  meta?: ZodObject<M>,
+): P extends undefined
+  ? M extends Record<string, never>
+    ? BaseMessageSchema<T>
+    : MessageSchemaWithCustomMeta<T, M>
+  : P extends Record<string, ZodTypeAny>
+    ? M extends Record<string, never>
+      ? PayloadMessageSchema<T, ZodObject<P>>
+      : PayloadMessageSchemaWithCustomMeta<T, ZodObject<P>, M>
+    : M extends Record<string, never>
+      ? PayloadMessageSchema<T, P & ZodTypeAny>
+      : PayloadMessageSchemaWithCustomMeta<T, P & ZodTypeAny, M> {
+  const baseMetaSchema = meta
+    ? MessageMetadataSchema.extend(meta.shape)
+    : MessageMetadataSchema
+  const baseSchema = z.object({
+    type: z.literal(messageType),
+    meta: baseMetaSchema,
+  })
+if (payload === undefined)
+</file>
+
+<file path="server/src/sockets/types.ts">
+import type { HeadersInit, Server, ServerWebSocket } from "bun";
+import type { ZodObject, ZodType, ZodTypeAny } from "zod";
+import { z, ZodLiteral } from "zod";
+import { MessageMetadataSchema } from "./schema";
+export interface WebSocketRouterOptions {
+  server?: Server;
+}
+export type WebSocketData<T> = {
+  clientId: string;
+} & T;
+export interface UpgradeOptions<T> {
+  server: Server;
+  data?: T;
+  headers?: HeadersInit;
+}
+export type SendFunction = <Schema extends MessageSchemaType>(
+  schema: Schema,
+  data: Schema["shape"] extends { payload: infer P }
+    ? P extends ZodTypeAny
+      ? z.infer<P>
+      : unknown
+    : unknown,
+  meta?: z.infer<Schema["shape"]["meta"]>,
+) => void;
+export type MessageContext<Schema extends MessageSchemaType, Data> = {
+  ws: ServerWebSocket<Data>;
+  meta: z.infer<Schema["shape"]["meta"]>;
+  send: SendFunction;
+} & (Schema["shape"] extends { payload: infer P }
+  ? P extends ZodTypeAny
+    ? { payload: z.infer<P> }
+    : Record<string, never>
+  : Record<string, never>);
+export type MessageHandler<Schema extends MessageSchemaType, Data> = (
+  context: MessageContext<Schema, Data>,
+) => void | Promise<void>;
+export type MessageSchemaType = ZodObject<{
+  type: ZodLiteral<string>;
+  meta: ZodType<z.infer<typeof MessageMetadataSchema>>;
+  payload?: ZodTypeAny;
+}>;
+export interface MessageHandlerEntry<Data = unknown> {
+  schema: MessageSchemaType;
+  handler: MessageHandler<MessageSchemaType, Data>;
+}
+export interface OpenHandlerContext<Data> {
+  ws: ServerWebSocket<Data>;
+  send: SendFunction;
+}
+export type OpenHandler<Data = unknown> = (
+  context: OpenHandlerContext<Data>,
+) => void | Promise<void>;
+export interface CloseHandlerContext<Data> {
+  ws: ServerWebSocket<Data>;
+  code: number;
+  reason?: string;
+  send: SendFunction;
+}
+export type CloseHandler<Data = unknown> = (
+  context: CloseHandlerContext<Data>,
+) => void | Promise<void>;
+</file>
+
+<file path="server/src/index.ts">
+import type { Server, ErrorLike } from 'bun'
+import { auth } from './rest/auth'
+import createApp from './rest/create-app'
+import { registerRoutes } from './routes'
+import { WebSocketRouter } from './sockets'
+import { chatRouter } from './sockets/chat.wsroute'
+⋮----
+interface MyWebSocketData {
+  userId?: string
+  roomId?: string
+  username?: string
+}
+type AdditionalWsData = Omit<MyWebSocketData, 'clientId'>
+⋮----
+fetch(
+    req: Request,
+    server: Server,
+): Response | Promise<Response> | undefined
+⋮----
+error(error: ErrorLike): void | Response | Promise<void> | Promise<Response>
+</file>
+
+<file path="server/package.json">
+{
+  "name": "@cashflow/server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist --target bun",
+    "start": "bun run ./dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cashflow/db": "workspace:*",
+    "@cashflow/types": "workspace:*",
+    "@faker-js/faker": "^9.7.0",
+    "@hono/zod-validator": "^0.5.0",
+    "better-auth": "^1.2.7",
+    "hono": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "resend": "^4.5.1",
+    "stoker": "^1.4.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.12",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bun-types": "latest",
+    "typescript": "^5.0.0"
+  }
+}
+</file>
+
+<file path="server/postman_collection.json">
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "name": "Cashflow Server Routes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth Routes",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/auth/login",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/auth/register",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/auth/me",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Currency Routes",
+      "item": [
+        {
+          "name": "Currency List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/currency",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["currency"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Deposit Routes",
+      "item": [
+        {
+          "name": "Deposit Methods",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/deposit/methods",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "deposit", "methods"]
+            }
+          }
+        },
+        {
+          "name": "Deposit History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/deposit/history",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "deposit", "history"]
+            }
+          }
+        },
+        {
+          "name": "Create Deposit",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/deposit/create",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "deposit", "create"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Game Routes",
+      "item": [
+        {
+          "name": "Game Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/games/categories",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["games", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Game Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/games/search",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["games", "search"]
+            }
+          }
+        },
+        {
+          "name": "Game Enter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/enter/game",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "enter", "game"]
+            }
+          }
+        },
+        {
+          "name": "User Game",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/games",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "games"]
+            }
+          }
+        },
+        {
+          "name": "Favorite Game",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/setup/game",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "setup", "game"]
+            }
+          }
+        },
+        {
+          "name": "Favorite Game List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/setup/game/list",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "setup", "game", "list"]
+            }
+          }
+        },
+        {
+          "name": "Game History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/gamehistory",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "gamehistory"]
+            }
+          }
+        },
+        {
+          "name": "Game Bigwin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/bigwin",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "bigwin"]
+            }
+          }
+        },
+        {
+          "name": "Spin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/spin",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "spin"]
+            }
+          }
+        },
+        {
+          "name": "Spin Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/spin/page",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "spin", "page"]
+            }
+          }
+        },
+        {
+          "name": "Game List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/games/list",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["games", "list"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Routes",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/health",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Routes",
+      "item": [
+        {
+          "name": "User Amount",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/amount",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "amount"]
+            }
+          }
+        },
+        {
+          "name": "User Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/info",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "info"]
+            }
+          }
+        },
+        {
+          "name": "User Balance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/balance",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "balance"]
+            }
+          }
+        },
+        {
+          "name": "Set User Currency",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/currency",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "currency"]
+            }
+          }
+        },
+        {
+          "name": "Update User Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/change",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "change"]
+            }
+          }
+        },
+        {
+          "name": "Update User Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/email",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "email"]
+            }
+          }
+        },
+        {
+          "name": "Update User Cashtag",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/cashtag",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "cashtag"]
+            }
+          }
+        },
+        {
+          "name": "Update User Password",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/password",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "password"]
+            }
+          }
+        },
+        {
+          "name": "Suspend User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/suspend",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "suspend"]
+            }
+          }
+        },
+        {
+          "name": "User Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/check",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "check"]
+            }
+          }
+        },
+        {
+          "name": "Verify User Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/verifyemail",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "verifyemail"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "VIP Routes",
+      "item": [
+        {
+          "name": "User VIP Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/vipinfo",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "vipinfo"]
+            }
+          }
+        },
+        {
+          "name": "User VIP Level",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/viplevels",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["viplevels"]
+            }
+          }
+        },
+        {
+          "name": "VIP Level Award",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/user/viplevel/award",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["user", "viplevel", "award"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+</file>
+
+<file path="server/tsconfig.json">
+// {
+//   "compilerOptions": {
+//     "target": "ESNext",
+//     "module": "ESNext",
+//     "lib": [
+//       "ESNext"
+//     ],
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "outDir": "./dist",
+//     "rootDir": "./src",
+//     "baseUrl": ".",
+//     "paths": {
+//       "@cashflow/types": [
+//         "../../packages/types/src"
+//       ],
+//       "@cashflow/db": [
+//         "../../packages/db/src"
+//       ]
+//     },
+//     "jsx": "react-jsx", // Required for Hono JSX middleware
+//     "jsxImportSource": "hono/jsx" // Required for Hono JSX middleware
+//   },
+//   "include": [
+//     "src/**/*.ts"
+//   ],
+//   "exclude": [
+//     "node_modules",
+//     "dist"
+//   ]
+// }// cashflow/apps/server/tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "moduleResolution": "bundler", // Or "NodeNext", "Node16"
+    "resolveJsonModule": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    // "rootDir": "./src", // REMOVED: Let TypeScript infer rootDir or set to a common ancestor if needed.
+    // Removing it is often the simplest fix for this specific error with path aliases.
+    "baseUrl": ".", // baseUrl is still useful for path aliases
+    "paths": {
+      "@cashflow/types": [
+        "../../packages/types/src"
+      ], // CORRECTED SCOPE
+      "@cashflow/db": [
+        "../../packages/db/src"
+      ], // CORRECTED SCOPE
+      "@/*": [
+        "./src/*"
+      ] // Internal alias for server's own src
+    },
+    "jsx": "react-jsx", // Required for Hono JSX middleware
+    "jsxImportSource": "hono/jsx" // Required for Hono JSX middleware
+  },
+  "include": [
+    "src/**/*.ts" // Include all .ts files within the server's src directory
+    // If you have .d.ts files directly in src you might add "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+  // For a more robust monorepo setup, consider using Project References:
+  // "references": [
+  //   { "path": "../../packages/db" },
+  //   { "path": "../../packages/types" }
+  // ]
+}
+</file>
+
+</files>

@@ -1,0 +1,32 @@
+{
+  "name": "@cashflow/server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --watch  src/index.ts --elide 1000",
+    "build": "bun build src/index.ts --outdir ./dist --target bun",
+    "start": "bun run ./dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cashflow/db": "workspace:*",
+    "@cashflow/types": "workspace:*",
+    "@faker-js/faker": "^9.7.0",
+    "@hono/swagger-ui": "^0.5.1",
+    "@hono/zod-openapi": "^0.19.6",
+    "@hono/zod-validator": "^0.5.0",
+    "better-auth": "^1.2.7",
+    "hono": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "resend": "^4.5.1",
+    "stoker": "^1.4.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.12",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bun-types": "latest",
+    "typescript": "^5.0.0"
+  }
+}

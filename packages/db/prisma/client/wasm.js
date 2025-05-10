@@ -1,0 +1,742 @@
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+const {
+  Decimal,
+  objectEnumValues,
+  makeStrictEnum,
+  Public,
+  getRuntime,
+  skip
+} = require('./runtime/index-browser.js')
+
+
+const Prisma = {}
+
+exports.Prisma = Prisma
+exports.$Enums = {}
+
+/**
+ * Prisma Client JS version: 5.22.0
+ * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
+ */
+Prisma.prismaVersion = {
+  client: "5.22.0",
+  engine: "605197351a3c8bdd595af2d2a9bc3025bca48ea2"
+}
+
+Prisma.PrismaClientKnownRequestError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientKnownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)};
+Prisma.PrismaClientUnknownRequestError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientUnknownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.PrismaClientRustPanicError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientRustPanicError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.PrismaClientInitializationError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientInitializationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.PrismaClientValidationError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`PrismaClientValidationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.NotFoundError = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`NotFoundError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.Decimal = Decimal
+
+/**
+ * Re-export of sql-template-tag
+ */
+Prisma.sql = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`sqltag is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.empty = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`empty is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.join = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`join is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.raw = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`raw is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.validator = Public.validator
+
+/**
+* Extensions
+*/
+Prisma.getExtensionContext = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`Extensions.getExtensionContext is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+Prisma.defineExtension = () => {
+  const runtimeName = getRuntime().prettyName;
+  throw new Error(`Extensions.defineExtension is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
+In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
+)}
+
+/**
+ * Shorthand utilities for JSON filtering
+ */
+Prisma.DbNull = objectEnumValues.instances.DbNull
+Prisma.JsonNull = objectEnumValues.instances.JsonNull
+Prisma.AnyNull = objectEnumValues.instances.AnyNull
+
+Prisma.NullTypes = {
+  DbNull: objectEnumValues.classes.DbNull,
+  JsonNull: objectEnumValues.classes.JsonNull,
+  AnyNull: objectEnumValues.classes.AnyNull
+}
+
+
+
+/**
+ * Enums
+ */
+
+exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
+  Serializable: 'Serializable'
+});
+
+exports.Prisma.AchievementScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  targetXp: 'targetXp',
+  reward: 'reward',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  sbId: 'sbId',
+  name: 'name',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  isOnline: 'isOnline',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  twoFactorEnabled: 'twoFactorEnabled',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires',
+  username: 'username',
+  displayUsername: 'displayUsername',
+  passwordHash: 'passwordHash',
+  totalXp: 'totalXp',
+  balance: 'balance',
+  isVerified: 'isVerified',
+  active: 'active',
+  lastLogin: 'lastLogin',
+  verificationToken: 'verificationToken',
+  avatar: 'avatar',
+  activeProfileId: 'activeProfileId',
+  gender: 'gender',
+  status: 'status',
+  cashtag: 'cashtag',
+  phpId: 'phpId',
+  accessToken: 'accessToken',
+  vipInfoId: 'vipInfoId',
+  lastDailySpin: 'lastDailySpin'
+};
+
+exports.Prisma.AccountScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  userId: 'userId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  scope: 'scope',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlatformSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  activeGameId: 'activeGameId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  refreshToken: 'refreshToken',
+  active: 'active',
+  token: 'token',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OperatorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logo: 'logo',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  acceptedPayments: 'acceptedPayments',
+  ownerId: 'ownerId',
+  balance: 'balance'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  authorId: 'authorId'
+};
+
+exports.Prisma.ProfileScalarFieldEnum = {
+  id: 'id',
+  balance: 'balance',
+  xpEarned: 'xpEarned',
+  isActive: 'isActive',
+  lastPlayed: 'lastPlayed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  phpId: 'phpId',
+  userId: 'userId',
+  currency: 'currency',
+  shopId: 'shopId'
+};
+
+exports.Prisma.GameScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  title: 'title',
+  temperature: 'temperature',
+  developer: 'developer',
+  vipLevel: 'vipLevel',
+  isActive: 'isActive',
+  device: 'device',
+  featured: 'featured',
+  gamebank: 'gamebank',
+  bet: 'bet',
+  denomination: 'denomination',
+  categoryTemp: 'categoryTemp',
+  originalId: 'originalId',
+  bids: 'bids',
+  statIn: 'statIn',
+  statOut: 'statOut',
+  currentRtp: 'currentRtp',
+  rtpStatIn: 'rtpStatIn',
+  rtpStatOut: 'rtpStatOut',
+  standardRtp: 'standardRtp',
+  popularity: 'popularity',
+  chanceFirepot1: 'chanceFirepot1',
+  chanceFirepot2: 'chanceFirepot2',
+  chanceFirepot3: 'chanceFirepot3',
+  fireCount1: 'fireCount1',
+  fireCount2: 'fireCount2',
+  fireCount3: 'fireCount3',
+  linesPercentConfigSpin: 'linesPercentConfigSpin',
+  linesPercentConfigSpinBonus: 'linesPercentConfigSpinBonus',
+  linesPercentConfigBonus: 'linesPercentConfigBonus',
+  linesPercentConfigBonusBonus: 'linesPercentConfigBonusBonus',
+  rezerv: 'rezerv',
+  cask: 'cask',
+  advanced: 'advanced',
+  scaleMode: 'scaleMode',
+  slotViewState: 'slotViewState',
+  view: 'view',
+  categoryId: 'categoryId',
+  operatorId: 'operatorId',
+  providerId: 'providerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  jackpotGroupId: 'jackpotGroupId',
+  active: 'active',
+  password: 'password',
+  category: 'category'
+};
+
+exports.Prisma.OperatorgameScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  thumbnail: 'thumbnail',
+  minBet: 'minBet',
+  maxBet: 'maxBet',
+  xpMultiplier: 'xpMultiplier',
+  isActive: 'isActive',
+  isPromoted: 'isPromoted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  operatorId: 'operatorId'
+};
+
+exports.Prisma.VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logo: 'logo',
+  createdAt: 'createdAt',
+  metadata: 'metadata'
+};
+
+exports.Prisma.MemberScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.InvitationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  email: 'email',
+  role: 'role',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  inviterId: 'inviterId'
+};
+
+exports.Prisma.TwoFactorScalarFieldEnum = {
+  id: 'id',
+  secret: 'secret',
+  backupCodes: 'backupCodes',
+  userId: 'userId'
+};
+
+exports.Prisma.ChatmessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  channel: 'channel',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  roomId: 'roomId'
+};
+
+exports.Prisma.ChatroomScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isGameRoom: 'isGameRoom',
+  createdAt: 'createdAt',
+  gameSessionId: 'gameSessionId'
+};
+
+exports.Prisma.FriendshipScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  friendId: 'friendId'
+};
+
+exports.Prisma.GamesessionScalarFieldEnum = {
+  id: 'id',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  betAmount: 'betAmount',
+  winAmount: 'winAmount',
+  xpEarned: 'xpEarned',
+  metadata: 'metadata',
+  gameId: 'gameId',
+  tournamentId: 'tournamentId',
+  active: 'active',
+  profileId: 'profileId',
+  vipInfoId: 'vipInfoId'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  url: 'url',
+  type: 'type',
+  bonusCode: 'bonusCode',
+  bonusTotalInCredits: 'bonusTotalInCredits',
+  priceInCents: 'priceInCents',
+  amountToReceiveInCredits: 'amountToReceiveInCredits',
+  bestValue: 'bestValue',
+  discountInCents: 'discountInCents',
+  bonusSpins: 'bonusSpins',
+  isPromo: 'isPromo',
+  totalDiscountInCents: 'totalDiscountInCents',
+  shopId: 'shopId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
+exports.Prisma.TournamentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  entryFee: 'entryFee',
+  prizePool: 'prizePool',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  operatorId: 'operatorId',
+  leaderboard: 'leaderboard'
+};
+
+exports.Prisma.TournamententryScalarFieldEnum = {
+  id: 'id',
+  score: 'score',
+  wagered: 'wagered',
+  won: 'won',
+  joinedAt: 'joinedAt',
+  userId: 'userId',
+  tournamentId: 'tournamentId',
+  profileId: 'profileId'
+};
+
+exports.Prisma.TournamentgameScalarFieldEnum = {
+  id: 'id',
+  multiplier: 'multiplier',
+  tournamentId: 'tournamentId',
+  gameId: 'gameId'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  amount: 'amount',
+  amountCredits: 'amountCredits',
+  buyerCashtag: 'buyerCashtag',
+  buyerUserId: 'buyerUserId',
+  username: 'username',
+  cashiername: 'cashiername',
+  cashierAvatar: 'cashierAvatar',
+  cashierId: 'cashierId',
+  reference: 'reference',
+  status: 'status',
+  metadata: 'metadata',
+  isRealMoney: 'isRealMoney',
+  paymentMethod: 'paymentMethod',
+  paymentDetails: 'paymentDetails',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt',
+  gameSessionId: 'gameSessionId',
+  profileId: 'profileId',
+  cashtag: 'cashtag',
+  productid: 'productid',
+  vipInfoId: 'vipInfoId'
+};
+
+exports.Prisma.UserachievementScalarFieldEnum = {
+  id: 'id',
+  progress: 'progress',
+  isUnlocked: 'isUnlocked',
+  unlockedAt: 'unlockedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  achievementId: 'achievementId'
+};
+
+exports.Prisma.RainBetScalarFieldEnum = {
+  id: 'id',
+  rainHistoryId: 'rainHistoryId',
+  userId: 'userId',
+  betAmount: 'betAmount',
+  odds: 'odds',
+  outcome: 'outcome',
+  settledAt: 'settledAt'
+};
+
+exports.Prisma.RainHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  rainType: 'rainType',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RainTipScalarFieldEnum = {
+  id: 'id',
+  rainHistoryId: 'rainHistoryId',
+  userId: 'userId',
+  tipAmount: 'tipAmount',
+  tippedAt: 'tippedAt'
+};
+
+exports.Prisma.RainWinnerScalarFieldEnum = {
+  id: 'id',
+  rainHistoryId: 'rainHistoryId',
+  userId: 'userId',
+  wonAmount: 'wonAmount',
+  wonAt: 'wonAt'
+};
+
+exports.Prisma.VipInfoScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  deposit_exp: 'deposit_exp',
+  bet_exp: 'bet_exp',
+  rank_bet_exp: 'rank_bet_exp',
+  rank_deposit_exp: 'rank_deposit_exp',
+  rank_name: 'rank_name',
+  icon: 'icon',
+  exp_switch_type: 'exp_switch_type',
+  now_deposit_exp: 'now_deposit_exp',
+  level_deposit_exp: 'level_deposit_exp',
+  now_bet_exp: 'now_bet_exp',
+  level_bet_exp: 'level_bet_exp',
+  telegram: 'telegram',
+  is_protection: 'is_protection',
+  protection_deposit_exp: 'protection_deposit_exp',
+  protection_deposit_amount: 'protection_deposit_amount',
+  protection_bet_exp: 'protection_bet_exp',
+  protection_bet_amount: 'protection_bet_amount',
+  protection_days: 'protection_days',
+  protection_switch: 'protection_switch',
+  cycle_award_switch: 'cycle_award_switch',
+  level_award_switch: 'level_award_switch',
+  signin_award_switch: 'signin_award_switch',
+  bet_award_switch: 'bet_award_switch',
+  withdrawal_award_switch: 'withdrawal_award_switch',
+  unprotection_deposit_exp: 'unprotection_deposit_exp',
+  unprotection_deposit_amount: 'unprotection_deposit_amount',
+  unprotection_bet_exp: 'unprotection_bet_exp',
+  unprotection_bet_amount: 'unprotection_bet_amount',
+  unprotection_days: 'unprotection_days',
+  unprotection_switch: 'unprotection_switch',
+  main_currency: 'main_currency',
+  can_receive_level_award: 'can_receive_level_award',
+  can_receive_rank_award: 'can_receive_rank_award',
+  can_receive_day_award: 'can_receive_day_award',
+  can_receive_week_award: 'can_receive_week_award',
+  can_receive_month_award: 'can_receive_month_award',
+  can_receive_signin_award: 'can_receive_signin_award',
+  can_receive_bet_award: 'can_receive_bet_award',
+  can_receive_withdrawal_award: 'can_receive_withdrawal_award',
+  userid: 'userid',
+  free_spin_times: 'free_spin_times',
+  week_gift: 'week_gift',
+  month_gift: 'month_gift',
+  upgrade_gift: 'upgrade_gift',
+  now_cash_back: 'now_cash_back',
+  yesterday_cash_back: 'yesterday_cash_back',
+  history_cash_back: 'history_cash_back',
+  operatorId: 'operatorId'
+};
+
+exports.Prisma.EventLogScalarFieldEnum = {
+  id: 'id',
+  tableName: 'tableName',
+  rowId: 'rowId',
+  operation: 'operation',
+  payload: 'payload',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.Gender = exports.$Enums.Gender = {
+  BOY: 'BOY',
+  GIRL: 'GIRL',
+  ALIEN: 'ALIEN',
+  UNSURE: 'UNSURE',
+  ROBOT: 'ROBOT',
+  COMPLICATED: 'COMPLICATED'
+};
+
+exports.UserStatus = exports.$Enums.UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
+};
+
+exports.GameCategory = exports.$Enums.GameCategory = {
+  TABLE: 'TABLE',
+  FISH: 'FISH',
+  POKER: 'POKER',
+  SLOTS: 'SLOTS',
+  OTHER: 'OTHER'
+};
+
+exports.ChatChannel = exports.$Enums.ChatChannel = {
+  LOBBY: 'LOBBY',
+  GAME: 'GAME',
+  TOURNAMENT: 'TOURNAMENT',
+  PRIVATE: 'PRIVATE'
+};
+
+exports.FriendshipStatus = exports.$Enums.FriendshipStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  BLOCKED: 'BLOCKED'
+};
+
+exports.NotificationType = exports.$Enums.NotificationType = {
+  SYSTEM: 'SYSTEM',
+  FRIEND_REQUEST: 'FRIEND_REQUEST',
+  ACHIEVEMENT: 'ACHIEVEMENT',
+  BALANCE_UPDATE: 'BALANCE_UPDATE',
+  PROMOTIONAL: 'PROMOTIONAL',
+  TOURNAMENT: 'TOURNAMENT'
+};
+
+exports.TransactionType = exports.$Enums.TransactionType = {
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  BET: 'BET',
+  WIN: 'WIN',
+  BONUS: 'BONUS',
+  DONATION: 'DONATION',
+  ADJUSTMENT: 'ADJUSTMENT',
+  TOURNAMENT_BUYIN: 'TOURNAMENT_BUYIN',
+  TOURNAMENT_PRIZE: 'TOURNAMENT_PRIZE'
+};
+
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+  EXPIRED: 'EXPIRED',
+  REJECTED: 'REJECTED'
+};
+
+exports.Prisma.ModelName = {
+  Achievement: 'Achievement',
+  User: 'User',
+  Account: 'Account',
+  PlatformSession: 'PlatformSession',
+  Operator: 'Operator',
+  Message: 'Message',
+  Profile: 'Profile',
+  Game: 'Game',
+  Operatorgame: 'Operatorgame',
+  Verification: 'Verification',
+  Organization: 'Organization',
+  Member: 'Member',
+  Invitation: 'Invitation',
+  TwoFactor: 'TwoFactor',
+  Chatmessage: 'Chatmessage',
+  Chatroom: 'Chatroom',
+  Friendship: 'Friendship',
+  Gamesession: 'Gamesession',
+  Product: 'Product',
+  Notification: 'Notification',
+  Tournament: 'Tournament',
+  Tournamententry: 'Tournamententry',
+  Tournamentgame: 'Tournamentgame',
+  Transaction: 'Transaction',
+  Userachievement: 'Userachievement',
+  RainBet: 'RainBet',
+  RainHistory: 'RainHistory',
+  RainTip: 'RainTip',
+  RainWinner: 'RainWinner',
+  VipInfo: 'VipInfo',
+  EventLog: 'EventLog'
+};
+
+/**
+ * This is a stub Prisma Client that will error at runtime if called.
+ */
+class PrismaClient {
+  constructor() {
+    return new Proxy(this, {
+      get(target, prop) {
+        let message
+        const runtime = getRuntime()
+        if (runtime.isEdge) {
+          message = `PrismaClient is not configured to run in ${runtime.prettyName}. In order to run Prisma Client on edge runtime, either:
+- Use Prisma Accelerate: https://pris.ly/d/accelerate
+- Use Driver Adapters: https://pris.ly/d/driver-adapters
+`;
+        } else {
+          message = 'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' + runtime.prettyName + '`).'
+        }
+        
+        message += `
+If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`
+
+        throw new Error(message)
+      }
+    })
+  }
+}
+
+exports.PrismaClient = PrismaClient
+
+Object.assign(exports, Prisma)

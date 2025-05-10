@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: my-monorepo-postgres
+    restart: always
+    ports:
+      - '5432:5432' # Expose PostgreSQL port to host
+    environment:
+      POSTGRES_USER: postgres # Default user
+      POSTGRES_PASSWORD: password # Default password
+      POSTGRES_DB: mydb # Default database
+    volumes:
+      - postgres_data2:/var/lib/postgresql/data # Persist data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d mydb']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # server:
+  #   build:
+  #     context: .. # Root of your monorepo
+  #     dockerfile: docker/Dockerfile
+  #   container_name: my-monorepo-server
+  #   ports:
+  #     - "3001:3001" # Expose server port
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy # Wait for postgres to be healthy
+  #   environment:
+  #     DATABASE_URL: "postgresql://postgres:password@postgres:5432/mydb?schema=public"
+  #     PORT: 3001
+  #     # Add any other server-specific environment variables here
+  #   volumes:
+  #     # Mount your server app's source code for live reloading during development
+  #     # This is optional and depends on how you want to manage dev vs. prod builds
+  #     - ../apps/server:/usr/src/app/apps/server
+  #     - ../packages/db:/usr/src/app/packages/db
+  #     - ../packages/types:/usr/src/app/packages/types
+  #     # Prevent node_modules from being overwritten by local mount
+  #     - /usr/src/app/apps/server/node_modules
+  #     - /usr/src/app/packages/db/node_modules
+  #     - /usr/src/app/packages/types/node_modules
+  #   # Command for development with watch mode (if your dev script supports it)
+  #   # command: bun --cwd apps/server run dev
+
+volumes:
+  postgres_data2: # Define the postgres_data volume
+
+networks:
+  default:
+    driver: bridge

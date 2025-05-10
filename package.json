@@ -1,0 +1,45 @@
+{
+  "name": "cashflow",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/sdk"
+  ],
+  "scripts": {
+    "dev": "bunx concurrently \"bun run dev:server\" \"bun run dev:client\" -c \"bgBlue.bold,bgGreen.bold\" -n \"SERVER,CLIENT\" --kill-others-on-fail",
+    "dev:serverx": "bun --cwd apps/server bun run dev",
+    "dev:server": "bun run --filter  @cashflow/server dev  --elide 1000 ",
+    "dev:clientx": "echo 'Client dev script not implemented yet. cd apps/client && bun run dev'",
+    "dev:client": "bun run --filter @cashflow/client  dev",
+    "build:server": "bun --cwd apps/server bun run build",
+    "build:client": "echo 'Client build script not implemented yet.'",
+    "start:server": "bun --cwd apps/server run start",
+    "db:generate": "bunx prisma generate --schema packages/db/prisma/schema.prisma",
+    "db:migrate:dev": "bun --cwd packages/db run prisma:migrate:dev",
+    "db:studio": "bun --cwd packages/db run prisma:studio",
+    "db:seed": "bunx prisma db seed --schema packages/db/prisma/schema.prisma",
+    "db:push": "bunx prisma db push --schema packages/db/prisma/schema.prisma",
+    "typecheck:server": "bun --cwd apps/server run typecheck",
+    "typecheck:types": "bun --cwd packages/types run typecheck",
+    "docker:dev": "docker-compose -f docker/docker-compose.yml up --build",
+    "deploy:fly": "fly deploy",
+    "build:sdk": "bun --cwd packages/sdk run build",
+    "typecheck:sdk": "bun --cwd packages/sdk run typecheck",
+    "typecheck": "bun run typecheck:server && bun run typecheck:types && bun run typecheck:sdk && bun --cwd apps/client run typecheck"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "bun-types": "latest",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "prisma": "^5.12.0",
+    "typescript": "^5.0.0",
+    "ws": "^8.18.2"
+  },
+  "dependencies": {},
+  "prisma": {
+    "seed": "packages/db/src/seed.ts",
+    "schema": "packages/db/prisma/schema.prisma"
+  }
+}

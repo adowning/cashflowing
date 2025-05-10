@@ -1,0 +1,41 @@
+// cashflow/packages/sdk/tsconfig.json
+{
+    // Consider creating a tsconfig.base.json at the monorepo root and extending it
+    // "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "moduleResolution": "bundler", // Or "NodeNext", "Node16"
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true,
+        "outDir": "./dist",
+        // "rootDir": "./src", // REMOVED: Let TypeScript infer rootDir.
+        // This was causing the error when resolving path aliases outside this directory.
+        "baseUrl": ".", // baseUrl is still useful for path aliases
+        "paths": {
+            // This path alias allows importing the server's exported app type.
+            // Ensure this path correctly points to your server's entry point that exports CashflowServerAppType.
+            "@cashflow/server": [
+                "../../apps/server/src/index.ts"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ], // Include all files within the SDK's src directory
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+    // For a more robust monorepo setup, consider using Project References:
+    // "references": [
+    //   { "path": "../../apps/server" } // If apps/server is also a composite project
+    // ]
+}

@@ -1,0 +1,80 @@
+// {
+//   "compilerOptions": {
+//     "target": "ESNext",
+//     "module": "ESNext",
+//     "lib": [
+//       "ESNext"
+//     ],
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "outDir": "./dist",
+//     "rootDir": "./src",
+//     "baseUrl": ".",
+//     "paths": {
+//       "@cashflow/types": [
+//         "../../packages/types/src"
+//       ],
+//       "@cashflow/db": [
+//         "../../packages/db/src"
+//       ]
+//     },
+//     "jsx": "react-jsx", // Required for Hono JSX middleware
+//     "jsxImportSource": "hono/jsx" // Required for Hono JSX middleware
+//   },
+//   "include": [
+//     "src/**/*.ts"
+//   ],
+//   "exclude": [
+//     "node_modules",
+//     "dist"
+//   ]
+// }// cashflow/apps/server/tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "moduleResolution": "bundler", // Or "NodeNext", "Node16"
+    "resolveJsonModule": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    // "rootDir": "./src", // REMOVED: Let TypeScript infer rootDir or set to a common ancestor if needed.
+    // Removing it is often the simplest fix for this specific error with path aliases.
+    "baseUrl": ".", // baseUrl is still useful for path aliases
+    "paths": {
+      "@cashflow/types": [
+        "../../packages/types/src"
+      ], // CORRECTED SCOPE
+      "@cashflow/db": [
+        "../../packages/db/src"
+      ], // CORRECTED SCOPE
+      "@/*": [
+        "./src/*"
+      ] // Internal alias for server's own src
+    },
+    "jsx": "react-jsx", // Required for Hono JSX middleware
+    "jsxImportSource": "hono/jsx" // Required for Hono JSX middleware
+  },
+  "include": [
+    "src/**/*.ts" // Include all .ts files within the server's src directory
+    // If you have .d.ts files directly in src you might add "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+  // For a more robust monorepo setup, consider using Project References:
+  // "references": [
+  //   { "path": "../../packages/db" },
+  //   { "path": "../../packages/types" }
+  // ]
+}

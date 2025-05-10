@@ -1,0 +1,14 @@
+# Defines the workspace structure for Bun.
+# Bun will automatically detect and link packages defined in the root package.json "workspaces" field.
+
+# Optional: You can specify a different location for the lockfile.
+# lockfile = "bun.lockb"
+
+# Optional: Default framework for `bun create`
+# [create]
+# default = "next"
+
+# Optional: Configure the test runner
+# [test]
+# preload = ["./test/setup.ts"]
+# coverage = true
