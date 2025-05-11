@@ -394,7 +394,8 @@ export type RainType = (typeof RainType)[keyof typeof RainType]
 export const MemberRole: {
   ADMIN: 'ADMIN',
   MEMBER: 'MEMBER',
-  GUEST: 'GUEST'
+  GUEST: 'GUEST',
+  USER: 'USER'
 };
 
 export type MemberRole = (typeof MemberRole)[keyof typeof MemberRole]
@@ -5747,10 +5748,13 @@ export namespace Prisma {
   export type UserMinAggregateOutputType = {
     id: string | null
     sbId: string | null
+    username: string | null
+    displayUsername: string | null
     name: string | null
     email: string | null
     emailVerified: boolean | null
     isOnline: boolean | null
+    isAnonymous: boolean | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5759,8 +5763,6 @@ export namespace Prisma {
     banned: boolean | null
     banReason: string | null
     banExpires: Date | null
-    username: string | null
-    displayUsername: string | null
     passwordHash: string | null
     totalXp: number | null
     balance: number | null
@@ -5782,10 +5784,13 @@ export namespace Prisma {
   export type UserMaxAggregateOutputType = {
     id: string | null
     sbId: string | null
+    username: string | null
+    displayUsername: string | null
     name: string | null
     email: string | null
     emailVerified: boolean | null
     isOnline: boolean | null
+    isAnonymous: boolean | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5794,8 +5799,6 @@ export namespace Prisma {
     banned: boolean | null
     banReason: string | null
     banExpires: Date | null
-    username: string | null
-    displayUsername: string | null
     passwordHash: string | null
     totalXp: number | null
     balance: number | null
@@ -5817,10 +5820,13 @@ export namespace Prisma {
   export type UserCountAggregateOutputType = {
     id: number
     sbId: number
+    username: number
+    displayUsername: number
     name: number
     email: number
     emailVerified: number
     isOnline: number
+    isAnonymous: number
     image: number
     createdAt: number
     updatedAt: number
@@ -5829,8 +5835,6 @@ export namespace Prisma {
     banned: number
     banReason: number
     banExpires: number
-    username: number
-    displayUsername: number
     passwordHash: number
     totalXp: number
     balance: number
@@ -5866,10 +5870,13 @@ export namespace Prisma {
   export type UserMinAggregateInputType = {
     id?: true
     sbId?: true
+    username?: true
+    displayUsername?: true
     name?: true
     email?: true
     emailVerified?: true
     isOnline?: true
+    isAnonymous?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -5878,8 +5885,6 @@ export namespace Prisma {
     banned?: true
     banReason?: true
     banExpires?: true
-    username?: true
-    displayUsername?: true
     passwordHash?: true
     totalXp?: true
     balance?: true
@@ -5901,10 +5906,13 @@ export namespace Prisma {
   export type UserMaxAggregateInputType = {
     id?: true
     sbId?: true
+    username?: true
+    displayUsername?: true
     name?: true
     email?: true
     emailVerified?: true
     isOnline?: true
+    isAnonymous?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -5913,8 +5921,6 @@ export namespace Prisma {
     banned?: true
     banReason?: true
     banExpires?: true
-    username?: true
-    displayUsername?: true
     passwordHash?: true
     totalXp?: true
     balance?: true
@@ -5936,10 +5942,13 @@ export namespace Prisma {
   export type UserCountAggregateInputType = {
     id?: true
     sbId?: true
+    username?: true
+    displayUsername?: true
     name?: true
     email?: true
     emailVerified?: true
     isOnline?: true
+    isAnonymous?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -5948,8 +5957,6 @@ export namespace Prisma {
     banned?: true
     banReason?: true
     banExpires?: true
-    username?: true
-    displayUsername?: true
     passwordHash?: true
     totalXp?: true
     balance?: true
@@ -6058,10 +6065,13 @@ export namespace Prisma {
   export type UserGroupByOutputType = {
     id: string
     sbId: string | null
-    name: string | null
+    username: string | null
+    displayUsername: string | null
+    name: string
     email: string
     emailVerified: boolean | null
     isOnline: boolean | null
+    isAnonymous: boolean | null
     image: string | null
     createdAt: Date
     updatedAt: Date | null
@@ -6070,8 +6080,6 @@ export namespace Prisma {
     banned: boolean | null
     banReason: string | null
     banExpires: Date | null
-    username: string
-    displayUsername: string
     passwordHash: string | null
     totalXp: number
     balance: number
@@ -6112,10 +6120,13 @@ export namespace Prisma {
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     sbId?: boolean
+    username?: boolean
+    displayUsername?: boolean
     name?: boolean
     email?: boolean
     emailVerified?: boolean
     isOnline?: boolean
+    isAnonymous?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6124,8 +6135,6 @@ export namespace Prisma {
     banned?: boolean
     banReason?: boolean
     banExpires?: boolean
-    username?: boolean
-    displayUsername?: boolean
     passwordHash?: boolean
     totalXp?: boolean
     balance?: boolean
@@ -6166,10 +6175,13 @@ export namespace Prisma {
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     sbId?: boolean
+    username?: boolean
+    displayUsername?: boolean
     name?: boolean
     email?: boolean
     emailVerified?: boolean
     isOnline?: boolean
+    isAnonymous?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6178,8 +6190,6 @@ export namespace Prisma {
     banned?: boolean
     banReason?: boolean
     banExpires?: boolean
-    username?: boolean
-    displayUsername?: boolean
     passwordHash?: boolean
     totalXp?: boolean
     balance?: boolean
@@ -6201,10 +6211,13 @@ export namespace Prisma {
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     sbId?: boolean
+    username?: boolean
+    displayUsername?: boolean
     name?: boolean
     email?: boolean
     emailVerified?: boolean
     isOnline?: boolean
+    isAnonymous?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6213,8 +6226,6 @@ export namespace Prisma {
     banned?: boolean
     banReason?: boolean
     banExpires?: boolean
-    username?: boolean
-    displayUsername?: boolean
     passwordHash?: boolean
     totalXp?: boolean
     balance?: boolean
@@ -6236,10 +6247,13 @@ export namespace Prisma {
   export type UserSelectScalar = {
     id?: boolean
     sbId?: boolean
+    username?: boolean
+    displayUsername?: boolean
     name?: boolean
     email?: boolean
     emailVerified?: boolean
     isOnline?: boolean
+    isAnonymous?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6248,8 +6262,6 @@ export namespace Prisma {
     banned?: boolean
     banReason?: boolean
     banExpires?: boolean
-    username?: boolean
-    displayUsername?: boolean
     passwordHash?: boolean
     totalXp?: boolean
     balance?: boolean
@@ -6268,7 +6280,7 @@ export namespace Prisma {
     lastDailySpin?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sbId" | "name" | "email" | "emailVerified" | "isOnline" | "image" | "createdAt" | "updatedAt" | "twoFactorEnabled" | "role" | "banned" | "banReason" | "banExpires" | "username" | "displayUsername" | "passwordHash" | "totalXp" | "balance" | "isVerified" | "active" | "lastLogin" | "verificationToken" | "avatar" | "activeProfileId" | "gender" | "status" | "cashtag" | "phpId" | "accessToken" | "vipInfoId" | "lastDailySpin", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sbId" | "username" | "displayUsername" | "name" | "email" | "emailVerified" | "isOnline" | "isAnonymous" | "image" | "createdAt" | "updatedAt" | "twoFactorEnabled" | "role" | "banned" | "banReason" | "banExpires" | "passwordHash" | "totalXp" | "balance" | "isVerified" | "active" | "lastLogin" | "verificationToken" | "avatar" | "activeProfileId" | "gender" | "status" | "cashtag" | "phpId" | "accessToken" | "vipInfoId" | "lastDailySpin", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     operator?: boolean | User$operatorArgs<ExtArgs>
     activeProfile?: boolean | User$activeProfileArgs<ExtArgs>
@@ -6318,10 +6330,13 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       sbId: string | null
-      name: string | null
+      username: string | null
+      displayUsername: string | null
+      name: string
       email: string
       emailVerified: boolean | null
       isOnline: boolean | null
+      isAnonymous: boolean | null
       image: string | null
       createdAt: Date
       updatedAt: Date | null
@@ -6330,8 +6345,6 @@ export namespace Prisma {
       banned: boolean | null
       banReason: string | null
       banExpires: Date | null
-      username: string
-      displayUsername: string
       passwordHash: string | null
       totalXp: number
       balance: number
@@ -6791,10 +6804,13 @@ export namespace Prisma {
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
     readonly sbId: FieldRef<"User", 'String'>
+    readonly username: FieldRef<"User", 'String'>
+    readonly displayUsername: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'Boolean'>
     readonly isOnline: FieldRef<"User", 'Boolean'>
+    readonly isAnonymous: FieldRef<"User", 'Boolean'>
     readonly image: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
@@ -6803,8 +6819,6 @@ export namespace Prisma {
     readonly banned: FieldRef<"User", 'Boolean'>
     readonly banReason: FieldRef<"User", 'String'>
     readonly banExpires: FieldRef<"User", 'DateTime'>
-    readonly username: FieldRef<"User", 'String'>
-    readonly displayUsername: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly totalXp: FieldRef<"User", 'Int'>
     readonly balance: FieldRef<"User", 'Int'>
@@ -42314,10 +42328,13 @@ export namespace Prisma {
   export const UserScalarFieldEnum: {
     id: 'id',
     sbId: 'sbId',
+    username: 'username',
+    displayUsername: 'displayUsername',
     name: 'name',
     email: 'email',
     emailVerified: 'emailVerified',
     isOnline: 'isOnline',
+    isAnonymous: 'isAnonymous',
     image: 'image',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -42326,8 +42343,6 @@ export namespace Prisma {
     banned: 'banned',
     banReason: 'banReason',
     banExpires: 'banExpires',
-    username: 'username',
-    displayUsername: 'displayUsername',
     passwordHash: 'passwordHash',
     totalXp: 'totalXp',
     balance: 'balance',
@@ -43223,10 +43238,13 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
     sbId?: StringNullableFilter<"User"> | string | null
-    name?: StringNullableFilter<"User"> | string | null
+    username?: StringNullableFilter<"User"> | string | null
+    displayUsername?: StringNullableFilter<"User"> | string | null
+    name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     emailVerified?: BoolNullableFilter<"User"> | boolean | null
     isOnline?: BoolNullableFilter<"User"> | boolean | null
+    isAnonymous?: BoolNullableFilter<"User"> | boolean | null
     image?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -43235,8 +43253,6 @@ export namespace Prisma {
     banned?: BoolNullableFilter<"User"> | boolean | null
     banReason?: StringNullableFilter<"User"> | string | null
     banExpires?: DateTimeNullableFilter<"User"> | Date | string | null
-    username?: StringFilter<"User"> | string
-    displayUsername?: StringFilter<"User"> | string
     passwordHash?: StringNullableFilter<"User"> | string | null
     totalXp?: IntFilter<"User"> | number
     balance?: IntFilter<"User"> | number
@@ -43276,10 +43292,13 @@ export namespace Prisma {
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     sbId?: SortOrderInput | SortOrder
-    name?: SortOrderInput | SortOrder
+    username?: SortOrderInput | SortOrder
+    displayUsername?: SortOrderInput | SortOrder
+    name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
     isOnline?: SortOrderInput | SortOrder
+    isAnonymous?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
@@ -43288,8 +43307,6 @@ export namespace Prisma {
     banned?: SortOrderInput | SortOrder
     banReason?: SortOrderInput | SortOrder
     banExpires?: SortOrderInput | SortOrder
-    username?: SortOrder
-    displayUsername?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
     totalXp?: SortOrder
     balance?: SortOrder
@@ -43329,15 +43346,17 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
-    username?: string
     activeProfileId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     sbId?: StringNullableFilter<"User"> | string | null
-    name?: StringNullableFilter<"User"> | string | null
+    username?: StringNullableFilter<"User"> | string | null
+    displayUsername?: StringNullableFilter<"User"> | string | null
+    name?: StringFilter<"User"> | string
     emailVerified?: BoolNullableFilter<"User"> | boolean | null
     isOnline?: BoolNullableFilter<"User"> | boolean | null
+    isAnonymous?: BoolNullableFilter<"User"> | boolean | null
     image?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -43346,7 +43365,6 @@ export namespace Prisma {
     banned?: BoolNullableFilter<"User"> | boolean | null
     banReason?: StringNullableFilter<"User"> | string | null
     banExpires?: DateTimeNullableFilter<"User"> | Date | string | null
-    displayUsername?: StringFilter<"User"> | string
     passwordHash?: StringNullableFilter<"User"> | string | null
     totalXp?: IntFilter<"User"> | number
     balance?: IntFilter<"User"> | number
@@ -43380,15 +43398,18 @@ export namespace Prisma {
     twofactors?: TwoFactorListRelationFilter
     userachievement?: UserachievementListRelationFilter
     vipInfo?: XOR<VipInfoNullableScalarRelationFilter, VipInfoWhereInput> | null
-  }, "id" | "email" | "username" | "activeProfileId">
+  }, "id" | "email" | "activeProfileId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     sbId?: SortOrderInput | SortOrder
-    name?: SortOrderInput | SortOrder
+    username?: SortOrderInput | SortOrder
+    displayUsername?: SortOrderInput | SortOrder
+    name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
     isOnline?: SortOrderInput | SortOrder
+    isAnonymous?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
@@ -43397,8 +43418,6 @@ export namespace Prisma {
     banned?: SortOrderInput | SortOrder
     banReason?: SortOrderInput | SortOrder
     banExpires?: SortOrderInput | SortOrder
-    username?: SortOrder
-    displayUsername?: SortOrder
     passwordHash?: SortOrderInput | SortOrder
     totalXp?: SortOrder
     balance?: SortOrder
@@ -43428,10 +43447,13 @@ export namespace Prisma {
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
     sbId?: StringNullableWithAggregatesFilter<"User"> | string | null
-    name?: StringNullableWithAggregatesFilter<"User"> | string | null
+    username?: StringNullableWithAggregatesFilter<"User"> | string | null
+    displayUsername?: StringNullableWithAggregatesFilter<"User"> | string | null
+    name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     emailVerified?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
     isOnline?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
+    isAnonymous?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -43440,8 +43462,6 @@ export namespace Prisma {
     banned?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
     banReason?: StringNullableWithAggregatesFilter<"User"> | string | null
     banExpires?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    username?: StringWithAggregatesFilter<"User"> | string
-    displayUsername?: StringWithAggregatesFilter<"User"> | string
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     totalXp?: IntWithAggregatesFilter<"User"> | number
     balance?: IntWithAggregatesFilter<"User"> | number
@@ -46208,10 +46228,13 @@ export namespace Prisma {
   export type UserCreateInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -46220,8 +46243,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -46261,10 +46282,13 @@ export namespace Prisma {
   export type UserUncheckedCreateInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -46273,8 +46297,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -46314,10 +46336,13 @@ export namespace Prisma {
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -46326,8 +46351,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -46367,10 +46390,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -46379,8 +46405,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -46420,10 +46444,13 @@ export namespace Prisma {
   export type UserCreateManyInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -46432,8 +46459,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -46455,10 +46480,13 @@ export namespace Prisma {
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -46467,8 +46495,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -46490,10 +46516,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -46502,8 +46531,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -49887,10 +49914,13 @@ export namespace Prisma {
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     sbId?: SortOrder
+    username?: SortOrder
+    displayUsername?: SortOrder
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
     isOnline?: SortOrder
+    isAnonymous?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -49899,8 +49929,6 @@ export namespace Prisma {
     banned?: SortOrder
     banReason?: SortOrder
     banExpires?: SortOrder
-    username?: SortOrder
-    displayUsername?: SortOrder
     passwordHash?: SortOrder
     totalXp?: SortOrder
     balance?: SortOrder
@@ -49928,10 +49956,13 @@ export namespace Prisma {
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     sbId?: SortOrder
+    username?: SortOrder
+    displayUsername?: SortOrder
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
     isOnline?: SortOrder
+    isAnonymous?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -49940,8 +49971,6 @@ export namespace Prisma {
     banned?: SortOrder
     banReason?: SortOrder
     banExpires?: SortOrder
-    username?: SortOrder
-    displayUsername?: SortOrder
     passwordHash?: SortOrder
     totalXp?: SortOrder
     balance?: SortOrder
@@ -49963,10 +49992,13 @@ export namespace Prisma {
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     sbId?: SortOrder
+    username?: SortOrder
+    displayUsername?: SortOrder
     name?: SortOrder
     email?: SortOrder
     emailVerified?: SortOrder
     isOnline?: SortOrder
+    isAnonymous?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -49975,8 +50007,6 @@ export namespace Prisma {
     banned?: SortOrder
     banReason?: SortOrder
     banExpires?: SortOrder
-    username?: SortOrder
-    displayUsername?: SortOrder
     passwordHash?: SortOrder
     totalXp?: SortOrder
     balance?: SortOrder
@@ -56300,10 +56330,13 @@ export namespace Prisma {
   export type UserCreateWithoutAccountsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -56312,8 +56345,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -56352,10 +56383,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutAccountsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -56364,8 +56398,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -56420,10 +56452,13 @@ export namespace Prisma {
   export type UserUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56432,8 +56467,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -56472,10 +56505,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56484,8 +56520,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -56524,10 +56558,13 @@ export namespace Prisma {
   export type UserCreateWithoutSessionsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -56536,8 +56573,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -56576,10 +56611,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutSessionsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -56588,8 +56626,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -56644,10 +56680,13 @@ export namespace Prisma {
   export type UserUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56656,8 +56695,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -56696,10 +56733,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56708,8 +56748,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -56748,10 +56786,13 @@ export namespace Prisma {
   export type UserCreateWithoutOperatorInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -56760,8 +56801,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -56800,10 +56839,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutOperatorInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -56812,8 +56854,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -57234,10 +57274,13 @@ export namespace Prisma {
   export type UserUpdateWithoutOperatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57246,8 +57289,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -57286,10 +57327,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutOperatorInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57298,8 +57342,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -57609,10 +57651,13 @@ export namespace Prisma {
   export type UserCreateWithoutActiveProfileInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -57621,8 +57666,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -57661,10 +57704,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutActiveProfileInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -57673,8 +57719,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -57908,10 +57952,13 @@ export namespace Prisma {
   export type UserUpdateWithoutActiveProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57920,8 +57967,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -57960,10 +58005,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutActiveProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57972,8 +58020,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -58410,10 +58456,13 @@ export namespace Prisma {
   export type UserCreateWithoutMembersInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -58422,8 +58471,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -58462,10 +58509,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutMembersInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -58474,8 +58524,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -58561,10 +58609,13 @@ export namespace Prisma {
   export type UserUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58573,8 +58624,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -58613,10 +58662,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58625,8 +58677,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -58665,10 +58715,13 @@ export namespace Prisma {
   export type UserCreateWithoutInvitationsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -58677,8 +58730,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -58717,10 +58768,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutInvitationsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -58729,8 +58783,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -58810,10 +58862,13 @@ export namespace Prisma {
   export type UserUpdateWithoutInvitationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58822,8 +58877,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -58862,10 +58915,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutInvitationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58874,8 +58930,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -58945,10 +58999,13 @@ export namespace Prisma {
   export type UserCreateWithoutTwofactorsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -58957,8 +59014,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -58997,10 +59052,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutTwofactorsInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59009,8 +59067,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59065,10 +59121,13 @@ export namespace Prisma {
   export type UserUpdateWithoutTwofactorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59077,8 +59136,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59117,10 +59174,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutTwofactorsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59129,8 +59189,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59190,10 +59248,13 @@ export namespace Prisma {
   export type UserCreateWithoutChatmessageInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59202,8 +59263,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59242,10 +59301,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutChatmessageInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59254,8 +59316,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59337,10 +59397,13 @@ export namespace Prisma {
   export type UserUpdateWithoutChatmessageInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59349,8 +59412,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59389,10 +59450,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutChatmessageInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59401,8 +59465,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59565,10 +59627,13 @@ export namespace Prisma {
   export type UserCreateWithoutFriendshipFriendshipFriendidtouserInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59577,8 +59642,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59617,10 +59680,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutFriendshipFriendshipFriendidtouserInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59629,8 +59695,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59674,10 +59738,13 @@ export namespace Prisma {
   export type UserCreateWithoutFriendshipFriendshipUseridtouserInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59686,8 +59753,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59726,10 +59791,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutFriendshipFriendshipUseridtouserInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -59738,8 +59806,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -59794,10 +59860,13 @@ export namespace Prisma {
   export type UserUpdateWithoutFriendshipFriendshipFriendidtouserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59806,8 +59875,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59846,10 +59913,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutFriendshipFriendshipFriendidtouserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59858,8 +59928,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59909,10 +59977,13 @@ export namespace Prisma {
   export type UserUpdateWithoutFriendshipFriendshipUseridtouserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59921,8 +59992,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -59961,10 +60030,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutFriendshipFriendshipUseridtouserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59973,8 +60045,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -60922,10 +60992,13 @@ export namespace Prisma {
   export type UserCreateWithoutNotificationInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -60934,8 +61007,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -60974,10 +61045,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutNotificationInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -60986,8 +61060,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -61042,10 +61114,13 @@ export namespace Prisma {
   export type UserUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61054,8 +61129,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -61094,10 +61167,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61106,8 +61182,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -61452,10 +61526,13 @@ export namespace Prisma {
   export type UserCreateWithoutTournamententryInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -61464,8 +61541,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -61504,10 +61579,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutTournamententryInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -61516,8 +61594,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -61660,10 +61736,13 @@ export namespace Prisma {
   export type UserUpdateWithoutTournamententryInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61672,8 +61751,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -61712,10 +61789,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutTournamententryInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61724,8 +61804,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -62583,10 +62661,13 @@ export namespace Prisma {
   export type UserCreateWithoutUserachievementInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -62595,8 +62676,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -62635,10 +62714,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutUserachievementInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -62647,8 +62729,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -62736,10 +62816,13 @@ export namespace Prisma {
   export type UserUpdateWithoutUserachievementInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62748,8 +62831,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -62788,10 +62869,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutUserachievementInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -62800,8 +62884,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -62865,10 +62947,13 @@ export namespace Prisma {
   export type UserCreateWithoutRainBetInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -62877,8 +62962,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -62917,10 +63000,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutRainBetInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -62929,8 +63015,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63016,10 +63100,13 @@ export namespace Prisma {
   export type UserUpdateWithoutRainBetInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63028,8 +63115,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63068,10 +63153,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutRainBetInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63080,8 +63168,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63148,10 +63234,13 @@ export namespace Prisma {
   export type UserCreateWithoutRainHistoryInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -63160,8 +63249,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63200,10 +63287,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutRainHistoryInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -63212,8 +63302,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63332,10 +63420,13 @@ export namespace Prisma {
   export type UserUpdateWithoutRainHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63344,8 +63435,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63384,10 +63473,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutRainHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63396,8 +63488,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63493,10 +63583,13 @@ export namespace Prisma {
   export type UserCreateWithoutRainTipInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -63505,8 +63598,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63545,10 +63636,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutRainTipInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -63557,8 +63651,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63644,10 +63736,13 @@ export namespace Prisma {
   export type UserUpdateWithoutRainTipInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63656,8 +63751,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63696,10 +63789,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutRainTipInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63708,8 +63804,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63773,10 +63867,13 @@ export namespace Prisma {
   export type UserCreateWithoutRainWinnerInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -63785,8 +63882,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63825,10 +63920,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutRainWinnerInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -63837,8 +63935,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -63924,10 +64020,13 @@ export namespace Prisma {
   export type UserUpdateWithoutRainWinnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63936,8 +64035,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -63976,10 +64073,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutRainWinnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -63988,8 +64088,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -64171,10 +64269,13 @@ export namespace Prisma {
   export type UserCreateWithoutVipInfoInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -64183,8 +64284,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -64223,10 +64322,13 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutVipInfoInput = {
     id?: string
     sbId?: string | null
-    name?: string | null
+    username?: string | null
+    displayUsername?: string | null
+    name: string
     email: string
     emailVerified?: boolean | null
     isOnline?: boolean | null
+    isAnonymous?: boolean | null
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -64235,8 +64337,6 @@ export namespace Prisma {
     banned?: boolean | null
     banReason?: string | null
     banExpires?: Date | string | null
-    username: string
-    displayUsername?: string
     passwordHash?: string | null
     totalXp?: number
     balance?: number
@@ -64370,10 +64470,13 @@ export namespace Prisma {
   export type UserUpdateWithoutVipInfoInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64382,8 +64485,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number
@@ -64422,10 +64523,13 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutVipInfoInput = {
     id?: StringFieldUpdateOperationsInput | string
     sbId?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     isOnline?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    isAnonymous?: NullableBoolFieldUpdateOperationsInput | boolean | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -64434,8 +64538,6 @@ export namespace Prisma {
     banned?: NullableBoolFieldUpdateOperationsInput | boolean | null
     banReason?: NullableStringFieldUpdateOperationsInput | string | null
     banExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    username?: StringFieldUpdateOperationsInput | string
-    displayUsername?: StringFieldUpdateOperationsInput | string
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     totalXp?: IntFieldUpdateOperationsInput | number
     balance?: IntFieldUpdateOperationsInput | number

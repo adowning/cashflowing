@@ -181,6 +181,7 @@ enum MemberRole {
   ADMIN
   MEMBER
   GUEST
+  USER
 }
 
 enum InvitationStatus {
@@ -206,10 +207,13 @@ model Achievement {
 model User {
   id                                 String            @id() @default(cuid())
   sbId                               String?
-  name                               String?
+   username                           String?            
+  displayUsername                    String?            @default("")
+  name                               String 
   email                              String            @unique()
   emailVerified                      Boolean?
   isOnline                           Boolean?
+  isAnonymous                       Boolean?
   image                              String?
   createdAt                          DateTime          @default(now())
   updatedAt                          DateTime?         @updatedAt()
@@ -218,8 +222,7 @@ model User {
   banned                             Boolean?
   banReason                          String?
   banExpires                         DateTime?
-  username                           String            @unique()
-  displayUsername                    String            @default("")
+
   passwordHash                       String?
   totalXp                            Int               @default(0)
   balance                            Int               @default(0)

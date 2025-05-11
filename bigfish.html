@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Big Fish Casino</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <style>
+      .bg-casino {
+        background-color: #0a0a3c;
+        background-image:
+          radial-gradient(
+            circle at 20% 30%,
+            rgba(120, 120, 255, 0.15) 10px,
+            transparent 10px
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(120, 120, 255, 0.1) 20px,
+            transparent 20px
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(120, 120, 255, 0.15) 15px,
+            transparent 15px
+          ),
+          radial-gradient(
+            circle at 30% 70%,
+            rgba(120, 120, 255, 0.1) 25px,
+            transparent 25px
+          ),
+          radial-gradient(
+            circle at 70% 80%,
+            rgba(120, 120, 255, 0.15) 18px,
+            transparent 18px
+          );
+      }
+      .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+        animation: sparkle 3s infinite;
+      }
+      @keyframes sparkle {
+        0% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .casino-card {
+        background-color: #0f1c61;
+        border-radius: 1rem;
+        border: 1px solid #2a3a8c;
+        box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
+      }
+      .btn-login {
+        background-color: #00c853;
+        color: white;
+        font-weight: bold;
+        padding: 0.75rem 0;
+        border-radius: 0.5rem;
+        width: 100%;
+        text-align: center;
+        transition: all 0.3s;
+      }
+      .btn-login:hover {
+        background-color: #00a844;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 200, 83, 0.3);
+      }
+      .logo-text {
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+      .casino-element {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-15px) rotate(5deg);
+        }
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-casino min-h-screen"
+    x-data="{ showLogin: true, showCookies: true, loggedIn: false }"
+  >
+    <!-- Sparkle Effects -->
+    <div class="sparkle" style="top: 15%; left: 20%"></div>
+    <div
+      class="sparkle"
+      style="top: 25%; left: 40%; animation-delay: 0.5s"
+    ></div>
+    <div class="sparkle" style="top: 10%; left: 60%; animation-delay: 1s"></div>
+    <div
+      class="sparkle"
+      style="top: 30%; left: 80%; animation-delay: 1.5s"
+    ></div>
+    <div class="sparkle" style="top: 50%; left: 30%; animation-delay: 2s"></div>
+    <div
+      class="sparkle"
+      style="top: 60%; left: 70%; animation-delay: 2.5s"
+    ></div>
+    <div
+      class="sparkle"
+      style="top: 80%; left: 20%; animation-delay: 1.2s"
+    ></div>
+    <div
+      class="sparkle"
+      style="top: 70%; left: 50%; animation-delay: 0.7s"
+    ></div>
+    <div
+      class="sparkle"
+      style="top: 90%; left: 80%; animation-delay: 1.7s"
+    ></div>
+
+    <!-- Login Page -->
+    <div x-show="showLogin && !loggedIn" class="container mx-auto px-4">
+      <header class="flex items-center justify-between py-6">
+        <div class="flex items-center">
+          <div class="text-white logo-text text-3xl">
+            <span class="text-white">BIG FISH</span>
+            <span class="text-yellow-400">Casino</span>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <button
+            class="bg-gray-900 text-white font-semibold py-2 px-8 rounded-full mr-2"
+          >
+            SIGN UP
+          </button>
+          <button
+            class="bg-blue-500 text-white font-semibold py-2 px-8 rounded-full"
+          >
+            LOGIN
+          </button>
+        </div>
+      </header>
+
+      <div class="flex justify-center mt-10">
+        <div class="casino-card px-8 pt-6 pb-8 mb-4 w-full max-w-md text-white">
+          <h2 class="text-center text-3xl mb-6 font-bold">
+            Welcome Back, Champ!
+          </h2>
+
+          <div class="mb-4">
+            <label class="block text-white text-sm font-bold mb-2" for="email">
+              Email
+            </label>
+            <input
+              class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="email"
+              type="email"
+              placeholder="Max. 88 characters, example jon@aol.com"
+            />
+          </div>
+
+          <div class="mb-6">
+            <label
+              class="block text-white text-sm font-bold mb-2"
+              for="password"
+            >
+              Password
+            </label>
+            <div class="relative">
+              <input
+                class="shadow appearance-none border rounded-md w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="password"
+                type="password"
+                placeholder="••••••••"
+              />
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <svg
+                  class="h-5 w-5 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
+                checked
+              />
+              <label for="remember-me" class="ml-2 block text-sm text-white">
+                Remember Me
+              </label>
+            </div>
+            <div>
+              <a href="#" class="text-sm text-blue-300 hover:text-blue-200">
+                Forgot password
+              </a>
+            </div>
+          </div>
+
+          <button
+            class="btn-login mb-4"
+            @click="loggedIn = true; showLogin = false"
+          >
+            LOG IN
+          </button>
+
+          <p class="text-xs text-center text-gray-400 mt-4">
+            By proceeding, you agree to our
+            <a href="#" class="text-blue-300">Terms of Service</a>, and
+            <a href="#" class="text-blue-300">Privacy and Cookies Statement</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Casino Page (After Login) -->
+    <div x-show="loggedIn" class="container mx-auto px-4">
+      <header
+        class="flex items-center justify-between py-4 border-b border-blue-900"
+      >
+        <div class="flex items-center">
+          <div class="text-white logo-text text-3xl">
+            <span class="text-white">BIG FISH</span>
+            <span class="text-yellow-400">Casino</span>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <div class="flex items-center bg-blue-900 rounded-full px-3 py-1">
+            <img
+              src="https://via.placeholder.com/40"
+              alt="User"
+              class="h-10 w-10 rounded-full border-2 border-purple-500"
+            />
+            <span class="text-white ml-2 font-bold">Asdfffff</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="mt-8 flex justify-center">
+        <div class="relative w-full max-w-3xl">
+          <!-- Casino Elements Animation -->
+          <div class="absolute -top-20 -left-20 casino-element">
+            <img
+              src="https://via.placeholder.com/100?text=🎰"
+              alt="Slot"
+              class="h-20 w-20"
+            />
+          </div>
+          <div
+            class="absolute top-10 -right-10 casino-element"
+            style="animation-delay: 1s"
+          >
+            <img
+              src="https://via.placeholder.com/100?text=♠️"
+              alt="Spade"
+              class="h-16 w-16"
+            />
+          </div>
+          <div
+            class="absolute -bottom-10 -left-10 casino-element"
+            style="animation-delay: 2s"
+          >
+            <img
+              src="https://via.placeholder.com/100?text=🔔"
+              alt="Bell"
+              class="h-16 w-16"
+            />
+          </div>
+          <div
+            class="absolute bottom-20 -right-20 casino-element"
+            style="animation-delay: 1.5s"
+          >
+            <img
+              src="https://via.placeholder.com/100?text=🍒"
+              alt="Cherry"
+              class="h-14 w-14"
+            />
+          </div>
+
+          <!-- User Stats Bar -->
+          <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center">
+              <div class="bg-purple-900 rounded-full p-2 mr-2">
+                <span class="text-white font-bold">13</span>
+              </div>
+              <span class="text-white">Asdfffff</span>
+            </div>
+            <div class="flex items-center">
+              <div
+                class="flex items-center bg-purple-900 rounded-lg px-3 py-1 mr-2"
+              >
+                <svg
+                  class="h-5 w-5 text-red-500 mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M10 3.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM10 15a5 5 0 110-10 5 5 0 010 10z"
+                  />
+                  <path
+                    d="M10 6a4 4 0 100 8 4 4 0 000-8zM10 12a2 2 0 110-4 2 2 0 010 4z"
+                  />
+                </svg>
+                <span class="text-white font-bold">6,618,591</span>
+              </div>
+              <div class="flex items-center bg-purple-900 rounded-lg px-3 py-1">
+                <svg
+                  class="h-5 w-5 text-yellow-500 mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                </svg>
+                <span class="text-white font-bold">1,005</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mother's Day Promotion -->
+          <div class="casino-card p-6 mb-8 relative overflow-hidden">
+            <div class="absolute top-2 right-2">
+              <button
+                class="text-white bg-red-600 rounded-full h-8 w-8 flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="flex flex-col items-center">
+              <!-- Mother's Day Header with Flowers -->
+              <div class="relative mb-4 w-full text-center">
+                <div class="absolute top-0 left-0 w-full">
+                  <div class="flex justify-between">
+                    <div class="flex">
+                      <svg
+                        class="h-10 w-10 text-pink-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                      </svg>
+                      <svg
+                        class="h-8 w-8 text-pink-300"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                      </svg>
+                    </div>
+                    <div class="flex">
+                      <svg
+                        class="h-8 w-8 text-pink-300"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                      </svg>
+                      <svg
+                        class="h-10 w-10 text-pink-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <h1
+                  class="text-5xl font-bold text-white italic"
+                  style="
+                    text-shadow:
+                      0 0 10px #ff66b3,
+                      0 0 20px #ff66b3;
+                    font-family: &quot;Comic Sans MS&quot;, cursive;
+                  "
+                >
+                  Mother's Day
+                </h1>
+              </div>
+
+              <!-- +275% MORE -->
+              <div class="text-center mb-6 bg-purple-800 rounded-xl p-4 w-full">
+                <div
+                  class="text-yellow-300 text-6xl font-bold"
+                  style="
+                    text-shadow:
+                      0 0 10px #ffd700,
+                      0 0 20px #ffd700;
+                  "
+                >
+                  +275%
+                </div>
+                <div
+                  class="text-yellow-300 text-5xl font-bold"
+                  style="
+                    text-shadow:
+                      0 0 10px #ffd700,
+                      0 0 20px #ffd700;
+                  "
+                >
+                  MORE
+                </div>
+              </div>
+
+              <!-- Sale Text with Flowers -->
+              <div class="relative mb-6 w-full text-center">
+                <div class="absolute top-0 left-0 w-full">
+                  <div class="flex justify-between">
+                    <div class="flex">
+                      <svg
+                        class="h-10 w-10 text-pink-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                      </svg>
+                    </div>
+                    <div class="flex">
+                      <svg
+                        class="h-10 w-10 text-pink-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <h2
+                  class="text-6xl font-bold text-white italic"
+                  style="
+                    text-shadow:
+                      0 0 10px #ff66b3,
+                      0 0 20px #ff66b3;
+                    font-family: &quot;Comic Sans MS&quot;, cursive;
+                  "
+                >
+                  Sale
+                </h2>
+              </div>
+
+              <!-- Buy Now Button -->
+              <button
+                class="bg-red-600 hover:bg-red-700 text-white text-2xl font-bold py-3 px-12 rounded-full mb-4"
+                style="box-shadow: 0 0 15px rgba(255, 0, 0, 0.5)"
+              >
+                BUY NOW!
+              </button>
+
+              <!-- Promotion Timer -->
+              <div class="text-center text-white">
+                <p class="uppercase text-sm mb-1">PROMOTION ENDS IN:</p>
+                <p class="font-bold">1 day</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Bar -->
+      <div
+        class="fixed bottom-0 left-0 right-0 bg-blue-900 flex justify-around py-2"
+      >
+        <div class="flex flex-col items-center">
+          <div class="bg-red-600 rounded-full p-1">
+            <svg
+              class="h-6 w-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <span class="text-white text-xs">Sale!</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <svg
+            class="h-6 w-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+          <span class="text-white text-xs">Clubs</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <svg
+            class="h-6 w-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+          <span class="text-white text-xs">Lobby</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <svg
+            class="h-6 w-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+            />
+          </svg>
+          <span class="text-white text-xs">Treasures</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <svg
+            class="h-6 w-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span class="text-white text-xs">Ready</span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-12 pb-20 text-center">
+        <div class="text-white text-sm mb-6 max-w-3xl mx-auto">
+          YOU MUST BE 18+ TO ACCESS BIG FISH CASINO. THIS GAME DOES NOT OFFER
+          GAMBLING OR AN OPPORTUNITY TO WIN REAL MONEY OR PRIZES. PRACTICE OR
+          SUCCESS AT SOCIAL GAMING DOES NOT IMPLY FUTURE SUCCESS AT GAMBLING.
+        </div>
+
+        <div class="flex justify-center space-x-4 mb-8">
+          <a href="#" class="block">
+            <img
+              src="https://via.placeholder.com/140x40?text=App+Store"
+              alt="App Store"
+              class="h-10"
+            />
+          </a>
+          <a href="#" class="block">
+            <img
+              src="https://via.placeholder.com/140x40?text=Google+Play"
+              alt="Google Play"
+              class="h-10"
+            />
+          </a>
+          <a href="#" class="block">
+            <img
+              src="https://via.placeholder.com/140x40?text=Amazon"
+              alt="Amazon"
+              class="h-10"
+            />
+          </a>
+          <a href="#" class="block">
+            <img
+              src="https://via.placeholder.com/140x40?text=Facebook"
+              alt="Facebook"
+              class="h-10"
+            />
+          </a>
+        </div>
+
+        <div class="flex justify-center space-x-6">
+          <a href="#" class="block bg-blue-900 p-3 rounded-full">
+            <svg
+              class="h-6 w-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z"
+              />
+            </svg>
+          </a>
+          <a href="#" class="block bg-blue-900 p-3 rounded-full">
+            <svg
+              class="h-6 w-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+              />
+            </svg>
+          </a>
+          <a href="#" class="block bg-blue-900 p-3 rounded-full">
+            <svg
+              class="h-6 w-6 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+              />
+            </svg>
+          </a>
+        </div>
+
+        <div class="mt-8">
+          <img
+            src="https://via.placeholder.com/200x40?text=Product+Madness"
+            alt="Product Madness"
+            class="h-8 mx-auto"
+          />
+        </div>
+      </footer>
+    </div>
+
+    <!-- Cookie Consent Popup -->
+    <div
+      x-show="showCookies"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-blue-900 text-white p-6 rounded-lg max-w-lg mx-4">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-white logo-text text-xl">
+            <span class="text-white">BIG FISH</span>
+            <span class="text-yellow-400">Casino</span>
+          </div>
+          <button @click="showCookies = false" class="text-white">✕</button>
+        </div>
+
+        <p class="mb-4">
+          Product Madness requests your consent to use cookies to improve user
+          experience, such as for advertising and measurement by our partners.
+          Essential Cookies are always activated since they are necessary for
+          the website's functioning.
+        </p>
+
+        <p class="mb-4">
+          You can withdraw your consent at any time. To learn more about your
+          choices and how we use cookies please view our
+          <a href="#" class="text-blue-300">Privacy Policy</a>
+        </p>
+
+        <div
+          class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2"
+        >
+          <button
+            @click="showCookies = false"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            ACCEPT ALL
+          </button>
+          <button
+            @click="showCookies = false"
+            class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
+          >
+            DECLINE NON-ESSENTIAL
+          </button>
+        </div>
+
+        <div class="mt-4 text-center">
+          <button class="text-sm text-blue-300">SHOW DETAILS</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Add interactive elements if needed
+      document.addEventListener("DOMContentLoaded", function () {
+        // You can add JavaScript functionality here
+      });
+    </script>
+  </body>
+</html>

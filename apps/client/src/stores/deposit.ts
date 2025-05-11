@@ -47,7 +47,9 @@ export const useDepositStore = defineStore("deposit", () => {
   const getDepositSubmit = computed(() => depositSubmit.value);
   const getPixInfo = computed(() => pixInfo.value);
   const getPixInfoToggle = computed(() => pixInfoToggle.value);
-  const getDepositHistoryItem = computed(() => depositHistoryItem.value);
+  const getDepositHistoryItems = computed(
+    () => depositHistoryItem.value.record
+  );
   const getProducts = computed(() => products.value);
   const getOperatorData = computed(() => operatorData.value);
   const getSelectedPaymentMethod = computed(() => selectedPaymentMethod.value);
@@ -165,7 +167,7 @@ export const useDepositStore = defineStore("deposit", () => {
   };
 
   // user deposit history
-  const dispatchUserDepositHistory = async (data: any) => {
+  const dispatchUserDepositHistory = async () => {
     // Keeping 'any' type as in original
     setSuccess(false);
     const route: string = NETWORK_CONFIG.DEPOSIT_PAGE.HISTORY;
@@ -179,7 +181,7 @@ export const useDepositStore = defineStore("deposit", () => {
         setErrorMessage(handleException(response.code));
       }
     };
-    await network.sendMsg(route, data, next, 1);
+    await network.sendMsg(route, undefined, next, 1);
   };
 
   // Return all state, getters, and actions
@@ -207,7 +209,7 @@ export const useDepositStore = defineStore("deposit", () => {
     getDepositSubmit,
     getPixInfo,
     getPixInfoToggle,
-    getDepositHistoryItem,
+    getDepositHistoryItems,
 
     setSuccess,
     setErrorMessage,

@@ -13,5 +13,6 @@ export type GetSigninResponseData = {
 };
 export type GetSession = {
   token: string;
+  code: number;
   session: Session;
 };

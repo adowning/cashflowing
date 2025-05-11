@@ -1,51 +1,53 @@
-import { betterAuth,  } from 'better-auth'
-import { prismaAdapter } from 'better-auth/adapters/prisma'
-import * as z from 'zod'
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import * as z from "zod";
 // import type { User } from "shared";
-import { bearer } from 'better-auth/plugins'
-import { username } from 'better-auth/plugins'
+import { bearer, oneTap } from "better-auth/plugins";
+import { username } from "better-auth/plugins";
+import { anonymous } from "better-auth/plugins";
 
-import { resend } from './email'
-import db from '@cashflow/db'
-import { Gender, UserStatus } from '@cashflow/db/prisma/client'
+import { resend } from "./email";
+import db from "@cashflow/db";
+import { Gender, UserStatus } from "@cashflow/db/prisma/client";
+import { oneTapClient } from "better-auth/client/plugins";
 
 // eslint-disable-next-line node/no-process-env
-const { BETTER_AUTH_URL, JWT_SECRET, ALLOWED_ORIGINS, PORT } = process.env
+const { BETTER_AUTH_URL, JWT_SECRET, ALLOWED_ORIGINS, PORT } = process.env;
 
 export const auth = betterAuth({
   baseURL: BETTER_AUTH_URL || `http://localhost:${PORT}`,
   secret:
     JWT_SECRET ||
-    'a_very_secure_and_random_jwt_secret_for_development_12345!@#$%',
+    "a_very_secure_and_random_jwt_secret_for_development_12345!@#$%",
   password: {
     hash: async (password: string) => {
-      console.log('hash')
-      return await Bun.password.hash(password)
+      console.log("hash");
+      return await Bun.password.hash(password);
     },
     verifyPassword: async (data: any) => {
-      console.log('verify ', data.password, data.hash)
-      return await Bun.password.verify(data.password, data.hash)
+      console.log("verify ", data.password, data.hash);
+      return await Bun.password.verify(data.password, data.hash);
     },
     verify: async (data: any) => {
-      console.log('verify ', data.password, data.hash)
-      return await Bun.password.verify(data.password, data.hash)
+      console.log("verify ", data.password, data.hash);
+      return await Bun.password.verify(data.password, data.hash);
     },
   },
-  trustedOrigins: JSON.parse(ALLOWED_ORIGINS || '[]'),
+  trustedOrigins: JSON.parse(ALLOWED_ORIGINS || "[]"),
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
     minPasswordLength: 6,
     resetPasswordTokenExpiresIn: 10 * 60 * 1000, // 10 minutes
     sendResetPassword: async ({ user, token }, request) => {
-      const url = new URL(request?.headers.get('origin') || '')
-      url.pathname = '/reset-password'
-      url.searchParams.append('token', token)
+      const url = new URL(request?.headers.get("origin") || "");
+      url.pathname = "/reset-password";
+      url.searchParams.append("token", token);
 
       await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: "onboarding@resend.dev",
         to: [user.email],
-        subject: 'Reset your password',
+        subject: "Reset your password",
         html: `
             <div style="max-width: 600px; margin: 0 auto; padding: 30px; background-color: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
             <h1 style="color: #000000; font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 16px;">Reset your password</h1>
@@ -73,16 +75,44 @@ export const auth = betterAuth({
             </p>
           </div>
           `,
-      })
+      });
     },
   },
   database: prismaAdapter(db, {
-    provider: 'postgresql',
+    provider: "postgresql",
   }),
   verification: {
     disableCleanup: true,
   },
-  plugins: [bearer(), username()],
+  socialProviders: {
+    google: {
+      clientId:
+        "740187878164-qoahkvecq5tu5d8os02pomr7nifcgh8s.apps.googleusercontent.com",
+      clientSecret: "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",
+    },
+  },
+  plugins: [
+    bearer(),
+    username(),
+    anonymous(),
+    oneTap(),
+    // oneTapClient({
+    //   clientId:
+    //     "740187878164-qoahkvecq5tu5d8os02pomr7nifcgh8s.apps.googleusercontent.com",
+    //   // Optional client configuration:
+    //   autoSelect: false,
+    //   cancelOnTapOutside: true,
+    //   context: "signin",
+    //   additionalOptions: {
+    //     // Any extra options for the Google initialize method
+    //   },
+    //   // Configure prompt behavior and exponential backoff:
+    //   promptOptions: {
+    //     baseDelay: 1000, // Base delay in ms (default: 1000)
+    //     maxAttempts: 5, // Maximum number of attempts before triggering onPromptNotification (default: 5)
+    //   },
+    // }),
+  ],
 
   user: {
     // fields: {
@@ -115,37 +145,37 @@ export const auth = betterAuth({
     // },
     additionalFields: {
       role: {
-        type: 'string',
-        defaultValue: 'USER',
+        type: "string",
+        defaultValue: "USER",
       },
       // fields: {
-      id: { type: 'string' },
-      email: { type: 'string' },
-      name: { type: 'string' },
-      emailVerified: { type: 'boolean' },
-      image: { type: 'string' },
-      createdAt: { type: 'date' },
-      updatedAt: { type: 'date' },
-      username: { type: 'string' },
-      displayUsername: { type: 'string' },
-      totalXp: { type: 'number' },
-      balance: { type: 'number' },
-      isVerified: { type: 'boolean' },
-      active: { type: 'boolean' },
-      lastLogin: { type: 'date' },
-      verificationToken: { type: 'string' },
-      avatar: { type: 'string' },
-      activeProfileId: { type: 'string' },
+      id: { type: "string" },
+      email: { type: "string" },
+      name: { type: "string" },
+      emailVerified: { type: "boolean" },
+      image: { type: "string" },
+      createdAt: { type: "date" },
+      updatedAt: { type: "date" },
+      username: { type: "string" },
+      displayUsername: { type: "string" },
+      totalXp: { type: "number" },
+      balance: { type: "number" },
+      isVerified: { type: "boolean" },
+      active: { type: "boolean" },
+      lastLogin: { type: "date" },
+      verificationToken: { type: "string" },
+      avatar: { type: "string" },
+      activeProfileId: { type: "string" },
       gender: { type: Object.values(Gender) },
       status: { type: Object.values(UserStatus) },
-      cashtag: { type: 'string' },
-      phpId: { type: 'number' },
-      accessToken: { type: 'string' },
-      twoFactorEnabled: { type: 'boolean' },
-      banned: { type: 'boolean' },
-      banReason: { type: 'string' },
-      banExpires: { type: 'date' },
-      lastDailySpin: { type: 'date' },
+      cashtag: { type: "string" },
+      phpId: { type: "number" },
+      accessToken: { type: "string" },
+      twoFactorEnabled: { type: "boolean" },
+      banned: { type: "boolean" },
+      banReason: { type: "string" },
+      banExpires: { type: "date" },
+      lastDailySpin: { type: "date" },
       // activeProfile: { type: Profile },
       //   vipInfo: { type: Object.values(VipInfo) },
       // },
@@ -157,15 +187,15 @@ export const auth = betterAuth({
   },
 
   advanced: {
-    cookiePrefix: 'token',
+    cookiePrefix: "token",
     cookies: {
       session_token: {
         attributes: {
           httpOnly: true,
-          sameSite: 'none',
-          path: '/',
+          sameSite: "none",
+          path: "/",
         },
       },
     },
   },
-})
+});

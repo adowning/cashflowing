@@ -134,10 +134,13 @@ exports.Prisma.AchievementScalarFieldEnum = {
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   sbId: 'sbId',
+  username: 'username',
+  displayUsername: 'displayUsername',
   name: 'name',
   email: 'email',
   emailVerified: 'emailVerified',
   isOnline: 'isOnline',
+  isAnonymous: 'isAnonymous',
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -146,8 +149,6 @@ exports.Prisma.UserScalarFieldEnum = {
   banned: 'banned',
   banReason: 'banReason',
   banExpires: 'banExpires',
-  username: 'username',
-  displayUsername: 'displayUsername',
   passwordHash: 'passwordHash',
   totalXp: 'totalXp',
   balance: 'balance',
@@ -609,7 +610,8 @@ exports.Prisma.JsonNullValueFilter = {
 exports.MemberRole = exports.$Enums.MemberRole = {
   ADMIN: 'ADMIN',
   MEMBER: 'MEMBER',
-  GUEST: 'GUEST'
+  GUEST: 'GUEST',
+  USER: 'USER'
 };
 
 exports.Gender = exports.$Enums.Gender = {

@@ -1,4 +1,3 @@
-
 // export default server
 import type { Server, ErrorLike } from "bun"; // Import Bun's Server type and Errorlike
 import { auth } from "./rest/auth";
@@ -30,27 +29,43 @@ const server = Bun.serve<AdditionalWsData, {}>({
   hostname: "0.0.0.0", // Listen on all interfaces
   routes: {
     "/ws": async (req: Request) => {
-      const session = await auth.api.getSession({
-        headers: req.headers,
-      });
-      if (!session?.user || !session?.user.id) {
-        console.log(
-          "[Bun Fetch] WebSocket upgrade denied: Missing userId query param."
-        );
-        return new Response(
-          "userId query parameter is required for WebSocket connection",
-          { status: 401 }
-        );
+      if (req.url.includes("token")) {
+        const token = req.url.split("?")[1].split("=")[1];
+        req.headers.set("Authorization", `Bearer ${token}`);
+        const session = await auth.api.getSession({
+          headers: req.headers,
+        });
+        console.log("session", session);
+        if (!session?.user || !session?.user.id) {
+          console.log(
+            "[Bun Fetch] WebSocket upgrade denied: Missing userId query param."
+          );
+          return new Response(
+            "userId query parameter is required for WebSocket connection",
+            { status: 401 }
+          );
+        }
+        return wsRouter.upgrade(req, {
+          server,
+          data: {
+            userId: session?.user.id,
+            roomId: session?.user.id,
+            clientId: session?.user.id as string,
+          },
+        }); // Return the WebSocketHandler
+        // // return Response.json(session);
+      } else {
+        const session = await auth.api.signInAnonymous();
+
+        return wsRouter.upgrade(req, {
+          server,
+          data: {
+            userId: session?.user.id,
+            roomId: session?.user.id,
+            clientId: session?.user.id as string,
+          },
+        }); // Retur
       }
-      return wsRouter.upgrade(req, {
-        server,
-        data: {
-          userId: session?.user.id,
-          roomId: session?.user.id,
-          clientId: session?.user.id as string,
-        },
-      }); // Return the WebSocketHandler
-      // // return Response.json(session);
     },
   },
   fetch(

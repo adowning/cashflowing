@@ -3,7 +3,9 @@ export namespace NETWORK_CONFIG {
   //Login Related News
   export class LOGIN {
     static LOGIN: string = "/auth/login"; //Login
+    static LOGOUT: string = "/auth/logout"; //Login
     static REGISTER: string = "/auth/register"; //Registration
+    static GOOGLE: string = "/auth/google"; //Registration
     static ME = "/auth/me";
   }
 
@@ -32,6 +34,7 @@ export namespace NETWORK_CONFIG {
     static HISTORY = "/user/deposithistory"; // user deposit history
     static PRODUCTS = "/user/depositproducts"; // user deposit history
     static OPERATOR_DATA = "/user/operator_data"; // user deposit history
+    static GET_CURRENT_USER_TRANSACTIONS = "/user/transactions"; // user deposit history
   }
 
   // withdraw api

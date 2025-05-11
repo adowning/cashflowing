@@ -42,7 +42,7 @@ export type volatility = "HIGH" | "MEDIUM" | "LOW";
 
 export type RainType = "GAME" | "CHAT" | "MANUAL";
 
-export type MemberRole = "ADMIN" | "MEMBER" | "GUEST";
+export type MemberRole = "ADMIN" | "MEMBER" | "GUEST" | "USER";
 
 export type InvitationStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 
@@ -61,10 +61,13 @@ export interface Achievement {
 export interface User {
   id: string;
   sbId: string | null;
-  name: string | null;
+  username: string | null;
+  displayUsername: string | null;
+  name: string;
   email: string;
   emailVerified: boolean | null;
   isOnline: boolean | null;
+  isAnonymous: boolean | null;
   image: string | null;
   createdAt: Date;
   updatedAt: Date | null;
@@ -73,8 +76,6 @@ export interface User {
   banned: boolean | null;
   banReason: string | null;
   banExpires: Date | null;
-  username: string;
-  displayUsername: string;
   passwordHash: string | null;
   totalXp: number;
   balance: number;

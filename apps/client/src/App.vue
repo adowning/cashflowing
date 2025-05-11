@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="!initialAuthCheckComplete && globalStore.isLoading">
+    <div v-if="initialAuthCheckComplete && globalStore.isLoading">
       <GlobalLoading />
     </div>
     <div v-if="initialAuthCheckComplete">
@@ -14,47 +14,63 @@
         </MobileSection>
       </div>
       <div v-else-if="!globalStore.isLoading">
-        <LoginView />
+        <DesktopSection v-if="!isMobile">
+          <LoginView />
+        </DesktopSection>
+        <MobileSection v-if="isMobile">
+          <GlobalLoading v-if="globalStore.isLoading"></GlobalLoading>
+          <LoginView v-else />
+        </MobileSection>
       </div>
-      <div v-if="authError" class="error-message">
-        <p>Error: {{ authError.message }}</p>
+      <div v-if="errorState" class="error-message">
+        <p>Error: {{ errorState.message }}</p>
       </div>
-      <div
-        v-if="globalStore.isLoading && !initialAuthCheckComplete"
+      <!-- <div
+        v-if="globalStore.isLoading && !initializeAuthSystem"
         class="loading-message"
       >
         <p>Processing...</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useSupabaseAuth } from './composables/useSupabaseAuth' // Adjust path if needed
-  import { useGlobalStore } from './stores/global'
-  import LoginView from './views/LoginView.vue'
-  import { loadingFadeOut } from 'virtual:app-loading'
+  import { ref, onMounted } from "vue";
+  // import { useBetterAuth } from "@/composables/useBetterAuth"; // Adjust path
+  import { useGlobalStore } from "./stores/global";
+  import LoginView from "./views/LoginView.vue";
+  import { loadingFadeOut } from "virtual:app-loading";
+  // import { getToken } from "./utils/auth";
+  import { WebSocketService } from "./utils/websocket";
+  import { useAuthStore } from "./stores/auth";
+  import { useUserStore } from "./stores/user";
 
-  const globalStore = useGlobalStore()
+  const globalStore = useGlobalStore();
   const {
-    isAuthenticated,
-    // isLoading,
-    authError,
-    currentUser,
-    subscribeGlobalAuth,
+    authenticated,
+    isLoading,
+    errorState,
     initialAuthCheckComplete,
-  } = useSupabaseAuth()
-  const { isMobile } = useDisplay()
+    getToken,
+    // initializeAuthSystem,
+    // isWebSocketConnected,
+  } = useAuthStore();
+  const { currentUser } = useUserStore();
 
-  const signInForm = ref({ email: '', password: '' })
+  const { isMobile } = useDisplay();
 
+  const signInForm = ref({ email: "", password: "" });
+  const isAuthenticated = computed(() => authenticated.loggedIn);
   onMounted(() => {
-    subscribeGlobalAuth()
-    console.log('App.vue mounted, useSupabaseAuth is active.')
-
-    loadingFadeOut()
+    // subscribeGlobalAuth()
+    const token = getToken;
+    if (token) {
+      WebSocketService.getInstance().connect();
+    }
+    // console.log('App.vue mounted, useSupabaseAuth is active.')
+    loadingFadeOut();
     // isLoading = false
-  })
+  });
 </script>
 <style></style>

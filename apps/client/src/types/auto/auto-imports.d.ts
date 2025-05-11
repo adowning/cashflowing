@@ -6,9 +6,11 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const AUTH_EVENT_IDENTIFIERS: typeof import('../../composables/useBetterAuth')['AUTH_EVENT_IDENTIFIERS']
   const EffectScope: typeof import('vue')['EffectScope']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
+  const authClient: typeof import('../../composables/useBetterAuth')['authClient']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
@@ -42,7 +44,7 @@ declare global {
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
-  const initializeWebSocket: typeof import('../../composables/useZilaWebsocket')['initializeWebSocket']
+  const initializeWebSocket: (typeof import("../../composables/useCashflowSocket"))["initializeWebSocket"]
   const inject: typeof import('vue')['inject']
   const injectLocal: typeof import('@vueuse/core')['injectLocal']
   const isDefined: typeof import('@vueuse/core')['isDefined']
@@ -142,12 +144,13 @@ declare global {
   const useAttrs: typeof import('vue')['useAttrs']
   const useBase64: typeof import('@vueuse/core')['useBase64']
   const useBattery: typeof import('@vueuse/core')['useBattery']
+  const useBetterAuth: typeof import('../../composables/useBetterAuth')['useBetterAuth']
   const useBluetooth: typeof import('@vueuse/core')['useBluetooth']
   const useBreakpoints: typeof import('@vueuse/core')['useBreakpoints']
   const useBroadcastChannel: typeof import('@vueuse/core')['useBroadcastChannel']
   const useBrowserLocation: typeof import('@vueuse/core')['useBrowserLocation']
   const useCached: typeof import('@vueuse/core')['useCached']
-  const useCashflowSocket: typeof import('../../composables/useZilaWebsocket')['useCashflowSocket']
+  const useCashflowSocket: typeof import('../../composables/useCashflowSocket')['useCashflowSocket']
   const useClipboard: typeof import('@vueuse/core')['useClipboard']
   const useClipboardItems: typeof import('@vueuse/core')['useClipboardItems']
   const useCloned: typeof import('@vueuse/core')['useCloned']
@@ -201,7 +204,7 @@ declare global {
   const useIntersectionObserver: typeof import('@vueuse/core')['useIntersectionObserver']
   const useInterval: typeof import('@vueuse/core')['useInterval']
   const useIntervalFn: typeof import('@vueuse/core')['useIntervalFn']
-  const useIsMobile: typeof import('../../composables/useIsMobile')['useIsMobile']
+  const useIsMobile: (typeof import("../../composables/useIsMobile"))["useIsMobile"]
   const useKeyModifier: typeof import('@vueuse/core')['useKeyModifier']
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
   const useLink: typeof import('vue-router')['useLink']
@@ -261,7 +264,7 @@ declare global {
   const useStorage: typeof import('@vueuse/core')['useStorage']
   const useStorageAsync: typeof import('@vueuse/core')['useStorageAsync']
   const useStyleTag: typeof import('@vueuse/core')['useStyleTag']
-  const useSupabaseAuth: typeof import('../../composables/useSupabaseAuth')['useSupabaseAuth']
+  const useSupabaseAuth: typeof import('../../composables/useSupabaseAuth copy')['useSupabaseAuth']
   const useSupported: typeof import('@vueuse/core')['useSupported']
   const useSwipe: typeof import('@vueuse/core')['useSwipe']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
@@ -319,6 +322,9 @@ declare global {
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
-  export type { eventobject } from '../../composables/EventManager'
+  export type { IEventManagerService, eventobject } from '../../composables/EventManager'
   import('../../composables/EventManager')
+  // @ts-ignore
+  export type { ZilaMessagePayload, ZilaComposableMessageCallback, ZilaDecodedMessage } from '../../composables/useCashflowSocket'
+  import('../../composables/useCashflowSocket')
 }

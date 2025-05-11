@@ -2,12 +2,8 @@
 import { useGameStore } from '@/stores/game'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import FlameEffectOverlay from './animation/FlameEffectOverlay.vue'
-// Import the effect components
-// import FireEffectOverlay from './FireEffectOverlay.vue' // Adjust the import path as needed
-// import SnowEffectOverlay from './SnowEffectOverlay.vue' // Adjust the import path as needed
+// import FlameEffectOverlay from './FlameEffectOverlay.vue'
 
-// Define the structure for game data
 interface Game {
   id: number
   title: string
@@ -124,22 +120,22 @@ const isFeatured = (game: Game) => game.featured === true
                 @error="onImageError"
               />
 
-                <SnowEffectOverlay
+                <!-- <SnowEffectOverlay
                 class="absolute bottom-20"
                 style="z-index: 2;  width: 30px; bottom: -30px; opacity: .8; height: 20%; "
 
                 v-if="game.temperature === 'cold'"
-              />
+              /> -->
     <!-- <FireEffectOverlay
                 class="absolute bottom-20"
                 style="z-index: 2;  width: 40px; bottom: -30px; opacity: .8; height: 30%; "
                 v-if="game.temperature === 'hot'"
               />  -->
-              <FlameEffectOverlay
+              <!-- <FlameEffectOverlay
                 class="absolute bottom-20"
                 style="z-index: 2;  width: 40px; bottom: -30px; opacity: .8; height: 30%; "
                 v-if="game.temperature === 'hot'"
-              />
+              /> -->
               <img
                 src="/images/games/speedRTP_1.gif"
                 height="40px"

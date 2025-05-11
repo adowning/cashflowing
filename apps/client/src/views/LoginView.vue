@@ -1,540 +1,663 @@
 <script lang="ts" setup>
-  import { useLoading } from "@/composables/useLoading";
-  import { useSupabaseAuth } from "@/composables/useSupabaseAuth";
-  import { useAppBarStore } from "@/stores/appBar";
-  import { useAuthStore } from "@/stores/auth";
-  import { useCurrencyStore } from "@/stores/currency";
-  import { useGameStore } from "@/stores/game";
-  import { useNotificationStore } from "@/stores/notifications";
-  import { useRefferalStore } from "@/stores/refferal";
-  // import { useSocketStore } from '@/stores/socket'
-  import { useUserStore } from "@/stores/user";
-  import { useVipStore } from "@/stores/vip";
-  import { supabase } from "@/supabase";
-  // import { posthog } from '@/bootstrap'
+  // import { ref, reactive, computed, onMounted, onUnmounted, watch } from "vue";
+  import { useRouter } from "vue-router"; // For navigation after login
+  import { useAuthStore } from "@/stores/auth"; // To potentially watch isAuthenticated or session
+  import { useNotificationStore } from "@/stores/notifications"; // For user feedback
   import { loadingFadeOut } from "virtual:app-loading";
+  import { createAuthClient } from "better-auth/vue";
+  import { oneTapClient } from "better-auth/client/plugins";
+  import { useUserStore } from "@/stores/user";
 
-  const signInForm = ref({ email: "", password: "" });
-  const signUpForm = ref({ email: "", password: "", username: "" });
+  const authClient = createAuthClient({
+    plugins: [
+      oneTapClient({
+        clientId:
+          "740187878164-qoahkvecq5tu5d8os02pomr7nifcgh8s.apps.googleusercontent.com",
+        // Optional client configuration:
+        autoSelect: false,
+        cancelOnTapOutside: true,
+        context: "signin",
+        additionalOptions: {
+          // Any extra options for the Google initialize method
+        },
+        // Configure prompt behavior and exponential backoff:
+        promptOptions: {
+          baseDelay: 1000, // Base delay in ms (default: 1000)
+          maxAttempts: 5, // Maximum number of attempts before triggering onPromptNotification (default: 5)
+        },
+      }),
+    ],
+  }); // Assuming you have a client for better-auth
+  // Import other stores if they are DIRECTLY needed for view logic not covered by useBetterAuth
+  // import { useUserStore } from "@/stores/user";
+  // import { useProfileStore } from "@/stores/profile";
+
+  // import Logo from "@/components/icons/Logo.vue"; // Assuming you have a Logo component
+
+  // --- Composables & Stores ---
+  const router = useRouter();
   const {
-    // isAuthenticated,
-    isLoading,
-    authError,
-    currentUser,
-    currentProfile,
+    isLoading: isAuthLoading, // Renamed to avoid conflict if component has its own isLoading
+    errorState, // For displaying login/signup errors
+    // currentProfile, // Often not needed directly in login view, but available
     signInWithPassword,
+    // authenticated,
     signUpNewUser,
-    signOut,
+    signInWithGoogleIdToken, // From useBetterAuth for Google Sign In
+    // signOut, // Sign out is usually on a different page/component
     initialAuthCheckComplete,
-  } = useSupabaseAuth();
+  } = useAuthStore();
+  const {
+    // For displaying login/signup errors
+    currentUser,
+    // From useBetterAuth (which gets it from useCashflowSocket)
+  } = useUserStore();
+  const authStore = useAuthStore(); // For direct observation if needed
+  const authenticated = authStore.authenticated;
+  const notificationStore = useNotificationStore();
 
+  // --- Component State ---
+  const uiMode = ref<"signIn" | "signUp">("signIn"); // To toggle between sign-in and sign-up views in the flip card
+
+  const formData = reactive({
+    email: "", // Default to empty or test values for quick testing
+    password: "",
+    confirmPassword: "", // For sign-up
+    username: "", // For sign-up
+    // promoCode: '', // If you have promo codes for sign-up
+  });
+
+  const componentLoading = ref(false); // For UI elements specific to this component's loading state
+  const googleScriptLoaded = ref(false);
+
+  // --- Computed Properties ---
+  const currentAuthError = computed(() => errorState?.message || null);
+
+  // --- Methods ---
   const handleSignIn = async () => {
+    if (!formData.email || !formData.password) {
+      notificationStore.addNotification(
+        "error",
+        "Please enter both email and password."
+      );
+      return;
+    }
+    componentLoading.value = true;
     await signInWithPassword({
       email: formData.email,
       password: formData.password,
     });
-    if (!authError.value) {
-      signInForm.value = { email: "", password: "" };
+    componentLoading.value = false;
+
+    if (!errorState && authenticated.loggedIn) {
+      notificationStore.addNotification("success", "Successfully signed in!");
+      // router.push('/dashboard'); // Or your desired redirect path
+    } else if (errorState) {
+      notificationStore.addNotification(
+        "error",
+        errorState.message || "Sign in failed. Please try again."
+      );
     }
   };
 
   const handleSignUp = async () => {
+    if (!formData.email || !formData.password || !formData.username) {
+      notificationStore.addNotification(
+        "error",
+        "Please fill in all required fields for sign up."
+      );
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      notificationStore.addNotification("error", "Passwords do not match.");
+      return;
+    }
+
+    componentLoading.value = true;
     await signUpNewUser({
       email: formData.email,
       password: formData.password,
-      options: {
-        data: {
-          username: signUpForm.value.username,
-        },
+      username: formData.username,
+      // You can add other properties to SignUpPayload if your backend expects them
+      // e.g., promoCode: formData.promoCode,
+    });
+    componentLoading.value = false;
+
+    if (!errorState && authenticated.loggedIn) {
+      // Assuming signUpNewUser also logs in the user
+      notificationStore.addNotification(
+        "success",
+        "Successfully signed up and logged in!"
+      );
+      // router.push('/dashboard'); // Or your desired redirect path
+    } else if (errorState) {
+      notificationStore.addNotification(
+        "error",
+        errorState.message || "Sign up failed. Please try again."
+      );
+    }
+  };
+  const baOneTap = async () => {
+    console.log(componentLoading.value);
+    console.log(isAuthLoading);
+    if (componentLoading.value || isAuthLoading) {
+      console.warn(
+        "Google One Tap response received while already loading. Ignoring."
+      );
+      notificationStore.addNotification(
+        "warning",
+        "Processing a previous request, please wait."
+      );
+      return;
+    }
+    componentLoading.value = true;
+    await authClient.oneTap({
+      autoSelect: true,
+      cancelOnTapOutside: true,
+      context: "signin",
+      additionalOptions: {
+        // Any extra options for the Google initialize method
       },
     });
-    if (!authError.value) {
-      signUpForm.value = { email: "", password: "", username: "" };
+    componentLoading.value = false;
+  };
+  // Google Sign-In Handler
+  const handleGoogleSignIn = async (response: any) => {
+    if (componentLoading.value || isAuthLoading) {
+      console.warn(
+        "Google Credential Response received while already loading. Ignoring."
+      );
+      notificationStore.addNotification(
+        "warning",
+        "Processing a previous request, please wait."
+      );
+      return;
     }
-  };
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
-  const { withLoading, stopLoading } = useLoading();
-  let x = 0;
-  // posthog.capture('Login Page Viewed', { page: window.location.pathname })
-  // var executed = false
-  const authStore = useAuthStore();
-
-  async function handleSignInWithGoogle(response) {
-    const { data, error } = await supabase.auth.signInWithIdToken({
-      provider: "google",
-      token: response.credential,
-    });
-  }
-
-  const {
-    dispatchSignIn,
-    dispatchSignUp,
-    setNickNameDialogVisible,
-    dispatchUserProfile,
-    setAuthModalType,
-    setAuthDialogVisible,
-    getSuccess,
-    isAuthenticated,
-  } = authStore;
-  const userStore = useUserStore();
-  const notificationStore = useNotificationStore();
-  const appBarStore = useAppBarStore();
-  const refferalStore = useRefferalStore();
-  // const socketStore = useSocketStore()
-  const currencyStore = useCurrencyStore();
-  const vipStore = useVipStore();
-  const gameStore = useGameStore();
-  const { dispatchUserBalance } = userStore;
-  const { dispatchVipInfo, dispatchVipLevels, dispatchVipLevelAward } =
-    vipStore;
-  const { setOverlayScrimShow } = appBarStore;
-  const { setRefferalDialogShow } = refferalStore;
-  // const { dispatchSocketConnect } = socketStore
-  const { dispatchGameSearch, dispatchGameBigWin } = gameStore;
-  const { dispatchCurrencyList } = currencyStore;
-  const success = computed(() => getSuccess);
-  const formData = reactive({
-    username: "ash",
-    email: "ash@ash.com",
-    password: "asdfasdf",
-    confirm: "asdfasdf",
-    faceIndex: 0,
-    loginErr: "",
-    passwErr: "",
-    agentCode: "",
-    promoCode: "",
-  });
-  const errMessage = ref();
-  const currentPage = ref();
-  const handleSignupFormSubmit = async () => {
-    // isLoading.value = true
-    const r = await withLoading(
-      dispatchSignUp({
-        username: formData.username,
-        password: formData.password,
-        referral_code: formData.promoCode,
-        browser: "",
-        device: "",
-        model: "",
-        brand: "",
-        imei: "",
-      })
-    );
-    console.log(authStore.getSuccess);
-    if (authStore.getSuccess) {
-      await withLoading(dispatchUserProfile());
-      await withLoading(dispatchUserBalance());
-      await withLoading(dispatchSocketConnect());
-      await withLoading(dispatchCurrencyList());
-      await withLoading(dispatchGameSearch(""));
-      setAuthDialogVisible(false);
-      setNickNameDialogVisible(true);
-      // const toast = useToast();
-      notificationStore.addNotification("success", "success");
-
-      // toast.success(t("signup.submit_result.success_text"), {
-      //   timeout: 3000,
-      //   closeOnClick: false,
-      //   pauseOnFocusLoss: false,
-      //   pauseOnHover: false,
-      //   draggable: false,
-      //   showCloseButtonOnHover: false,
-      //   hideProgressBar: true,
-      //   closeButton: "button",
-      //   icon: SuccessIcon,
-      //   rtl: false,
-      // });
-      console.log(process.env.NODE_ENV);
-      console.log(process.env.NODE_ENV);
-      // if (process.env.NODE_ENV == 'development') {
-      setTimeout(() => {
-        console.log("asdfasdf");
-
-        // isLoading.value = false
-      }, 3000);
-      // } else {
-      //  // isLoading.value = false
-
-      // }
-    } else {
-      console.log("wtf error");
-      // isLoading.value = false
-
-      if (
-        errMessage.value ==
-        "The account you entered has been used by someone else, please input again"
-      ) {
-        currentPage.value = "already regged"; //PAGE_TYPE.ALREADY_REGISTERED;
-      } else {
-        // const toast = useToast();
-        notificationStore.addNotification("error", "error");
-
-        // toast.success(errMessage.value, {
-        //   timeout: 3000,
-        //   closeOnClick: false,
-        //   pauseOnFocusLoss: false,
-        //   pauseOnHover: false,
-        //   draggable: false,
-        //   showCloseButtonOnHover: false,
-        //   hideProgressBar: true,
-        //   closeButton: "button",
-        //   icon: WarningIcon,
-        //   rtl: false,
-        // });
+    if (response.credential) {
+      componentLoading.value = true;
+      await signInWithGoogleIdToken(response.credential);
+      componentLoading.value = false;
+      if (!errorState && authenticated.loggedIn) {
+        notificationStore.addNotification(
+          "success",
+          "Successfully signed in with Google!"
+        );
+        // router.push('/dashboard');
+      } else if (errorState) {
+        notificationStore.addNotification(
+          "error",
+          errorState.message || "Google sign-in failed."
+        );
       }
-      // }
-    }
-  };
-
-  const handleLoginFormSubmit = async () => {
-    // isLoading.value = true
-
-    const r = await withLoading(
-      dispatchSignIn({
-        username: formData.username,
-        password: formData.password,
-      })
-    );
-    console.log(r);
-    console.log(success.value);
-    console.log(r);
-    if (r == true) {
-      await withLoading(dispatchUserProfile());
-      await withLoading(dispatchUserBalance());
-      await withLoading(dispatchCurrencyList());
-      await withLoading(dispatchVipInfo());
-      await withLoading(dispatchVipLevels());
-      await withLoading(dispatchVipLevelAward());
-      await withLoading(dispatchGameSearch("?limit=200"));
-      await withLoading(dispatchGameBigWin());
-      setOverlayScrimShow(false);
-      setRefferalDialogShow(true);
-      if (authStore.userInfo == undefined) {
-        throw new Error("User not found");
-      }
-      userStore.setCurrentUser(authStore.userInfo!);
-      authStore.setIsAuthenticated(true);
-      userStore.isAuthenticated = true;
-      // const toast = useToast();
-      // toast.success("success_text", {
-      //   timeout: 3000,
-      //   closeOnClick: false,
-      //   pauseOnFocusLoss: false,
-      //   pauseOnHover: false,
-      //   draggable: false,
-      //   showCloseButtonOnHover: false,
-      //   hideProgressBar: true,
-      //   closeButton: "button",
-      //   icon: SuccessIcon,
-      //   rtl: false,
-
-      // });
-      setTimeout(() => {
-        setAuthModalType("");
-        setAuthDialogVisible(false);
-      }, 100);
-      // await dispatchSocketConnect()
-      setTimeout(() => {
-        // isLoading.value = false
-        notificationStore.addNotification("success", "success");
-      }, 100);
     } else {
-      // const toast = useToast();
-      notificationStore.addNotification("error", "error");
-
-      // toast.success("err_text", {
-      //   timeout: 3000,
-      //   closeOnClick: false,
-      //   pauseOnFocusLoss: false,
-      //   pauseOnHover: false,
-      //   draggable: false,
-      //   showCloseButtonOnHover: false,
-      //   hideProgressBar: true,
-      //   closeButton: "button",
-      //   icon: WarningIcon,
-      //   rtl: false,
-      // });
+      notificationStore.addNotification(
+        "error",
+        "Google Sign-In credential not received. Please try again."
+      );
+      console.error(
+        "Google Sign-In failed or no credential received:",
+        response
+      );
     }
-
-    // isLoading.value = false
   };
 
-  // async function sendEmit1() {
-  //   // posthog.capture('Form Submitted', { formData })
-  //   const userStore = useUserStore()
-  //   // let success
-  //   // if (executed === false)
-  //   try {
-  //     await withLoading(
-  //       userStore.login({
-  //         username: formData.username,
-  //         password: formData.password,
-  //       }),
-  //     )
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  //   // console.log(success)
-  //   // if (success === true) {
-  //   // router.push('/home')
-  //   // } else {
-  //   //   router.push('/login')
-  //   // }
-  // }
-  // async function register() {
-  //   // posthog.capture('Form Submitted', { formData })
-  //   const user = useUserStore()
-  //   const userStore = useUserStore()
-  //   let success
-  //   // if (executed === false)
-  //   console.log(formData.password)
-  //   success = await withLoading(
-  //     user.register(formData.username, formData.password),
-  //   )
-  //   // success = await userStore.register(formData.username, formData.password)
-  //   // executed = true
+  // Watch for authentication changes to redirect
+  // watch(
+  //  authenticated,
+  //     if (isAuth) {
+  watch(
+    authenticated,
+    (newAuthenticated) => {
+      // User has successfully authenticated (either via form or Google)
+      console.log("User authenticated, current user:", currentUser);
+      notificationStore.addNotification(
+        "info",
+        `Welcome, ${currentUser?.username || currentUser?.email}!`
+      );
+      // Example: Navigate to a dashboard or home page
+      if (newAuthenticated.loggedIn) router.push({ name: "Home" }); // Assuming you have a route named 'Dashboard'
+    },
+    { immediate: false }
+  ); // Don't run immediately, only on change from false to true after component setup
 
-  //   // if (success === true) {
-  //   //   router.push('/home/lobby')
-  //   //   // } else {
-  //   //   //   router.push('/login')
-  //   // }
-  // }
-  const { signInWithGoogleIdToken } = useSupabaseAuth();
-
-  // const handleGoogleCredentialResponseFunctionName = 'handleSupabaseGoogleLogin'
-
-  // ;(window as any)[handleGoogleCredentialResponseFunctionName] = async (
-  //   response: any,
-  // ) => {
-  //   console.log('Google Credential Response received:', response)
-  //   if (isLoading.value) {
-  //     console.warn(
-  //       'Google Credential Response received while already loading. Ignoring.',
-  //     )
-  //     return
-  //   }
-  //   if (response.credential) {
-  //     console.log(
-  //       'Credential found in response. Calling signInWithGoogleIdToken.',
-  //     )
-  //     // componentError.value = null
-  //     try {
-  //       await signInWithGoogleIdToken(response.credential)
-  //       // isLoading and authError are handled by the composable.
-  //       // If successful, onAuthStateChange handles UI updates.
-  //     } catch (e: any) {
-  //       console.error('Exception during signInWithGoogleIdToken call:', e)
-  //       // componentError.value =
-  //       //   'An unexpected error occurred during Google sign-in processing.'
-  //     }
-  //   } else {
-  //     console.error(
-  //       'Google Sign-In failed or no credential received in response:',
-  //       response,
-  //     )
-  //     // componentError.value =
-  //     //   'Google Sign-In credential not received. Please try again.'
-  //   }
-  // }
+  // To expose handleGoogleSignIn to the global scope for the Google button callback
   onMounted(() => {
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.onload = () => {
-      // Optional: Code to execute after the script is loaded
-      console.log("External script loaded");
-      // You can now use functions or variables from the external script
-    };
-    script.onerror = () => {
-      console.error("Failed to load the script.");
-    };
-    document.head.appendChild(script);
-    window.handleSignInWithGoogle = async (response: any) => {
-      console.log("handleSignInWithGoogle called");
-      handleSignInWithGoogle(response);
-    };
-    // console.log('GoogleLoginButton: Component Mounted.')
-    // if (!googleClientId) {
-    //   componentError.value =
-    //     'Google Sign-In is not configured (Missing Client ID).'
-    //   console.error('VITE_GOOGLE_CLIENT_ID is missing in .env')
-    // }
-    // }
-    // console.log('GoogleLoginButton: Component Mounted.')
-    // if (!googleClientId) {
-    //   componentError.value =
-    //     'Google Sign-In is not configured (Missing Client ID).'
-    //   console.error('VITE_GOOGLE_CLIENT_ID is missing in .env file.')
-    //   showFallbackButton.value = false
-    //   return
-    // }
-    // try {
-    //   // await loadGoogleGIS()
-    //   // setTimeout(initializeGoogleGIS, 100)
-    // } catch (error) {
-    //   console.error(
-    //     'GoogleLoginButton: Error during onMounted GIS setup:',
-    //     error,
-    //   )
-    // }
-
-    stopLoading();
-    // isLoading = false
     loadingFadeOut();
+
+    authStore.clearAuthError();
+    // Make sure Google Sign-In script is loaded
+    if (!(window as any).google || !(window as any).google.accounts) {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        googleScriptLoaded.value = true;
+        console.log("Google GSI script loaded.");
+        if (
+          (window as any).google &&
+          (window as any).google.accounts &&
+          (window as any).google.accounts.id
+        ) {
+          (window as any).google.accounts.id.initialize({
+            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID, // Ensure this is in your .env
+            callback: handleGoogleSignIn, // Assign your component method directly
+          });
+          (window as any).google.accounts.id.renderButton(
+            document.getElementById("googleSignInButtonContainer"), // Target a specific div for rendering
+            {
+              theme: "outline",
+              size: "large",
+              type: "standard",
+              text: "signin_with",
+            }
+          );
+          // (window as any).google.accounts.id.prompt(); // Optional: Auto prompt
+        } else {
+          console.error(
+            "Google GSI library not fully available after script load."
+          );
+          notificationStore.addNotification(
+            "error",
+            "Could not initialize Google Sign-In."
+          );
+        }
+      };
+      script.onerror = () => {
+        console.error("Failed to load Google GSI script.");
+        notificationStore.addNotification(
+          "error",
+          "Failed to load Google Sign-In script."
+        );
+      };
+      document.head.appendChild(script);
+    } else if (
+      (window as any).google &&
+      (window as any).google.accounts &&
+      (window as any).google.accounts.id
+    ) {
+      // Script already loaded, just initialize and render button
+      googleScriptLoaded.value = true;
+      (window as any).google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleGoogleSignIn,
+      });
+      // Ensure the container exists before rendering
+      const googleButtonContainer = document.getElementById(
+        "googleSignInButtonContainer"
+      );
+      if (googleButtonContainer) {
+        (window as any).google.accounts.id.renderButton(googleButtonContainer, {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          text: "signin_with",
+        });
+      } else {
+        console.warn(
+          "Google Sign-In button container not found on mount (it might appear later)."
+        );
+      }
+    }
+
+    // If already authenticated when visiting login page (e.g., direct navigation, browser back button)
+    if (authenticated.loggedIn) {
+      router.push({ name: "Home" }); // Or your main app page
+    }
+  });
+  const isSignUpMode = ref(false); // false = login, true = signup
+  const flipCardInner = ref<HTMLElement | null>(null);
+
+  // ...
+
+  // Toggle for flip card
+  function toggleMode() {
+    isSignUpMode.value = !isSignUpMode.value; // This updates the reactive state
+    if (flipCardInner.value) {
+      if (isSignUpMode.value) {
+        flipCardInner.value.style.transform = "rotateY(180deg)";
+      } else {
+        flipCardInner.value.style.transform = "rotateY(0deg)";
+      }
+    }
+    // Clear form errors when toggling
+    authStore.setError(null); // Assuming authStore is your Pinia store instance
+  }
+  onUnmounted(() => {
+    loadingFadeOut();
+
+    // Clean up global callback if it was set, though direct assignment to google.accounts.id.initialize is preferred
+    // if ((window as any).handleSignInWithGoogleGlobal === handleGoogleSignIn) {
+    //   delete (window as any).handleSignInWithGoogleGlobal;
+    // }
   });
 </script>
 
 <template>
-  <div
-    class="max-w-[520px] w-[100vw] mt-0 flex flex-col justify-center items-center"
-    style="
-      height: 100vh;
-      width: 100vw;
-      max-width: 520px;
-      justify-content: center;
-      /* background-image: url('/src/assets/login-bg.jpg'); */
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-color: #021130;
-    "
-  >
-    <div
-      class="wrapper color-white flex-col justify-center w-full mx-0 px-0"
-      style="height: 100vh; width: 80vw; max-width: 520px; margin-auto"
-    >
-      <Logo class="mt-8" />
-      <div
-        id="g_id_onload"
-        data-client_id="740187878164-qoahkvecq5tu5d8os02pomr7nifcgh8s.apps.googleusercontent.com"
-        data-context="signin"
-        data-ux_mode="popup"
-        data-callback="handleSignInWithGoogle"
-        data-auto_prompt="false"
-      ></div>
-
-      <div
-        class="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="outline"
-        data-text="signin_with"
-        data-size="large"
-        data-logo_alignment="left"
-      ></div>
-      <div class="mt-52 flex" style="margin-top: 200px">
-        <label class="switch">
-          <input class="toggle" type="checkbox" />
-          <span class="slider" />
-          <span class="card-side" />
-          <div class="flip-card__inner">
-            <div class="flip-card__front">
-              <div class="title">Log in</div>
-              <div class="flip-card__form">
-                <!-- <form> -->
-                <!-- <input
-                    v-model="formData.username"
-                    type="required"
-                    placeholder="Username"
-                    name="username"
-                    class="flip-card__input"
-                  />
-                  <input
-                    v-model="formData.password"
-                    type="password"
-                    autocomplete="new-password"
-                    placeholder="Password"
-                    name="password"
-                    class="flip-card__input"
-                  /> -->
-
-                <!-- <GoogleOneTap /> -->
-                <button class="flip-card__btn" @click="handleSignIn">
-                  Lets go!
-                </button>
-                <!-- </form> -->
-              </div>
-            </div>
-            <div class="flip-card__back">
-              <div class="title">Sign up</div>
-              <div action="" class="flip-card__form">
-                <form>
-                  <input
-                    v-model="formData.username"
-                    type="name"
-                    placeholder="Name"
-                    class="flip-card__input"
-                  />
-                  <input
-                    v-model="formData.password"
-                    type="password"
-                    placeholder="Password"
-                    autocomplete="new-password"
-                    name="password"
-                    class="flip-card__input"
-                  />
-                  <input
-                    v-model="formData.confirm"
-                    type="password"
-                    placeholder="Confirm"
-                    autocomplete="new-password"
-                    name="confirm"
-                    class="flip-card__input"
-                  />
-                  <button class="flip-card__btn" @click="handleSignUp">
-                    Confirm!
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </label>
+  <div class="login-view-container">
+    <!-- <div class="wrapper"> -->
+    <Logo class="logo-main">
+      <!-- <img
+        src="/images/sparkle.gif"
+        style="z-index: 999999; position: relative"
+      /> -->
+    </Logo>
+    <!-- <div v-if="currentAuthError" class="auth-error-message">
+        <p>{{ currentAuthError }}</p>
       </div>
+      <div v-else>
+        <div style="min-height: 50px" class="my-4" />
+      </div> -->
+    <div
+      class="auth-mode-toggle mb-5"
+      :class="{ 'is-signup-active': isSignUpMode }"
+      @click="toggleMode"
+      @keydown="toggleMode"
+      tabindex="0"
+      role="switch"
+      aria-label="Toggle Sign Up Mode"
+    >
+      <span class="lab login-label" :class="{ active: !isSignUpMode }"
+        >Log In</span
+      >
+      <div class="switch-visual-container">
+        <div class="switch-track"></div>
+        <div class="switch-knob"></div>
+      </div>
+      <span class="lab signup-label" :class="{ active: isSignUpMode }"
+        >Sign Up</span
+      >
+    </div>
+    <div class="mt-14 flex flex-col justify-center items-start pt-16">
+      <!-- <div class="flex flex-col items-center" style="width: 100%; height: 40px"> -->
+
+      <!-- </div> -->
+      <!-- <div v-if="currentAuthError" class="auth-error-message">
+            <p>{{ currentAuthError }}</p>
+          </div> -->
+      <!-- <div v-else>
+            <div style="min-height: 50px" class="my-4" />
+          </div> -->
+      <!-- </div> -->
+
+      <label class="switch mt-4">
+        <!-- <input
+          class="toggle"
+          type="checkbox"
+          :checked="isSignUpMode"
+          @change="toggleMode"
+        /> -->
+
+        <!-- <span class="slider" />
+        <span class="card-side" /> -->
+        <div class="flip-card__inner" ref="flipCardInner">
+          <div class="flip-card__front">
+            <div class="title">Log In</div>
+            <form @submit.prevent="handleSignIn" class="flip-card__form">
+              <input
+                v-model="formData.email"
+                type="email"
+                placeholder="Email"
+                required
+                class="flip-card__input"
+                :disabled="isAuthLoading || componentLoading"
+              />
+              <input
+                v-model="formData.password"
+                type="password"
+                placeholder="Password"
+                required
+                autocomplete="current-password"
+                class="flip-card__input"
+                :disabled="isAuthLoading || componentLoading"
+              />
+              <button
+                type="submit"
+                class="flip-card__btn"
+                :disabled="isAuthLoading || componentLoading"
+              >
+                Let's Go!
+              </button>
+            </form>
+            <div class="social-login-divider">OR</div>
+            <!-- <div
+              id="googleSignInButtonContainer"
+              class="google-signin-container"
+            ></div> -->
+            <button
+              id="googleSignInButtonContainer"
+              class="google-signin-button"
+              @click="baOneTap"
+              :disabled="isAuthLoading || componentLoading"
+            />
+          </div>
+
+          <div class="flip-card__back">
+            <div class="title">Sign Up</div>
+            <form @submit.prevent="handleSignUp" class="flip-card__form">
+              <input
+                v-model="formData.username"
+                type="text"
+                placeholder="Username"
+                required
+                class="flip-card__input"
+                :disabled="isAuthLoading || componentLoading"
+              />
+              <input
+                v-model="formData.email"
+                type="email"
+                placeholder="Email"
+                required
+                class="flip-card__input"
+                :disabled="isAuthLoading || componentLoading"
+              />
+              <input
+                v-model="formData.password"
+                type="password"
+                placeholder="Password"
+                required
+                autocomplete="new-password"
+                class="flip-card__input"
+                :disabled="isAuthLoading || componentLoading"
+              />
+              <input
+                v-model="formData.confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                required
+                autocomplete="new-password"
+                class="flip-card__input"
+                :disabled="isAuthLoading || componentLoading"
+              />
+              <button
+                type="submit"
+                class="flip-card__btn"
+                :disabled="isAuthLoading || componentLoading"
+              >
+                Confirm!
+              </button>
+            </form>
+          </div>
+        </div>
+      </label>
     </div>
   </div>
-  <!-- <div v-else>
+  <!-- </div> -->
+  <div v-if="isAuthLoading || componentLoading" class="loading-indicator">
     <GlobalLoading />
-  </div> -->
+  </div>
 </template>
 
 <style scoped>
-  .g_id_signin {
-    color: white;
+  .auth-mode-toggle {
+    /* CSS Variables for easy theming and consistent sizing */
+    --toggle-track-width: 50px;
+    --toggle-track-height: 26px;
+    --knob-size: 20px;
+    /* Horizontal padding within the track for the knob */
+    --track-internal-padding: 3px;
+
+    /* Colors */
+    --track-bg-login: #b954f3; /* Tailwind gray-400 */
+    --track-bg-signup: #4a90e2; /* Tailwind blue-400 */
+    --knob-bg-color: white;
+    --text-color-inactive: #718096; /* Tailwind gray-600 */
+    --text-color-active: #b954f3; /* Tailwind gray-800 */
+    --label-font-weight-inactive: 400;
+    --label-font-weight-active: 600;
+    --focus-ring-color: #b954f3; /* Blue-400 for focus outline */
+
+    /* Transitions */
+    --transition-duration: 0.3s;
+    --transition-timing-function: ease-in-out;
+    margin-bottom: 20px;
+    height: 50px;
+    display: inline-flex; /* Use inline-flex to allow other elements on the same line */
+    align-items: center;
+    gap: 8px; /* Space between labels and the switch visual */
+    cursor: pointer;
+    user-select: none; /* Prevents text selection when clicking */
+    padding: 4px; /* Padding for focus ring visibility */
+    border-radius: 18px; /* Rounded corners for the entire component for focus */
+    outline: none; /* Remove default outline, we'll add a custom one */
   }
-  /* From Uiverse.io by andrew-demchenk0 */
+
+  .auth-mode-toggle:focus-visible {
+    box-shadow: 0 0 0 2px var(--focus-ring-color);
+  }
+
+  .lab {
+    font-size: 18px;
+    font-weight: 700;
+    transition:
+      color var(--transition-duration) var(--transition-timing-function),
+      font-weight var(--transition-duration) var(--transition-timing-function);
+  }
+
+  .login-label {
+    color: var(--text-color-inactive);
+    font-weight: var(--label-font-weight-inactive);
+  }
+  .auth-mode-toggle .login-label.active {
+    color: var(--text-color-active);
+    font-weight: var(--label-font-weight-active);
+  }
+
+  .signup-label {
+    color: var(--text-color-inactive);
+    font-weight: var(--label-font-weight-inactive);
+  }
+  .auth-mode-toggle .signup-label.active {
+    color: var(--text-color-active);
+    font-weight: var(--label-font-weight-active);
+  }
+
+  .switch-visual-container {
+    position: relative;
+    width: var(--toggle-track-width);
+    height: var(--toggle-track-height);
+  }
+
+  .switch-track {
+    width: 100%;
+    height: 100%;
+    background-color: var(--track-bg-login);
+    border-radius: calc(var(--toggle-track-height) / 2); /* Pill shape */
+    transition: background-color var(--transition-duration)
+      var(--transition-timing-function);
+  }
+
+  /* Change track background when sign up is active */
+  .auth-mode-toggle.is-signup-active .switch-track {
+    background-color: var(--track-bg-signup);
+  }
+
+  .switch-knob {
+    position: absolute;
+    top: calc((var(--toggle-track-height) - var(--knob-size)) / 2);
+    left: var(--track-internal-padding);
+    width: var(--knob-size);
+    height: var(--knob-size);
+    background-color: var(--knob-bg-color);
+    border-radius: 50%; /* Circular knob */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-duration)
+      var(--transition-timing-function);
+  }
+
+  /* Move knob to the right when sign up is active */
+  .auth-mode-toggle.is-signup-active .switch-knob {
+    transform: translateX(
+      calc(
+        var(--toggle-track-width) - var(--knob-size) -
+          (2 * var(--track-internal-padding))
+      )
+    );
+  }
+  /* Scoped styles specific to LoginView */
+  .login-view-container {
+    width: 100%;
+    min-height: 100%; /* Ensure it takes full viewport height */
+    margin-top: 0;
+    display: flex; /* Use flex to center content */
+    flex-direction: column;
+    justify-content: start; /* Vertically center */
+    align-items: center; /* Horizontally center */
+    /* background-image: url('/src/assets/login-bg.jpg'); */ /* Ensure path is correct if used */
+    background-size: cover; /* Changed from contain for full coverage */
+    background-position: center; /* Center the background */
+    background-repeat: no-repeat;
+    background-color: #021130;
+    background-image: url("/images/starsbg.png");
+    background-size: 120% 120%;
+    background-origin: border-box;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    padding: 20px; /* Add some padding for smaller screens */
+    box-sizing: border-box;
+  }
+
   .wrapper {
-    position: relative;
-    /* margin-top: 150px; */
-    --input-focus: #2d8cf0;
-    --font-color: #fefefe;
-    --font-color-sub: #7e7e7e;
-    --bg-color: #111;
-    --bg-color-alt: #7e7e7e;
-    --main-color: #b954f3;
+    /* Removed height: 100vh and width: 80vw to let content size itself within login-view-container */
+    /* max-width: 520px; Already handled by parent */
+    width: 100%; /* Take full width of the centered container */
+    /* margin: auto; */
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: start; /* Center flip card vertically if space allows */
     align-items: center;
+    color: white; /* Assuming default text color is white based on original */
   }
 
-  .wrapper2 {
-    position: relative;
-    --input-focus: #2d8cf0;
-    --font-color: #fefefe;
-    --font-color-sub: #7e7e7e;
-    --bg-color: #111;
-    --bg-color-alt: #7e7e7e;
-    --main-color: #b954f3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .logo-main {
+    width: 70%;
+    /* margin-top: 2rem; Vuetify mt-8 is usually 2rem */
+    /* margin-bottom: 2rem; Add some space below logo */
   }
 
-  /* switch card */
+  .auth-error-message {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: red;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid red;
+    text-align: center;
+    width: 100%;
+    max-width: 420px; /* Match form width */
+  }
+
+  .loading-indicator {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+
+  /* Flip card styles from the original component */
   .switch {
-    transform: translateY(-200px);
+    transform: translateY(
+      0
+    ); /* Adjusted from -200px, let flexbox handle positioning */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -543,6 +666,8 @@
     gap: 30px;
     width: 50px;
     height: 20px;
+    margin-top: 2rem; /* Add some margin above the switch */
+    margin-bottom: 2rem;
   }
 
   .card-side::before {
@@ -550,10 +675,12 @@
     content: "Log in";
     left: -70px;
     top: 0;
-    width: 100px;
+    width: 200px;
     text-decoration: underline;
-    color: var(--font-color);
+    color: var(--font-color, #fefefe); /* Added fallback */
     font-weight: 600;
+    /* content: "Log in"; ... etc. */
+    z-index: 1; /* Above the card, below the slider */
   }
 
   .card-side::after {
@@ -561,10 +688,13 @@
     content: "Sign up";
     left: 70px;
     top: 0;
-    width: 100px;
+    width: 200px;
     text-decoration: none;
-    color: var(--font-color);
+    color: var(--font-color, #fefefe); /* Added fallback */
     font-weight: 600;
+    position: absolute;
+    /* content: "Sign up"; ... etc. */
+    z-index: 1; /* Above the card, below the slider */
   }
 
   .toggle {
@@ -586,6 +716,9 @@
     bottom: 0;
     background-color: var(--bg-color);
     transition: 0.3s;
+    position: absolute;
+    /* cursor: pointer; ... etc. */
+    z-index: 2; /* Ensure slider is on top for interaction and visibility */
   }
 
   .slider:before {
@@ -618,55 +751,49 @@
   .toggle:checked ~ .card-side:after {
     text-decoration: underline;
   }
-
-  /* card */
+  /* Logic for toggle moved to JS for direct style manipulation for simplicity */
+  /* .toggle:checked + .slider { background-color: var(--input-focus, #2d8cf0); } */
+  /* .toggle:checked + .slider:before { transform: translateX(30px); } */
+  /* .toggle:checked ~ .card-side:before { text-decoration: none; } */
+  /* .toggle:checked ~ .card-side:after { text-decoration: underline; } */
 
   .flip-card__inner {
-    width: 80vw;
-    max-width: 420px;
-    height: 350px;
+    width: 320px; /* Take full width of its parent label */
+    max-width: 420px; /* Max width for the form area */
+    height: auto; /* Let content define height, was 350px */
+    min-height: 380px; /* Ensure enough space for inputs */
     position: relative;
     background-color: transparent;
     perspective: 1000px;
-    /* width: 100%;
-    height: 100%; */
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
     margin-top: 16px;
-  }
-
-  .toggle:checked ~ .flip-card__inner {
-    transform: rotateY(180deg);
-  }
-
-  .toggle:checked ~ .flip-card__front {
-    box-shadow: none;
+    position: relative; /* This should already be present */
+    z-index: 0;
   }
 
   .flip-card__front,
   .flip-card__back {
-    width: 80vw;
-    max-width: 420px;
-    padding-left: 10px;
-    padding-right: 10px;
+    box-sizing: border-box; /* Added for better padding control */
+    width: 100%;
+    /* max-width: 420px; /* Let parent control max-width */
+    padding: 20px; /* Unified padding */
     position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center; /* Center form content */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    background: var(--bg-color);
-    gap: 20px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    box-shadow: 4px 4px var(--main-color);
+    background: var(--bg-color, #1f2937); /* Slightly lighter dark for card */
+    gap: 15px; /* Adjusted gap */
+    border-radius: 8px; /* Softer radius */
+    border: 1px solid var(--main-color, #b954f3); /* Thinner border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Softer shadow */
   }
 
   .flip-card__back {
-    /* width: 100%; */
-    width: 80vw;
-
     transform: rotateY(180deg);
   }
 
@@ -674,57 +801,103 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px; /* Adjusted gap */
+    width: 100%; /* Form takes full width of card */
   }
 
   .title {
-    margin: 10px 0 10px 0;
-    font-size: 25px;
-    font-weight: 900;
+    margin-bottom: 15px; /* Adjusted margin */
+    font-size: 24px; /* Slightly smaller */
+    font-weight: 700; /* Adjusted weight */
     text-align: center;
-    color: white;
+    color: var(--font-color, #fefefe);
   }
 
   .flip-card__input {
-    width: 200px;
-    height: 40px;
+    width: 100%; /* Full width inputs */
+    max-width: 300px; /* Max width for inputs */
+    height: 45px; /* Slightly taller */
     border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--font-color);
-    padding: 5px 10px;
+    border: 2px solid var(--main-color, #b954f3);
+    background-color: var(--bg-color-input, #2c3748); /* Different input bg */
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2); /* Inset shadow */
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--font-color, #fefefe);
+    padding: 5px 15px; /* More padding */
     outline: none;
+    transition: border-color 0.3s;
   }
 
   .flip-card__input::placeholder {
-    color: var(--font-color-sub);
+    color: var(--font-color-sub, #7e7e7e);
     opacity: 0.8;
   }
 
   .flip-card__input:focus {
-    border: 2px solid var(--input-focus);
-  }
-
-  .flip-card__btn:active,
-  .button-confirm:active {
-    box-shadow: 0px 0px var(--main-color);
-    transform: translate(3px, 3px);
+    border-color: var(--input-focus, #2d8cf0); /* Use border-color for focus */
   }
 
   .flip-card__btn {
-    margin: 20px 0 20px 0;
-    width: 120px;
-    height: 40px;
+    margin-top: 15px; /* Adjusted margin */
+    width: auto; /* Let content define width */
+    min-width: 150px; /* Minimum width */
+    padding: 10px 20px; /* Padding for button */
+    height: 45px;
     border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 17px;
+    border: 2px solid var(--main-color, #b954f3);
+    background-color: var(--main-color, #b954f3); /* Button bg same as border */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    font-size: 16px;
     font-weight: 600;
-    color: var(--font-color);
+    color: var(--font-color-btn, #fefefe); /* Ensure button text color is set */
     cursor: pointer;
+    transition:
+      background-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.1s;
+  }
+  .flip-card__btn:hover {
+    background-color: darken(
+      var(--main-color, #b954f3),
+      10%
+    ); /* Darken on hover */
+  }
+  .flip-card__btn:active {
+    box-shadow: 0px 0px var(--main-color, #b954f3);
+    transform: translate(2px, 2px); /* Slightly less movement */
+  }
+  .flip-card__btn:disabled {
+    background-color: #555;
+    border-color: #444;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .social-login-divider {
+    margin: 15px 0;
+    color: var(--font-color-sub, #7e7e7e);
+    text-align: center;
+    width: 100%;
+  }
+  .google-signin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* CSS Variables for theming (optional, but good practice) */
+  :root {
+    --input-focus: #4a90e2; /* Example: A lighter blue */
+    --font-color: #e0e0e0; /* Light gray for text */
+    --font-color-sub: #a0a0a0; /* Medium gray for subtext/placeholders */
+    --bg-color: #1e2a3b; /* Dark blue-gray background */
+    --bg-color-input: #2c3a4b; /* Slightly lighter for inputs */
+    --main-color: #6c63ff; /* Example: A vibrant purple */
+    --font-color-btn: #ffffff;
   }
 </style>

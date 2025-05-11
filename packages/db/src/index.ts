@@ -17,4 +17,4 @@ const apiKey = process.env.OPTIMIZE_API_KEY || "";
 const prisma = new OriginalPrismaClient().$extends(withAccelerate());
 //   .$extends(withOptimize({ apiKey }));
 
-export default enhance(prisma);
+export default prisma; // enhance(prisma);

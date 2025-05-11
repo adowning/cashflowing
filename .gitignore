@@ -36,3 +36,5 @@ flycheck_*
 # Build artifacts
 apps/*/dist
 packages/*/dist
+
+.venv/

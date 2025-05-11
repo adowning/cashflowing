@@ -322,6 +322,13 @@
     "useDisplay": true,
     "useSupabaseAuth": true,
     "eventobject": true,
-    "useEventManager": true
+    "useEventManager": true,
+    "ZilaComposableMessageCallback": true,
+    "ZilaMessagePayload": true,
+    "useBetterAuth": true,
+    "authClient": true,
+    "AUTH_EVENT_IDENTIFIERS": true,
+    "ZilaDecodedMessage": true,
+    "IEventManagerService": true
   }
 }

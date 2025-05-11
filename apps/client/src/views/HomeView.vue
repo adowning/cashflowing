@@ -1,6 +1,12 @@
+<script setup lang="ts">
+  const { isMobile } = useDisplay();
+  console.log(isMobile.value);
+</script>
 <template>
-  <div class="home">
-    <h1>Home</h1>
-    <p>Home page</p>
-  </div>
+  <BackGround />
+  <GameCarousel />
+  <FilterBar />
+  <AdCarousel />
+  <FooterBar v-if="!isMobile" />
 </template>
+<style scoped></style>

@@ -1,22 +1,26 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from "vue";
 
 export function useDisplay(maxWidth = 768) {
-  const isMobile = ref(window.innerWidth < maxWidth)
+  const isMobile = ref(window.innerWidth < maxWidth);
   const containerMaxW =
-    'xl:max-w-[600px] xl:mx-auto lg:max-w-[600px] lg:mx-auto md:max-w-[600px] md:mx-auto sm:max-w-[600px] sm:mx-auto xs:max-w-[600px] xs:mx-auto'
+    "xl:max-w-[480px] xl:mx-auto lg:max-w-[480px] lg:mx-auto md:max-w-[480px] md:mx-auto sm:max-w-[480px] sm:mx-auto xs:max-w-[480px] xs:mx-auto";
+  const desktopMaxHeight =
+    "xl:max-h-[720px] xl:mx-auto lg:max-h-[720px] lg:mx-auto md:max-h-[720px] md:mx-auto sm:max-h-[720px] sm:mx-auto xs:max-h-[720px] xs:mx-auto";
+  const desktopMinHeight =
+    "xl:min-h-[720px] xl:mx-auto lg:min-h-[720px] lg:mx-auto md:min-h-[720px] md:mx-auto sm:min-h-[720px] sm:mx-auto xs:min-h-[720px] xs:mx-auto";
 
   const handleResize = () => {
-    isMobile.value = window.innerWidth < maxWidth
-  }
+    isMobile.value = window.innerWidth < maxWidth;
+  };
 
   onMounted(() => {
-    window.addEventListener('resize', handleResize)
-    handleResize() // Initial check on mount
-  })
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check on mount
+  });
 
   onUnmounted(() => {
-    window.removeEventListener('resize', handleResize)
-  })
+    window.removeEventListener("resize", handleResize);
+  });
 
-  return { isMobile, containerMaxW }
+  return { isMobile, containerMaxW, desktopMaxHeight, desktopMinHeight };
 }

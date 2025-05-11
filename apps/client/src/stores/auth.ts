@@ -1,508 +1,517 @@
+// apps/client/src/stores/auth.ts
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import type { Session, AuthError } from "@supabase/supabase-js";
-import { ref, computed } from "vue"; // Import reactive functions
-import { NETWORK_CONFIG, User } from "@cashflow/types";
-import type * as SignIn from "@cashflow/types";
-import type * as SignUp from "@cashflow/types";
-// import type * as User from '@cashflow/types'
-import type {
-  GetUserAmountResponseData,
-  GetUserInfoResponseData,
-  User as IUser,
-  UpdateEmail,
-  UpdatePassword,
-  UpdateSuspendUser,
-} from "@cashflow/types";
-import { handleException } from "./exception"; // Assuming this path is correct
-import { router } from "@/router";
-import { NetworkData } from "@/utils/NetworkData";
+import {
+  type ClientSession,
+  type ApiAuthError,
+  type AuthCredentials,
+  type SignUpPayload,
+  type User,
+  type Profile,
+  NETWORK_CONFIG,
+  AuthenticatedState,
+} from "@cashflow/types"; // Ensure these types are correctly imported from your @cashflow/types package
+import { useNotificationStore } from "./notifications";
+import { logToPage } from "@/utils/logger";
+import type * as ApiTypes from "@cashflow/types";
+import { UserData, useUserStore, useUserStoreOutside } from "./user";
+import { ProfileData } from "./profile";
+import { store } from "@/stores";
+import { handleException } from "./exception";
 import { Network } from "@/utils/Network";
 
 export const useAuthStore = defineStore(
   "auth",
   () => {
-    // State properties converted to reactive references
+    // --- State ---
+    const sessionState = ref<ClientSession | null>(null);
     const success = ref(false);
-    const errMessage = ref("");
-    const authModalType = ref("");
-    const dialogCheckbox = ref(false);
-    const authDialogVisible = ref(false);
-    const signUpForm = ref(false);
-    const nickNameDialogVisible = ref(false);
-    const token = ref<string | undefined>(NetworkData.getInstance().getToken());
-    const userInfo = ref<Partial<User>>();
-    const session = ref<Session | null>(null);
-    const loading = ref<boolean>(false);
-    const error = ref<AuthError | null>(null);
-    const initialAuthCheckComplete = ref<boolean>(false);
+    const loadingState = ref<boolean>(false);
+    const authenticated = ref<AuthenticatedState>({ loggedIn: false });
+    const errorState = ref<ApiAuthError | null>(null);
+    const initialAuthCheckCompleteState = ref<boolean>(false);
+    const token = ref<string | null>(null);
+    const userStore = useUserStoreOutside();
+    // --- Getters (Computed properties) ---
+    const session = computed(() => sessionState.value);
+    // const isAuthenticated = computed(() => !!sessionState.value?.user);
+    // const isAuthenticated = ref<boolean>(false);
 
-    // Actions
-    function setSession(newSession: Session | null) {
-      session.value = newSession;
-    }
-
-    function setLoading(isLoading: boolean) {
-      loading.value = isLoading;
-    }
-
-    function setError(authError: AuthError | null) {
-      error.value = authError;
-    }
-
-    function setInitialAuthCheckComplete(isComplete: boolean) {
-      initialAuthCheckComplete.value = isComplete;
-    }
-
-    // const userInfo = ref<IUser>({
-    //   id: '',
-    //   name: '',
-    //   email: '',
-    //   emailVerified: false,
-    //   image: '',
-    //   createdAt: undefined,
-    //   updatedAt: undefined,
-    //   lastDailySpin: undefined,
-    //   twoFactorEnabled: false,
-    //   role: '',
-    //   banned: false,
-    //   banReason: '',
-    //   banExpires: undefined,
-    //   username: '',
-    //   passwordHash: '',
-    //   totalXp: 0,
-    //   balance: 0,
-    //   isVerified: false,
-    //   active: false,
-    //   lastLogin: undefined,
-    //   verificationToken: '',
-    //   avatar: '',
-    //   activeProfileId: '',
-    //   gender: 'BOY',
-    //   status: 'ACTIVE',
-    //   cashtag: '',
-    //   phpId: 0,
-    //   accessToken: '',
-    //   VipInfo: undefined,
-    //   activeProfile: {
-    //     transactions: [],
-    //     id: '',
-    //     balance: 0,
-    //     xpEarned: 0,
-    //     isActive: false,
-    //     lastPlayed: undefined,
-    //     createdAt: undefined,
-    //     updatedAt: undefined,
-    //     phpId: 0,
-    //     userId: '',
-    //     currency: '',
-    //     shopId: '',
-    //   },
-    // })
-    const userAmount = ref({
-      amount: 111111,
-      currency: {
-        fiat: true,
-        name: "",
-        symbol: "R$",
-        type: "BRL",
-      },
-      withdraw: 111111,
-      rate: 1000,
-    });
-
-    // Getters converted to computed properties
-    const getSuccess = computed(() => success.value);
-    const getErrMessage = computed(() => errMessage.value);
-    const getAuthModalType = computed(() => authModalType.value);
+    const isLoading = computed(() => loadingState.value);
+    const error = computed(() => errorState.value);
     const getToken = computed(() => token.value);
-    const getUserInfo = computed(() => userInfo.value);
-    const getUserAmount = computed(() => userAmount.value);
-    const getDialogCheckbox = computed(() => dialogCheckbox.value);
-    const getAuthDialogVisible = computed(() => authDialogVisible.value);
-    const getSignUpForm = computed(() => signUpForm.value);
-    const getNickNameDialogVisible = computed(
-      () => nickNameDialogVisible.value
+    const initialAuthCheckComplete = computed(
+      () => initialAuthCheckCompleteState.value
     );
-    const isAuthenticated = ref(false);
-    // Actions converted to regular functions
-    const setAuthModalType = (type: string) => {
-      authModalType.value = type;
-    };
-
+    const getSuccess = computed(() => success.value);
     const setSuccess = (isSuccess: boolean) => {
       success.value = isSuccess;
     };
+    // --- Actions (Functions) ---
+    function setSession(newSession: ClientSession | null) {
+      sessionState.value = newSession;
+    }
 
-    const setErrorMessage = (message: string) => {
-      errMessage.value = message;
-    };
-    const setIsAuthenticated = (b: boolean) => {
-      isAuthenticated.value = b;
-      console.log(router.currentRoute.value.path);
-      if (router.currentRoute.value.path == "/login") router.push("/home");
-    };
-    const setToken = (newToken: string) => {
-      const networkData: NetworkData = NetworkData.getInstance();
-      // const netCfg: Netcfg = Netcfg.getInstance()
-      networkData.setToken(newToken);
-      // netCfg.setToken(newToken)
+    function setToken(newToken: string | null) {
       token.value = newToken;
-    };
+    }
 
-    const removeToken = () => {
-      token.value = undefined;
-      const networkData: NetworkData = NetworkData.getInstance();
-      networkData.resetData();
-      // Reset userInfo to its initial state
-      userInfo.value = {
-        id: "",
-        name: "",
-        email: "",
-        emailVerified: false,
-        image: "",
-        twoFactorEnabled: false,
-        role: "",
-        banned: false,
-        banReason: "",
-        username: "",
-        passwordHash: "",
-        totalXp: 0,
-        balance: 0,
-        isVerified: false,
-        active: false,
-        verificationToken: "",
-        avatar: "",
-        activeProfileId: "",
-        gender: "BOY",
-        status: "ACTIVE",
-        cashtag: "",
-        phpId: 0,
-        accessToken: "",
-        vipInfo: {
-          id: "",
-          level: 0,
-          deposit_exp: 0,
-          bet_exp: 0,
-          rank_bet_exp: 0,
-          rank_deposit_exp: 0,
-          rank_name: null,
-          icon: null,
-          exp_switch_type: null,
-          now_deposit_exp: null,
-          level_deposit_exp: null,
-          now_bet_exp: null,
-          level_bet_exp: null,
-          telegram: null,
-          is_protection: false,
-          protection_deposit_exp: null,
-          protection_deposit_amount: null,
-          protection_bet_exp: null,
-          protection_bet_amount: null,
-          protection_days: null,
-          protection_switch: null,
-          cycle_award_switch: false,
-          level_award_switch: false,
-          signin_award_switch: false,
-          bet_award_switch: false,
-          withdrawal_award_switch: false,
-          unprotection_deposit_exp: null,
-          unprotection_deposit_amount: null,
-          unprotection_bet_exp: null,
-          unprotection_bet_amount: null,
-          unprotection_days: null,
-          unprotection_switch: null,
-          main_currency: null,
-          can_receive_level_award: false,
-          can_receive_rank_award: false,
-          can_receive_day_award: false,
-          can_receive_week_award: false,
-          can_receive_month_award: false,
-          can_receive_signin_award: false,
-          can_receive_bet_award: false,
-          can_receive_withdrawal_award: false,
-          userid: null,
-          free_spin_times: null,
-          week_gift: null,
-          month_gift: null,
-          upgrade_gift: null,
-          now_cash_back: null,
-          yesterday_cash_back: null,
-          history_cash_back: null,
-          gamesession: [],
-          operator: null,
-          transactions: [],
-          user: null,
-          operatorId: "",
-        },
-        currentProfile: {
-          id: "",
-          balance: 0,
-          xpEarned: 0,
-          userId: "",
-          currency: "",
-          shopId: "",
-          // operator: null,
-          // userProfileUseridtouser: null,
-          phpId: "null",
-          gamesession: [],
-          tournamententry: [],
-          transactions: [],
-        },
-      };
-    };
+    function setLoading(loading: boolean) {
+      loadingState.value = loading;
+    }
 
-    const setUserInfo = (info: Partial<IUser>) => {
-      userInfo.value = info;
-    };
+    function setError(newError: ApiAuthError | null) {
+      const notificationStore = useNotificationStore();
+      errorState.value = newError;
+      if (newError !== null) {
+        notificationStore.addNotification("error", newError.message);
+      }
+    }
 
-    const setUserAmount = (amount: SignIn.GetUserAmount) => {
-      userAmount.value = amount;
-    };
+    function setInitialAuthCheckComplete(complete: boolean) {
+      initialAuthCheckCompleteState.value = complete;
+    }
 
-    const setDialogCheckbox = (checked: boolean) => {
-      dialogCheckbox.value = checked;
-    };
+    function clearAuthError() {
+      errorState.value = null;
+    }
 
-    const setAuthDialogVisible = (visible: boolean) => {
-      authDialogVisible.value = visible;
-    };
-
-    const setSignUpForm = (isSignUp: boolean) => {
-      signUpForm.value = isSignUp;
-    };
-
-    const setNickNameDialogVisible = (visible: boolean) => {
-      nickNameDialogVisible.value = visible;
-    };
-
-    // Dispatch functions (actions)
-    const dispatchSignIn = async (msg: SignIn.SigninRequestData) => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
-      const network: Network = Network.getInstance();
-
-      const next = (response: SignIn.GetSigninResponseData) => {
-        if (response.code == 200) {
-          console.log(response.token);
-          setToken(response.token);
-          setSuccess(true);
-          console.log(success.value);
-          return success.value;
-        } else {
-          setErrorMessage(handleException(response.code));
-          return success.value;
-        }
-      };
-      await network.sendMsg(route, msg, next, 1);
-      return success.value;
-    };
-    const dispatchGetSession = async () => {
-      setSuccess(false);
-      const msg = null;
+    // async function fetchPublicUserData(
+    //   userId: string
+    // ): Promise<Partial<User> | null> {
+    const fetchPublicUserData = async (userId: string) => {
+      if (!userId) {
+        logToPage("warn", "fetchPublicUserData: No userId provided.");
+        return null;
+      }
+      logToPage("debug", `Workspaceing public user data for ${userId}...`);
+      // Adjust endpoint as per your Hono API structure
       const route: string = NETWORK_CONFIG.LOGIN.ME;
       const network: Network = Network.getInstance();
-
-      const next = (response: SignIn.GetSigninResponseData) => {
-        if (response.code == 200) {
+      // try {
+      // const sessionData = (await fetchApi("/auth/login", {
+      //   method: "POST",
+      //   body: JSON.stringify(credentials),
+      // })) as ClientSession | null;
+      setSuccess(false);
+      const next = (response: ApiTypes.GetSession) => {
+        if (response.code === 200) {
           console.log(response.token);
-          setToken(response.token);
+          setSuccess(true);
+          userStore.setUser(response.session as Partial<User>);
+          logToPage("info", `User data fetched and set for ${userId}`);
+          console.log(success.value);
+          return response.session as Partial<User>;
+        } else {
+          setError({
+            message: handleException(response.code),
+            code: response.code,
+          });
+          return null;
+        }
+      };
+      await network.sendMsg(route, undefined, next, 1);
+      return userStore.getCurrentUser;
+      // if (userData) {
+      //   userStore.setUser(userData as Partial<User>); // Update store
+      //   logToPage("info", `User data fetched and set for ${userId}`);
+      // }
+      // return userData as Partial<User> | null;
+    };
+
+    const fetchUserProfile = async (activeProfileId: string) => {
+      if (!activeProfileId) {
+        logToPage("warn", "fetchUserProfile: No userId provided.");
+        return null;
+      }
+      logToPage("debug", `Workspaceing user profile from`);
+      const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
+      const network: Network = Network.getInstance();
+      // const sessionData = (await fetchApi("/auth/login", {
+      //   method: "POST",
+      //   body: JSON.stringify(credentials),
+      // })) as ClientSession | null;
+      setSuccess(false);
+      const next = (response: ApiTypes.ProfileStatsUpdateData) => {
+        if (response !== undefined) {
+          userStore.setCurrentProfile(response as Partial<Profile>); // Update store
+          logToPage(
+            "info",
+            `User profile fetched and set for ${activeProfileId}`
+          );
           setSuccess(true);
           console.log(success.value);
-          return success.value;
+          return response as Partial<Profile>;
         } else {
-          setErrorMessage(handleException(response.code));
-          return success.value;
+          setError({
+            message: handleException(500),
+            code: 500,
+          });
+          return null;
         }
       };
-      await network.sendMsg(route, msg, next, 1);
-      return success.value;
+      await network.sendMsg(route, activeProfileId, next, 1);
+      return userStore.getCurrentProfile;
     };
-    const dispatchSignUp = async (
-      msg: SignUp.SignupRequestData
-    ): Promise<Boolean> => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.LOGIN.REGISTER;
-      const network: Network = Network.getInstance();
 
-      const next = (response: SignUp.GetSignupResponseData) => {
-        console.log(response.code);
-        if (response.code == 200) {
-          // setToken(response.token)
-          setSuccess(true);
-          console.log(success.value);
-          return success.value;
+    // --- WebSocket Auth Event Handlers ---
+    async function handleAuthStateChange(sessionPayload: ClientSession | null) {
+      logToPage(
+        "event",
+        `Handling Auth State Change. New session user: ${sessionPayload?.user?.id || "None"}`
+      );
+      setLoading(true); // Indicate loading while processing state change
+      setSession(sessionPayload);
+
+      if (sessionPayload?.user) {
+        const userId = sessionPayload.user.id;
+        // It's often good to re-fetch user/profile data to ensure freshness,
+        // even if some data is in sessionPayload.user.
+        const publicUserData = await fetchPublicUserData(userId);
+        if (publicUserData !== null && publicUserData.activeProfileId) {
+          // User store is updated by fetchPublicUserData
+          await fetchUserProfile(publicUserData.activeProfileId); // Profile store updated by fetchUserProfile
         } else {
-          setErrorMessage(handleException(response.code));
-          return success.value;
+          logToPage(
+            "warn",
+            `User data not found for authenticated user ${userId} after auth state change. Clearing local user/profile.`
+          );
+          userStore.clearUser();
+          userStore.clearProfile();
+          // Optionally, set an error or log out if essential data is missing post-auth
+          // setError({ message: "User data inconsistent after authentication." });
+          // await signOut(); // Drastic measure
         }
-      };
-      await network.sendMsg(route, msg, next, 1);
-      return success.value;
-    };
+      } else {
+        // No user in session (logged out or invalid session)
+        userStore.clearUser();
+        userStore.clearProfile();
+        logToPage("info", "Session cleared, user and profile stores cleared.");
+      }
+      setInitialAuthCheckComplete(true); // Mark check complete after processing first significant auth event
+      setLoading(false);
+    }
 
-    const dispatchUserProfile = async () => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_INFO;
+    // async function handleUserUpdate(userPayload: Partial<ClientAuthUser>) {
+    //   logToPage(
+    //     "event",
+    //     "Handling User Update event for user ID:",
+    //     userPayload?.id
+    //   );
+    //   if (
+    //     userPayload &&
+    //     userPayload.id &&
+    //     userStore.currentUser?.id === userPayload.id
+    //   ) {
+    //     setLoading(true);
+    //     // Re-fetch for full consistency is safer than merging partials
+    //     const fullUserData = await fetchPublicUserData(userPayload.id);
+    //     if (fullUserData) {
+    //       // userStore.setUser(fullUserData); // fetchPublicUserData already does this
+    //       // If ClientAuthUser structure (in session) needs updating based on UserData
+    //       if (
+    //         session.value?.user &&
+    //         session.value.user.id === fullUserData.id
+    //       ) {
+    //         setSession(
+    //           session,
+    //           // user: {
+    //           //   // Map fields from UserData to ClientAuthUser as needed
+    //           //   ...session.value.user, // Keep existing ClientAuthUser fields
+    //           //   id: fullUserData.id, // from UserData
+    //           //   email: fullUserData.email as string, // from UserData
+    //           //   username: fullUserData.username, // from UserData
+    //           //   avatarUrl: fullUserData.avatar, // from UserData
+    //           //   // ... other fields from UserData that map to ClientAuthUser
+    //           // },
+    //         // }
+    //       );
+    //       }
+    //     }
+    //     setLoading(false);
+    //   }
+    // }
+
+    async function handleProfileUpdate(profilePayload: Partial<ProfileData>) {
+      logToPage(
+        "event",
+        "Handling Profile Update event for profile ID:",
+        profilePayload?.id
+      );
+      if (
+        profilePayload &&
+        profilePayload.id &&
+        userStore.currentProfile?.id === profilePayload.id &&
+        userStore.currentUser?.id
+      ) {
+        setLoading(true);
+        // Re-fetch for full consistency
+        await fetchUserProfile(profilePayload.id);
+        // userStore.setProfile(fullProfileData); // fetchUserProfile already does this
+        setLoading(false);
+      }
+    }
+
+    // --- Auth Actions ---
+    async function commonPostAuthActions(
+      sessionData: ClientSession | null,
+      isInitialAuth: boolean = false
+    ) {
+      const oldToken = session.value?.token;
+      setSession(sessionData); // Update store immediately
+      const newToken = sessionData?.token;
+
+      // Re-establish WebSocket only if token status actually changes or if it's an initial auth process
+      // if (newToken !== oldToken || isInitialAuth || !isWebSocketConnected.value) {
+      //   logToPage(
+      //     "debug",
+      //     `Token status changed or initial auth. Old: ${oldToken ? "yes" : "no"}, New: ${newToken ? "yes" : "no"}. Re-establishing WS.`
+      //   );
+      //   await establishWebSocketConnection();
+      // }
+
+      // After setting session and potentially reconnecting WS, process the state
+      // Server should push AUTH_STATE_CHANGE via WebSocket after successful login/logout/session update.
+      // If immediate data update is critical and server push might be delayed, can call handleAuthStateChange.
+      // However, relying on server push promotes a single source of truth for state updates.
+      if (isInitialAuth && sessionData?.user) {
+        // For initial load with a valid session
+        await handleAuthStateChange(sessionData);
+      } else if (!sessionData?.user && (oldToken || isInitialAuth)) {
+        // For logout or initial load with no session
+        await handleAuthStateChange(null);
+      }
+      // For login/signup, handleAuthStateChange will be triggered by the server's WebSocket push.
+    }
+
+    async function signInWithPassword(credentials: AuthCredentials) {
+      logToPage("info", `Attempting sign in for ${credentials.email}...`);
+      const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
       const network: Network = Network.getInstance();
-
-      const next = (response: GetUserInfoResponseData) => {
-        if (response.code == 200) {
-          if (response.data.avatar == "") {
-            response.data.avatar = new URL(
-              "@/assets/public/image/ua_public_10.png",
-              import.meta.url
-            ).href;
+      try {
+        // const sessionData = (await fetchApi("/auth/login", {
+        //   method: "POST",
+        //   body: JSON.stringify(credentials),
+        // })) as ClientSession | null;
+        setSuccess(false);
+        const next = (response: ClientSession) => {
+          if (response.code === 200) {
+            console.log(response.token);
+            setToken(response.token);
+            setSuccess(true);
+            console.log(success.value);
+            return {
+              user: response?.user || null,
+              session: response,
+              error: null,
+            };
+          } else {
+            setError({
+              message: handleException(response.code),
+              code: response.code,
+            });
+            return success.value;
           }
-          if (response.data == null || response.data == undefined) return;
-          setErrorMessage("");
-          setUserInfo(response.data);
-          setSuccess(true);
-        } else {
-          if (response.code == 101004) {
-            dispatchSignout();
+        };
+        await network.sendMsg(route, credentials, next, 1);
+        // await commonPostAuthActions(sessionData);
+      } catch (e: any) {
+        await commonPostAuthActions(null); // Ensure WS disconnects or connects without token
+        return { user: null, session: null, error: e as ApiAuthError };
+      } finally {
+        setInitialAuthCheckComplete(true);
+      }
+    }
+
+    async function signUpNewUser(credentials: SignUpPayload) {
+      logToPage("info", `Attempting sign up for ${credentials.email}...`);
+      try {
+        // Assuming your /auth/register endpoint creates user, profile, and returns a session
+        // const sessionData = (await fetchApi("/auth/register", {
+        //   method: "POST",
+        //   body: JSON.stringify(payload),
+        // })) as ClientSession | null;
+        const route: string = NETWORK_CONFIG.LOGIN.REGISTER;
+        const network: Network = Network.getInstance();
+        setSuccess(false);
+        const next = (response: ClientSession) => {
+          if (response.code !== 200) {
+            console.log(response.token);
+            setToken(response.token);
+            setSuccess(true);
+            console.log(success.value);
+            return {
+              user: response?.user || null,
+              session: response,
+              error: null,
+            };
+          } else {
+            setError({
+              message: handleException(response.code),
+              code: response.code,
+            });
+            return success.value;
           }
-          setErrorMessage(handleException(response.code));
-        }
-      };
-      await network.sendMsg(route, {}, next, 1, 4);
-    };
+        };
+        await network.sendMsg(route, credentials, next, 1);
+      } catch (e: any) {
+        await commonPostAuthActions(null);
+        return { user: null, session: null, error: e as ApiAuthError };
+      }
+    }
 
-    const dispatchUserAmount = async () => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_AMOUNT;
-      const network: Network = Network.getInstance();
+    async function signInWithGoogleIdToken(idToken: string) {
+      logToPage("info", "Attempting Google Sign In... ");
+      try {
+        // const sessionData = (await fetchApi("/auth/google", {
+        //   method: "POST",
+        //   body: JSON.stringify({ token: idToken }),
+        // })) as ClientSession | null;
+        // const route: string = NETWORK_CONFIG.LOGIN.GOOGLE;
+        const route: string = "/auth/google";
+        const network: Network = Network.getInstance();
+        setSuccess(false);
+        const next = (response: ClientSession) => {
+          console.log("next ", response);
+          // {"authenticated":true,
+          //   "token":"hQWQp1gkOA0zsCjpPX0AvZR6xdehg9Iv",
+          //   "user":{"id":"b4cOnB54Ph5Ra2BuebaCieDs8wwVfcnu",
+          //     "email":"ashdowning@gmail.com",
+          //     "name":"Ash Downing",
+          //     "image":"https://lh3.googleusercontent.com/a/ACg8ocIO2WeWfygLcCyY5U-O5fXbm7qonbTxFTIKJpW4JI1Sc5jZK9mn=s96-c",
+          //     "emailVerified":true,
+          //     "createdAt":"2025-05-11T11:03:12.376Z",
+          //     "updatedAt":"2025-05-11T11:13:26.856Z"},
+          //     "code":200}
+          if (response.code === 200) {
+            console.log(response.token);
+            setToken(response.token);
+            setSession(response);
 
-      const next = (response: GetUserAmountResponseData) => {
-        if (response.code == 200) {
-          setUserAmount(response.data);
-          setSuccess(true);
-        } else {
-          setErrorMessage(handleException(response.code));
-        }
-      };
-      await network.sendMsg(route, {}, next, 1, 4);
-    };
+            console.log(success.value);
+            userStore.dispatchUpdateCurrentUser();
+            setSuccess(true);
+            authenticated.value = { loggedIn: true };
 
-    const dispatchUpdateUserInfo = async (data: any) => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_CHANGE;
-      const network: Network = Network.getInstance();
+            return {
+              user: response?.user || null,
+              session: response,
+              error: null,
+            };
+          } else {
+            setError({
+              message: handleException(response.code),
+              code: response.code,
+            });
+            return success.value;
+          }
+        };
+        await network.sendMsg(route, { token: idToken }, next, 1);
+        return session;
+      } catch (e: any) {
+        await commonPostAuthActions(null);
+        return { user: null, session: null, error: e as ApiAuthError };
+      } finally {
+        setInitialAuthCheckComplete(true);
+      }
+    }
 
-      const next = (response: GetUserInfoResponseData) => {
-        if (response.code == 200) {
-          setSuccess(true);
-        } else {
-          setErrorMessage(handleException(response.code));
-        }
-      };
-      await network.sendMsg(route, data, next, 1);
-    };
+    async function signOut() {
+      logToPage("info", "Attempting sign out...");
+      const currentToken = session.value?.token;
+      try {
+        // Pass token if your logout endpoint requires it for invalidation
+        // await fetchApi("/auth/logout", { method: "POST" });
+        const route: string = NETWORK_CONFIG.LOGIN.LOGOUT;
+        const network: Network = Network.getInstance();
+        setSuccess(false);
+        const next = (response: ClientSession) => {
+          if (response.code !== 200) {
+            console.log(response.token);
+            setToken(response.token);
+            setSuccess(true);
+            console.log(success.value);
+            return {
+              user: response?.user || null,
+              session: response,
+              error: null,
+            };
+          } else {
+            setError({
+              message: handleException(response.code),
+              code: response.code,
+            });
+            return success.value;
+          }
+        };
+        await network.sendMsg(route, undefined, next, 1);
+      } catch (e: any) {
+        logToPage(
+          "error",
+          "Sign out API call failed, but clearing local session anyway.",
+          e
+        );
+        // Still proceed to clear local state and update WS
+      } finally {
+        await commonPostAuthActions(null); // Crucial: clear session, this triggers WS re-evaluation
+        setInitialAuthCheckComplete(true);
+      }
+      return { error: error }; // Return any error that might have been set by fetchApi
+    }
+    function logout() {
+      sessionState.value = null;
+      errorState.value = null;
+      // It's good practice to also reset related user/profile states here
+      // import { useUserStore } from './user'; // Assuming you have these
+      // import { useProfileStore } from './profile';
+      // const userStore = useUserStore();
+      // userStore.clearUser(); // Example action
+      // const profileStore = useProfileStore();
+      // userStore.clearProfile(); // Example action
+    }
 
-    const dispatchUpdateEmail = async (data: UpdateEmail) => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_EMAIL;
-      const network: Network = Network.getInstance();
-
-      const next = (response: GetUserInfoResponseData) => {
-        if (response.code == 200) {
-          setSuccess(true);
-        } else {
-          setErrorMessage(handleException(response.code));
-        }
-      };
-      await network.sendMsg(route, data, next, 1);
-    };
-
-    const dispatchUpdatePassword = async (data: UpdatePassword) => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_PASSWORD;
-      const network: Network = Network.getInstance();
-
-      const next = (response: GetUserInfoResponseData) => {
-        if (response.code == 200) {
-          setSuccess(true);
-        } else {
-          setErrorMessage(handleException(response.code));
-        }
-      };
-      await network.sendMsg(route, data, next, 1);
-    };
-
-    const dispatchSuspendUser = async (data: UpdateSuspendUser) => {
-      setSuccess(false);
-      const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_SUSPEND;
-      const network: Network = Network.getInstance();
-
-      const next = (response: GetUserInfoResponseData) => {
-        if (response.code == 200) {
-          setSuccess(true);
-        } else {
-          setErrorMessage(handleException(response.code));
-        }
-      };
-      await network.sendMsg(route, data, next, 1);
-    };
-
-    const dispatchSignout = () => {
-      removeToken();
-    };
-
-    // Return all state, getters, and actions
     return {
-      success,
-      errMessage,
-      authModalType,
-      dialogCheckbox,
-      authDialogVisible,
-      signUpForm,
-      nickNameDialogVisible,
-      dispatchGetSession,
+      // State (exposed as refs)
+      sessionState,
       token,
-      userInfo,
-      userAmount,
-      getSuccess,
-      getErrMessage,
-      getAuthModalType,
-      getToken,
-      getUserInfo,
-      getUserAmount,
-      getDialogCheckbox,
-      getAuthDialogVisible,
-      getSignUpForm,
-      getNickNameDialogVisible,
-      setIsAuthenticated,
-      setAuthModalType,
-      setSuccess,
-      setErrorMessage,
-      setToken,
-      removeToken,
-      setUserInfo,
-      setUserAmount,
-      setDialogCheckbox,
-      setAuthDialogVisible,
-      setSignUpForm,
-      setNickNameDialogVisible,
-      dispatchSignIn,
-      dispatchSignUp,
-      dispatchUserProfile,
-      dispatchUserAmount,
-      dispatchUpdateUserInfo,
-      dispatchUpdateEmail,
-      dispatchUpdatePassword,
-      dispatchSuspendUser,
-      dispatchSignout,
+      loadingState,
+      errorState,
+      initialAuthCheckCompleteState,
+      signInWithGoogleIdToken,
+      // Getters
       session,
-      loading,
+      getToken,
+      authenticated,
+      isLoading,
       error,
       initialAuthCheckComplete,
+
+      // Actions
+      setToken,
+      signInWithPassword,
       setSession,
       setLoading,
       setError,
       setInitialAuthCheckComplete,
-      isAuthenticated,
+      clearAuthError,
+      logout,
+      signOut,
+      signUpNewUser,
     };
   },
-  { persist: true }
+  {
+    // Configuration for pinia-plugin-persistedstate (if you use it)
+    persist: true,
+    // Persist the entire state by default.
+    // You can customize which parts of the state to persist:
+    // paths: ['sessionState', 'initialAuthCheckCompleteState'],
+    // storage: localStorage, // or sessionStorage
+  }
 );
-
-// export const authStore = useAuthStore()
+/**
+ * @description In SPA applications, allows the store to be used before the Pinia instance becomes active.
+ * @descriptionn SSR applications, allows the store to be used outside of a component'ssetup()context.
+ */
+export function useAuthStoreOutside() {
+  return useAuthStore(store);
+}

@@ -23,7 +23,7 @@
       "
     >
       <img
-        src="/images/side-arrow-prev.avif "
+        src="/images/filterbar/side-arrow-prev.avif "
         class="mr-2 flex"
         style="text-align: center"
       />
@@ -46,7 +46,7 @@
         @click=""
       />
       <img
-        src="/images/side-arrow.avif"
+        src="/images/filterbar/side-arrow.avif"
         class="ml-2 flex"
         style="text-align: center"
       />

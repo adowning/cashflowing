@@ -41,6 +41,7 @@ export async function createUserWithProfileAndAccount(userData: {
   /// 800
 }) {
   return db.$transaction(async (prisma) => {
+    console.log("transaction");
     let defaultOperator: any = await db.operator.findFirst();
     let defaultOwnerUser: any = null;
     let defaultBank: any = null;
@@ -129,98 +130,106 @@ export async function createUserWithProfileAndAccount(userData: {
     //     // Add any other required fields for User
     //   },
     // })
-    const { headers, response } = await auth.api.signUpEmail({
-      returnHeaders: true,
-      //@ts-ignore
-      body: {
-        // id: clientId,
-        email: userData.email,
-        password: userData.password,
-        name: userData.username, // Assuming username is used as name for signup
-        username: userData.username,
-        displayUsername: userData.username,
-        emailVerified: true,
-        image: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        totalXp: 0,
-        balance: 0,
-        isVerified: true,
-        active: true,
-        lastLogin: new Date(),
-        verificationToken: "",
-        avatar: "",
-        // activeProfileId: '',
-        gender: "BOY",
-        status: "ACTIVE",
-        cashtag: "",
-        phpId: Math.random() * 10000,
-        accessToken: "",
-        twoFactorEnabled: true,
-        banned: true,
-        banReason: "",
-        banExpires: new Date(),
-        lastDailySpin: new Date(),
-      },
-    });
-    const newUser = response.user;
-    const token = response.token;
-    console.log(response);
-    // Create the profile linked to the new user and the default operator/bank
-    const newProfile = await db.profile.create({
-      data: {
-        // profileNumber: profileData.profileNumber,
-        userId: newUser.id,
-        shopId: defaultOperator.id, // Link to the default operator
-        // bankId: defaultBank.id, // Link to the default bank
-        // balance: profileData.balance ?? 0, // Use provided balance or default to 0 (Int)
-        // xpEarned: profileData.xpEarned ?? 0,
-        // isActive: profileData.isActive ?? true,
-        // lastPlayed: profileData.lastPlayed,
-        // phpId: profileData.phpId,
-        // Add any other required fields for Profile
-      },
-    });
+    try {
+      const { headers, response } = await auth.api.signUpEmail({
+        returnHeaders: true,
+        //@ts-ignore
+        body: {
+          // id: clientId,
+          email: userData.email,
+          password: userData.password,
+          name: userData.username, // Assuming username is used as name for signup
+          username: userData.username,
+          displayUsername: userData.username,
+          emailVerified: true,
+          image: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          totalXp: 0,
+          balance: 0,
+          isVerified: true,
+          role: "MEMBER",
+          active: true,
+          lastLogin: new Date(),
+          verificationToken: "",
+          avatar: "",
+          // activeProfileId: '',
+          gender: "BOY",
+          status: "ACTIVE",
+          cashtag: "",
+          phpId: Math.random() * 10000,
+          accessToken: "",
+          twoFactorEnabled: true,
+          banned: true,
+          banReason: "",
+          banExpires: new Date(),
+          lastDailySpin: new Date(),
+        },
+      });
+      console.log("response", response);
+      console.log("headers", headers);
+      const newUser = response.user;
+      const token = response.token;
+      console.log(response);
+      // Create the profile linked to the new user and the default operator/bank
+      const newProfile = await db.profile.create({
+        data: {
+          // profileNumber: profileData.profileNumber,
+          userId: newUser.id,
+          shopId: defaultOperator.id, // Link to the default operator
+          // bankId: defaultBank.id, // Link to the default bank
+          // balance: profileData.balance ?? 0, // Use provided balance or default to 0 (Int)
+          // xpEarned: profileData.xpEarned ?? 0,
+          // isActive: profileData.isActive ?? true,
+          // lastPlayed: profileData.lastPlayed,
+          // phpId: profileData.phpId,
+          // Add any other required fields for Profile
+        },
+      });
 
-    // Optionally update the user's activeProfileId to the newly created profile's ID
-    await db.user.update({
-      where: { id: newUser.id },
-      data: {
-        activeProfileId: newProfile.id,
-      },
-    });
+      // Optionally update the user's activeProfileId to the newly created profile's ID
+      await db.user.update({
+        where: { id: newUser.id },
+        data: {
+          activeProfileId: newProfile.id,
+        },
+      });
 
-    // Create the account linked to the new user
-    const newAccount = await db.account.create({
-      data: {
-        accountId: newUser.id,
-        providerId: "credential",
-        userId: newUser.id,
-        // accessToken: accountData.accessToken,
-        // refreshToken: accountData.refreshToken,
-        // idToken: accountData.idToken,
-        // accessTokenExpiresAt: accountData.accessTokenExpiresAt,
-        // refreshTokenExpiresAt: accountData.refreshTokenExpiresAt,
-        // scope: accountData.scope,
-        password: hashedPassword, // Again, consider security implications
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        // Add any other required fields for Account
-      },
-    });
+      // Create the account linked to the new user
+      const newAccount = await db.account.create({
+        data: {
+          accountId: newUser.id,
+          providerId: "credential",
+          userId: newUser.id,
+          // accessToken: accountData.accessToken,
+          // refreshToken: accountData.refreshToken,
+          // idToken: accountData.idToken,
+          // accessTokenExpiresAt: accountData.accessTokenExpiresAt,
+          // refreshTokenExpiresAt: accountData.refreshTokenExpiresAt,
+          // scope: accountData.scope,
+          password: hashedPassword, // Again, consider security implications
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          // Add any other required fields for Account
+        },
+      });
 
-    console.log(
-      `Created user: ${newUser.name}, profile: ${newProfile.id}, and account for provider: ${newAccount.id}`
-    );
+      console.log(
+        `Created user: ${newUser.name}, profile: ${newProfile.id}, and account for provider: ${newAccount.id}`
+      );
 
-    return {
-      user: newUser,
-      profile: newProfile,
-      account: newAccount,
-      operator: defaultOperator, // Return the operator used
-      ownerUser: defaultOwnerUser, // Return the owner user if created
-      token,
-    };
+      return {
+        user: newUser,
+        profile: newProfile,
+        account: newAccount,
+        operator: defaultOperator, // Return the operator used
+        ownerUser: defaultOwnerUser, // Return the owner user if created
+        token,
+      };
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   });
 }
 
@@ -279,11 +288,57 @@ export const getUserFromToken = async (token: string): Promise<User | null> => {
 
   return user;
 };
+export async function google(req: HonoRequest): Promise<Response> {
+  // console.log(req);
+  const json = await req.json();
+  console.log(json);
+  const _token = json.token;
+  const signInUsername = await auth.api.signInSocial({
+    body: {
+      provider: "google",
+      callbackURL: "http://localhost:3000/google",
+      idToken: {
+        token: _token, // Google Access Token
+      },
+    },
+  });
+  console.log(signInUsername);
+  const user = signInUsername.user;
+  const token = signInUsername.token;
+  console.log(user);
+  if (user == null) {
+    return new Response(
+      JSON.stringify({ message: "Invalid credentials", code: 401 }),
+      { status: 401 }
+    );
+  }
+  await db.user.update({
+    where: { id: user.id },
+    data: { lastLogin: new Date(), isOnline: true },
+  });
+  // const token = generateAccessToken(user.id)
 
-export async function me(
-  req: HonoRequest,
-  user: Partial<User>
-): Promise<Response> {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: "/",
+  };
+
+  return new Response(
+    JSON.stringify({ authenticated: true, token, user, code: 200 }),
+    {
+      status: 200,
+      headers: {
+        "Set-Cookie": `token=${token}; ${Object.entries(cookieOptions)
+          .map(([k, v]) => `${k}=${v}`)
+          .join("; ")}`,
+      },
+    }
+  );
+}
+export async function me(req: HonoRequest): Promise<Response> {
   // const session =  await prisma.platformSession.findUnique({
   //   where: { id: user.id },
   //   include: {
@@ -297,14 +352,20 @@ export async function me(
   const session = await auth.api.getSession({
     headers: req.raw.headers,
   });
-
-  if (!session) {
+  if (!session || session == null) {
     return new Response(JSON.stringify({ message: "Unauthorized" }));
   }
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: {},
+  });
+
   return new Response(
     JSON.stringify({
-      token: session?.session.token as string,
-      session: session as unknown as Session,
+      // token: session?.session.token as string,
+      // session: session as unknown as Session,
+      user,
+      code: 200,
     })
   );
   // return  session //new Response(JSON.stringify({ user, code: 200 }))
@@ -330,7 +391,8 @@ export async function register(req: HonoRequest) {
     password,
     username,
   });
-  const clientId = randomUUIDv7();
+  console.log("response", response);
+  // const clientId = randomUUIDv7();
 
   // console.log(headers)
   console.log(response);
@@ -428,5 +490,12 @@ export async function login(req: HonoRequest) {
     }
   );
 }
-
+export async function logout(req: HonoRequest) {
+  return new Response(JSON.stringify("ok"), {
+    status: 200,
+    headers: {
+      "Set-Cookie": `token=;`,
+    },
+  });
+}
 // export default app
