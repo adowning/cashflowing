@@ -1,5 +1,3 @@
-export type StringKeyMap = { [key: string]: any };
-
 export interface PgRealtimeClientOptions {
   user?: string;
   password?: string;
@@ -27,6 +25,7 @@ export enum Operation {
   DELETE = "DELETE",
   ALL = "*",
 }
+export type StringKeyMap = { [key: string]: any };
 
 export type TableOperationSubs = { [key: string]: EventCallback };
 
@@ -35,8 +34,8 @@ export interface PendingEvent {
   operation: Operation;
   schema: string;
   table: string;
-  data?: StringKeyMap;
-  primaryKeyData?: StringKeyMap;
+  data: StringKeyMap;
+  primaryKeyData: StringKeyMap;
   columnNamesChanged?: string[];
 }
 

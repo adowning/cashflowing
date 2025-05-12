@@ -88,7 +88,7 @@ export async function seed(): Promise<void> {
   await prisma.account.deleteMany();
   await prisma.profile.deleteMany();
   await prisma.operator.deleteMany(); // Operator depends on User (ownerId)
-  await prisma.platformSession.deleteMany();
+  // await prisma.platformSession.deleteMany();
   await prisma.message.deleteMany();
   await prisma.achievement.deleteMany();
   await prisma.user.deleteMany();
@@ -144,6 +144,7 @@ export async function seed(): Promise<void> {
               sbId: existingSupabaseUser.id,
               email: "ash@cashflowcasino.com",
               username: "ash",
+
               passwordHash: ashPasswordHash,
               name: "ash",
               emailVerified: true,
@@ -348,8 +349,9 @@ export async function seed(): Promise<void> {
   // Create Account for ashUser
   await prisma.account.create({
     data: {
-      userId: ashUser.id,
-      accountId: ashUser.id,
+      userId: ashUser.id as string,
+      accountId: ashUser.id as string,
+      password: ashUser.passwordHash as string,
       // type: "credentials",
       providerId: "credentials", // Custom provider name for your email/password
       // providerAccountId: ashUser.email, // Using email as the unique account ID for this provider
@@ -375,26 +377,26 @@ export async function seed(): Promise<void> {
   }
 
   // --- Create Sessions ---
-  if (users.length > 0) {
-    // Ensure users array is not empty
-    const sessionsCount = getRandomInt(10, 50);
-    for (let i = 0; i < sessionsCount; i++) {
-      const randomUser = getRandomElement(users);
-      await prisma.platformSession.create({
-        data: {
-          userId: randomUser.id,
-          activeGameId: faker.datatype.boolean() ? faker.string.uuid() : null,
-          ipAddress: faker.internet.ip(),
-          userAgent: faker.internet.userAgent(),
-          expiresAt: faker.date.future(),
-          refreshToken: faker.string.uuid(),
-          active: faker.datatype.boolean(),
-          token: faker.string.uuid(),
-        },
-      });
-      console.log(`Created session for user: ${randomUser.id}`);
-    }
-  }
+  // if (users.length > 0) {
+  //   // Ensure users array is not empty
+  //   const sessionsCount = getRandomInt(10, 50);
+  //   for (let i = 0; i < sessionsCount; i++) {
+  //     const randomUser = getRandomElement(users);
+  //     await prisma.platformSession.create({
+  //       data: {
+  //         userId: randomUser.id,
+  //         activeGameId: faker.datatype.boolean() ? faker.string.uuid() : null,
+  //         ipAddress: faker.internet.ip(),
+  //         userAgent: faker.internet.userAgent(),
+  //         expiresAt: faker.date.future(),
+  //         refreshToken: faker.string.uuid(),
+  //         active: faker.datatype.boolean(),
+  //         token: faker.string.uuid(),
+  //       },
+  //     });
+  //     console.log(`Created session for user: ${randomUser.id}`);
+  //   }
+  // }
 
   // --- Create Messages (Assuming Message model has authorId as String, not a direct relation) ---
   const messagesCount = getRandomInt(10, 100);
@@ -431,6 +433,10 @@ export async function seed(): Promise<void> {
         // ensure it's in our local array
         createdProfiles.push(existingProfile);
       }
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { activeProfileId: existingProfile.id },
+      });
       continue;
     }
 
@@ -451,6 +457,10 @@ export async function seed(): Promise<void> {
       console.log(
         `Created profile with id: ${profile.id} for user: ${user.id}`
       );
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { activeProfileId: profile.id },
+      });
     } catch (profileError: any) {
       if (
         profileError instanceof Prisma.PrismaClientKnownRequestError &&
@@ -491,6 +501,7 @@ export async function seed(): Promise<void> {
         // Based on common Prisma patterns for Account (e.g., NextAuth.js adapter):
         userId: user.id,
         accountId: user.id,
+        password: user.passwordHash,
         // type: "credentials",
         providerId: "credentials", // Custom provider name for your email/password
         // providerId: user.id, // Custom provider name for your email/password
@@ -797,7 +808,7 @@ export async function seed(): Promise<void> {
       const isRead = faker.datatype.boolean({ probability: 0.7 });
       await prisma.notification.create({
         data: {
-          type: getRandomElement<NotificationType>([
+          notficationType: getRandomElement<NotificationType>([
             // Use Prisma enum
             "SYSTEM",
             "FRIEND_REQUEST",
@@ -970,7 +981,7 @@ export async function seed(): Promise<void> {
 
       await prisma.transaction.create({
         data: {
-          type: type,
+          transactionType: type,
           amount: getRandomInt(1, 10000),
           reference: faker.string.uuid(),
           status: status,

@@ -6,7 +6,14 @@ import { registerRoutes } from "./routes";
 import { PgRealtimeClientOptions, WebSocketRouter } from "./sockets";
 import { chatRouter } from "./sockets/chat.wsroute";
 import { heartbeatRouter } from "./sockets/heartbeat.wsroute";
-
+import { Context } from "hono";
+import {
+  getCookie,
+  getSignedCookie,
+  setCookie,
+  setSignedCookie,
+  deleteCookie,
+} from "hono/cookie";
 export const app = createApp();
 // registerRoutes(app)
 interface MyWebSocketData {
@@ -16,25 +23,11 @@ interface MyWebSocketData {
 }
 //DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiY2RmNGZiNWUtMDBjOC00MThiLWFjYTEtYWJlMzEzMGMyNjBmIiwidGVuYW50X2lkIjoiOTJmNjcwMzJiYjU1N2VjZDU5NWNkN2MwMDkyZTg2MGRmOTdlNTVmMGVhOWZkYzY2NzBkZDExYzVhODUyNmY4MCIsImludGVybmFsX3NlY3JldCI6ImQ3NGRmNTU5LTUxYzEtNDAxNS1iNGJkLTYyZGRiOWFiNWI0MCJ9.z_eWzb9kX0r5V4xeIrg6cOYHzrF1teNCtyBmw4OsLuY"
 
-const pgOptions: PgRealtimeClientOptions = {
-  user: "postgres",
-  password: "postgres",
-  host: "password",
-  port: 5432,
-  database: "dev",
-  // minPoolConnections?: number;
-  // maxPoolConnections?: number;
-  // channel?: string;
-  // bufferInterval?: number;
-  // maxBufferSize?: number;
-  onError: (error: Error) => console.log(error),
-};
-
 type AdditionalWsData = Omit<MyWebSocketData, "clientId">;
-const wsRouter = new WebSocketRouter<AdditionalWsData>(pgOptions);
+const wsRouter = new WebSocketRouter<AdditionalWsData>();
 wsRouter.addRoutes(chatRouter);
 wsRouter.addRoutes(heartbeatRouter);
-
+wsRouter.setupDbListener();
 const PORT = 6589;
 console.log(`Attempting to start server on port ${PORT}...`);
 
@@ -45,23 +38,20 @@ const server = Bun.serve<AdditionalWsData, {}>({
   port: PORT,
   hostname: "0.0.0.0", // Listen on all interfaces
   routes: {
-    "/ws": async (req: Request) => {
+    "/ws": async (req: Request, c: Context) => {
+      if (wsRouter.server === undefined) wsRouter.addServer(server);
+      let session;
+      let token;
       if (req.url.includes("token")) {
-        const token = req.url.split("?")[1].split("=")[1];
+        token = req.url.split("?")[1].split("=")[1];
+        if (!token) token = req.headers.get("cookie")?.split("=")[1];
+        if (!token) token = req.headers.get("token")?.split("=")[1];
         req.headers.set("Authorization", `Bearer ${token}`);
-        const session = await auth.api.getSession({
+        session = await auth.api.getSession({
           headers: req.headers,
         });
         console.log("session", session);
-        if (!session?.user || !session?.user.id) {
-          console.log(
-            "[Bun Fetch] WebSocket upgrade denied: Missing userId query param."
-          );
-          return new Response(
-            "userId query parameter is required for WebSocket connection",
-            { status: 401 }
-          );
-        }
+        if (session !== null) setCookie(c, "token", session.session.token);
         return wsRouter.upgrade(req, {
           server,
           data: {
@@ -70,10 +60,10 @@ const server = Bun.serve<AdditionalWsData, {}>({
             clientId: session?.user.id as string,
           },
         }); // Return the WebSocketHandler
-        // // return Response.json(session);
       } else {
         const session = await auth.api.signInAnonymous();
-
+        console.log(session);
+        console.log(req);
         return wsRouter.upgrade(req, {
           server,
           data: {
@@ -82,6 +72,38 @@ const server = Bun.serve<AdditionalWsData, {}>({
             clientId: session?.user.id as string,
           },
         }); // Retur
+
+        // if (!session?.user || !session?.user.id) {
+        //   console.log(
+        //     "[Bun Fetch] WebSocket upgrade denied: Missing userId query param."
+        //   );
+        //   return new Response(
+        //     "userId query parameter is required for WebSocket connection",
+        //     { status: 401 }
+        //   );
+        // }
+        // return server.upgrade(req, {
+        //   data: {
+        //     userId: session?.user.id,
+        //     roomId: session?.user.id,
+        //     clientId: session?.user.id as string,
+        //   },
+        // });
+        // return server.upgrade(req, {
+        //         data: {
+        //           userId: session?.user.id,
+        //           roomId: session?.user.id,
+        //           clientId: session?.user.id as string,
+        //         },
+        //       });
+        // return server.upgrade(req, {
+        //   data: {
+        //     userId: session?.user.id,
+        //     roomId: session?.user.id,
+        //     clientId: session?.user.id as string,
+        //   },
+        //   // headers: new Headers({ 'X-WebSocket-Server': 'Bun-Native-With-Router' }) // Optional headers
+        // });
       }
     },
   },

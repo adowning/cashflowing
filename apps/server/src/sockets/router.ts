@@ -16,7 +16,25 @@ import type {
   WebSocketRouterOptions,
 } from "./types";
 import PgRealtimeClient from "@/services/update.service";
-import { PgRealtimeClientOptions } from "@/services/dbupdates/types";
+import {
+  EventCallback,
+  PendingEvent,
+  PgRealtimeClientOptions,
+} from "@/services/dbupdates/types";
+
+const pgOptions: PgRealtimeClientOptions = {
+  user: "postgres",
+  password: "password",
+  host: "192.168.1.35",
+  port: 5432,
+  database: "dev",
+  // minPoolConnections?: number;
+  // maxPoolConnections?: number;
+  // channel?: string;
+  // bufferInterval?: number;
+  // maxBufferSize?: number;
+  onError: (error: Error) => console.log(error),
+};
 /**
  * Creates a new Spec Realtime Client.
  */
@@ -38,18 +56,17 @@ export * from "@/services/dbupdates/types";
 export class WebSocketRouter<
   T extends Record<string, unknown> = Record<string, never>,
 > {
-  private readonly server: Server;
+  public server: Server;
   private readonly handlers = new WebSocketHandlers<WebSocketData<T>>();
   public pgUpdatesClient: PgRealtimeClient;
-
-  constructor(
-    pgOptions: PgRealtimeClientOptions,
-    options?: WebSocketRouterOptions
-  ) {
+  public connectedClients: ServerWebSocket<WebSocketData<T>>[];
+  constructor(options?: WebSocketRouterOptions) {
     this.server = options?.server ?? (undefined as unknown as Server);
-    this.pgUpdatesClient = createRealtimeClient(pgOptions);
+    this.connectedClients = [];
   }
-
+  addServer(server: Server) {
+    this.server = server;
+  }
   /**
    * Merges open, close, and message handlers from another WebSocketRouter instance.
    */
@@ -61,7 +78,46 @@ export class WebSocketRouter<
     this.handlers.close.push(...ws.handlers.close);
     return this;
   }
+  setupDbListener(): this {
+    try {
+      this.pgUpdatesClient = createRealtimeClient(pgOptions);
+      this.pgUpdatesClient._createSubscriber();
+      // export interface Event {
+      //   timestamp: string;
+      //   operation: Operation;
+      //   schema: string;
+      //   table: string;
+      //   data: StringKeyMap;
+      //   columnNamesChanged?: string[];
+      // }
+      this.pgUpdatesClient.table("user", { schema: "public" });
+      this.pgUpdatesClient
+        .table("profiles", { schema: "public" })
+        .onUpdate((data: any) => {
+          console.log(data);
+          const event = data as unknown as PendingEvent;
+          if (this.server) {
+            // this.server.publish("db_updates", JSON.stringify(data), false);
+            console.log(this.server.subscriberCount("db_updates"));
+            this.connectedClients.forEach((client) => {
+              if (event.table === "user")
+                if (client.data.userId === event.primaryKeyData["id"]) {
+                  client.send(data);
+                }
+              if (event.table === "profiles")
+                if (client.data.userId === event.data.userId) {
+                  client.send(data);
+                }
+            });
+          }
+        });
 
+      this.pgUpdatesClient.listen();
+    } catch (e) {
+      console.log(e);
+    }
+    return this;
+  }
   /**
    * Upgrades an HTTP request to a WebSocket connection.
   //  */
@@ -87,12 +143,13 @@ export class WebSocketRouter<
         }
       );
     }
-
-    return new Response(null, { status: 101 });
+    return new Response(null, data);
   }
 
   onOpen(handler: OpenHandler<WebSocketData<T>>): this {
     this.handlers.open.push(handler);
+
+    console.log("opened");
     return this;
   }
 
@@ -137,8 +194,9 @@ export class WebSocketRouter<
 
   private handleOpen(ws: ServerWebSocket<WebSocketData<T>>) {
     const clientId = ws.data.clientId;
-    console.log(`[ws] Connection opened: ${clientId}`);
 
+    console.log(`[ws] Connection opened: ${clientId}`);
+    const userId = ws.data.userId;
     const context = {
       ws,
       send: this.createSendFunction(ws),
@@ -163,6 +221,38 @@ export class WebSocketRouter<
         // ws.close(1011, "Internal server error during connection setup");
       }
     });
+
+    // ws.data.userId || `guest-${Math.random().toString(36).substring(2, 9)}`
+    // ws.data.userId = userId
+    // ws.data.username = ws.data.username || 'Anonymous' // Set a default username
+
+    // connectedClients.set(userId, ws)
+    console.log(
+      `WebSocket connection opened for user: ${userId} (username: ${ws.data.username})`
+    );
+    ws.send(
+      JSON.stringify({
+        type: "connection_ack",
+        message: "Connected to WebSocket server!",
+        userId,
+      })
+    );
+
+    // Subscribe to a default room or based on ws.data.roomId
+    const roomId = "db_updates";
+    ws.subscribe(roomId);
+    console.log(`User ${userId} subscribed to room: ${roomId}`);
+    // Announce new user to the room
+    this.server.publish(
+      roomId,
+      JSON.stringify({
+        type: "user_join",
+        username: ws.data.username,
+        userId: ws.data.userId,
+        timestamp: new Date().toISOString(),
+      })
+    );
+    this.connectedClients.push(ws);
   }
 
   private handleClose(

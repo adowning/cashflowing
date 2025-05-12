@@ -1,7 +1,7 @@
 [
   {
     "title": "Package One",
-    "type": "package",
+    "productType": "package",
     "amountToReceiveInCredits": 500,
     "totalDiscountInCents": 300,
     "bonusSpins": 1,
@@ -12,7 +12,7 @@
   },
   {
     "title": "Package Two",
-    "type": "package",
+    "productType": "package",
     "amountToReceiveInCredits": 1000,
     "totalDiscountInCents": 500,
     "bonusSpins": 2,
@@ -23,7 +23,7 @@
   },
   {
     "title": "Package Three",
-    "type": "package",
+    "productType": "package",
     "amountToReceiveInCredits": 1500,
     "totalDiscountInCents": 500,
     "bonusSpins": 3,
@@ -34,7 +34,7 @@
   },
   {
     "title": "Package Four",
-    "type": "package",
+    "productType": "package",
     "amountToReceiveInCredits": 2000,
     "totalDiscountInCents": 500,
     "bonusSpins": 5,
