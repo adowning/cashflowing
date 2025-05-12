@@ -1,10 +1,10 @@
 /* SPDX-FileCopyrightText: 2025-present Kriasoft */
 /* SPDX-License-Identifier: MIT */
 
-import type { Server, ServerWebSocket, WebSocketHandler } from 'bun'
-import { v4 as randomUUIDv7 } from 'uuid'
-import { z } from 'zod'
-import { WebSocketHandlers } from './handlers'
+import type { Server, ServerWebSocket, WebSocketHandler } from "bun";
+import { v4 as randomUUIDv7 } from "uuid";
+import { z } from "zod";
+import { WebSocketHandlers } from "./handlers";
 import type {
   CloseHandler,
   MessageHandler,
@@ -14,7 +14,7 @@ import type {
   UpgradeOptions,
   WebSocketData,
   WebSocketRouterOptions,
-} from './types'
+} from "./types";
 
 /**
  * WebSocket router for Bun that provides type-safe message routing with Zod validation.
@@ -26,11 +26,11 @@ import type {
 export class WebSocketRouter<
   T extends Record<string, unknown> = Record<string, never>,
 > {
-  private readonly server: Server
-  private readonly handlers = new WebSocketHandlers<WebSocketData<T>>()
+  private readonly server: Server;
+  private readonly handlers = new WebSocketHandlers<WebSocketData<T>>();
 
   constructor(options?: WebSocketRouterOptions) {
-    this.server = options?.server ?? (undefined as unknown as Server)
+    this.server = options?.server ?? (undefined as unknown as Server);
   }
 
   /**
@@ -38,71 +38,69 @@ export class WebSocketRouter<
    */
   addRoutes(ws: WebSocketRouter<T>): this {
     ws.handlers.message.forEach((handler, value) => {
-      console.log(value)
-      this.handlers.message.set(value, handler)
-    })
-    this.handlers.open.push(...ws.handlers.open)
-    this.handlers.close.push(...ws.handlers.close)
-    return this
+      this.handlers.message.set(value, handler);
+    });
+    this.handlers.open.push(...ws.handlers.open);
+    this.handlers.close.push(...ws.handlers.close);
+    return this;
   }
 
   /**
    * Upgrades an HTTP request to a WebSocket connection.
   //  */
   public upgrade(req: Request, options: UpgradeOptions<WebSocketData<T>>) {
-    const { server, data, headers } = options
-    const clientId = randomUUIDv7()
+    const { server, data, headers } = options;
+    const clientId = randomUUIDv7();
     const upgraded = server.upgrade(req, {
       data: { clientId, ...data },
       headers: {
-        'x-client-id': clientId,
+        "x-client-id": clientId,
         ...headers,
       },
-    })
+    });
 
     if (!upgraded) {
       return new Response(
-        'Failed to upgrade the request to a WebSocket connection',
+        "Failed to upgrade the request to a WebSocket connection",
         {
           status: 500,
           headers: {
-            'Content-Type': 'text/plain',
+            "Content-Type": "text/plain",
           },
-        },
-      )
+        }
+      );
     }
 
-    return new Response(null, { status: 101 })
+    return new Response(null, { status: 101 });
   }
 
   onOpen(handler: OpenHandler<WebSocketData<T>>): this {
-    this.handlers.open.push(handler)
-    return this
+    this.handlers.open.push(handler);
+    return this;
   }
 
   onClose(handler: CloseHandler<WebSocketData<T>>): this {
-    this.handlers.close.push(handler)
-    return this
+    this.handlers.close.push(handler);
+    return this;
   }
 
   onMessage<Schema extends MessageSchemaType>(
     schema: Schema,
-    handler: MessageHandler<Schema, WebSocketData<T>>,
+    handler: MessageHandler<Schema, WebSocketData<T>>
   ): this {
-    const messageType = schema.shape.type._def.value
-
+    const messageType = schema.shape.type._def.value;
     if (this.handlers.message.has(messageType)) {
       console.warn(
-        `Handler for message type "${messageType}" is being overwritten.`,
-      )
+        `Handler for message type "${messageType}" is being overwritten.`
+      );
     }
 
     this.handlers.message.set(messageType, {
       schema,
       handler: handler as MessageHandler<MessageSchemaType, WebSocketData<T>>,
-    })
+    });
 
-    return this
+    return this;
   }
 
   /**
@@ -113,7 +111,7 @@ export class WebSocketRouter<
       open: this.handleOpen.bind(this),
       message: this.handleMessage.bind(this),
       close: this.handleClose.bind(this),
-    }
+    };
   }
 
   // ———————————————————————————————————————————————————————————————————————————
@@ -121,151 +119,151 @@ export class WebSocketRouter<
   // ———————————————————————————————————————————————————————————————————————————
 
   private handleOpen(ws: ServerWebSocket<WebSocketData<T>>) {
-    const clientId = ws.data.clientId
-    console.log(`[ws] Connection opened: ${clientId}`)
+    const clientId = ws.data.clientId;
+    console.log(`[ws] Connection opened: ${clientId}`);
 
     const context = {
       ws,
       send: this.createSendFunction(ws),
-    }
-    console.log(this.handlers)
+    };
+    // console.log(this.handlers)
     // Execute all registered open handlers
     this.handlers.open.forEach((handler) => {
       try {
         // Call the handler, passing the WebSocket instance
-        const result = handler(context)
+        const result = handler(context);
         // Handle async handlers if they return a promise
         if (result instanceof Promise) {
           result.catch((error) => {
             console.error(
               `Unhandled promise rejection in open handler for ${clientId}:`,
-              error,
-            )
-          })
+              error
+            );
+          });
         }
       } catch (error) {
-        console.error(`Error in open handler for ${clientId}:`, error)
+        console.error(`Error in open handler for ${clientId}:`, error);
         // ws.close(1011, "Internal server error during connection setup");
       }
-    })
+    });
   }
 
   private handleClose(
     ws: ServerWebSocket<WebSocketData<T>>,
     code: number,
-    reason?: string,
+    reason?: string
   ) {
-    const clientId = ws.data.clientId
+    const clientId = ws.data.clientId;
     console.log(
       `[ws] Connection closed: ${clientId} (Code: ${code}, Reason: ${
-        reason || 'N/A'
-      })`,
-    )
+        reason || "N/A"
+      })`
+    );
 
     const context = {
       ws,
       code,
       reason,
       send: this.createSendFunction(ws),
-    }
+    };
 
     // Execute all registered close handlers
     this.handlers.close.forEach((handler) => {
       try {
         // Call the handler, passing the WebSocket instance, code, and reason
-        const result = handler(context)
+        const result = handler(context);
         // Handle async handlers if they return a promise
         if (result instanceof Promise) {
           result.catch((error) => {
             console.error(
               `[ws] Unhandled promise rejection in close handler for ${clientId}:`,
-              error,
-            )
-          })
+              error
+            );
+          });
         }
       } catch (error) {
         // Catch synchronous errors in handlers
-        console.error(`[ws] Error in close handler for ${clientId}:`, error)
+        console.error(`[ws] Error in close handler for ${clientId}:`, error);
       }
-    })
+    });
   }
 
   private handleMessage(
     ws: ServerWebSocket<WebSocketData<T>>,
-    message: string | Buffer,
+    message: string | Buffer
   ) {
-    const clientId = ws.data.clientId
-    let parsedMessage: unknown
+    const clientId = ws.data.clientId;
+    let parsedMessage: unknown;
 
     try {
       // Assuming messages are JSON strings
-      console.log(message)
-      if (typeof message === 'string') {
-        parsedMessage = JSON.parse(message)
+      if (typeof message === "string") {
+        parsedMessage = JSON.parse(message);
       } else if (message instanceof Buffer) {
         // Or handle Buffer messages if needed, e.g., parse as JSON
-        parsedMessage = JSON.parse(message.toString())
+        parsedMessage = JSON.parse(message.toString());
       } else {
-        console.warn(`[ws] Received non-string/buffer message from ${clientId}`)
-        return
+        console.warn(
+          `[ws] Received non-string/buffer message from ${clientId}`
+        );
+        return;
       }
 
       // Basic validation for message structure (must have a 'type' property)
       if (
-        typeof parsedMessage !== 'object' ||
+        typeof parsedMessage !== "object" ||
         parsedMessage === null ||
-        typeof (parsedMessage as { type: unknown }).type !== 'string'
+        typeof (parsedMessage as { type: unknown }).type !== "string"
       ) {
         console.warn(
           `[ws] Received invalid message format from ${clientId}:`,
-          parsedMessage,
-        )
+          parsedMessage
+        );
         // Optionally send an error message back or close the connection
         // ws.send(JSON.stringify({ error: "Invalid message format" }));
         // ws.close(1003, "Invalid message format");
-        return
+        return;
       }
     } catch (error) {
-      console.error(`[ws] Failed to parse message from ${clientId}:`, error)
+      console.error(`[ws] Failed to parse message from ${clientId}:`, error);
       // Optionally send an error message back or close the connection
       // ws.send(JSON.stringify({ error: "Invalid JSON" }));
       // ws.close(1003, "Invalid JSON");
-      return
+      return;
     }
-    console.log(this.handlers)
-    const messageType = (parsedMessage as { type: string }).type
-    const handlerEntry = this.handlers.message.get(messageType)
+    const messageType = (parsedMessage as { type: string }).type;
+    const handlerEntry = this.handlers.message.get(messageType);
 
     if (!handlerEntry) {
       console.warn(
-        `[ws] No handler found for message type "${messageType}" from ${clientId}`,
-      )
+        `[ws] No handler found for message type "${messageType}" from ${clientId}`
+      );
       // Optionally send a message indicating the type is unsupported
       ws.send(
-        JSON.stringify({ error: `Unsupported message type: ${messageType}` }),
-      )
-      return
+        JSON.stringify({ error: `Unsupported message type: ${messageType}` })
+      );
+      return;
     }
 
-    const { schema, handler } = handlerEntry
+    const { schema, handler } = handlerEntry;
 
     try {
       // Validate the message against the registered schema
-      const validationResult = schema.safeParse(parsedMessage)
+      const validationResult = schema.safeParse(parsedMessage);
 
       if (!validationResult.success) {
         console.error(
           `[ws] Message validation failed for type "${messageType}" from ${clientId}:`,
-          validationResult.error.errors, // Log Zod errors
-        )
+          validationResult.error.errors // Log Zod errors
+        );
         // Optionally send detailed validation errors back (be cautious with sensitive info)
         // ws.send(JSON.stringify({ error: "Validation failed", details: validationResult.error.flatten() }));
         // ws.close(1007, "Invalid message payload");
-        return
+        return;
       }
 
       // Prepare the context for the handler
-      const validatedData = validationResult.data
+      const validatedData = validationResult.data;
       const context = {
         ws,
         type: validatedData.type, // Already known, but include for consistency
@@ -275,27 +273,27 @@ export class WebSocketRouter<
           payload: validatedData.payload,
         }),
         send: this.createSendFunction(ws),
-      }
+      };
 
       // Execute the handler
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const result = handler(context as any)
+      const result = handler(context as any);
 
       // Handle async handlers
       if (result instanceof Promise) {
         result.catch((error) => {
           console.error(
             `[ws] Unhandled promise rejection in message handler for type "${messageType}" from ${clientId}:`,
-            error,
-          )
-        })
+            error
+          );
+        });
       }
     } catch (error) {
       // Catch synchronous errors in handlers
       console.error(
         `[ws] Error in message handler for type "${messageType}" from ${clientId}:`,
-        error,
-      )
+        error
+      );
       // Optionally close the connection on handler error
       // ws.close(1011, "Internal server error during message handling");
     }
@@ -306,20 +304,20 @@ export class WebSocketRouter<
    * This function allows handlers to send typed messages with proper validation.
    */
   private createSendFunction(
-    ws: ServerWebSocket<WebSocketData<T>>,
+    ws: ServerWebSocket<WebSocketData<T>>
   ): SendFunction {
     return <Schema extends MessageSchemaType>(
       schema: Schema,
-      payload: Schema['shape'] extends { payload: infer P }
+      payload: Schema["shape"] extends { payload: infer P }
         ? P extends z.ZodTypeAny
           ? z.infer<P>
           : unknown
         : unknown,
-      meta: Partial<z.infer<Schema['shape']['meta']>> = {},
+      meta: Partial<z.infer<Schema["shape"]["meta"]>> = {}
     ) => {
       try {
         // Extract the message type from the schema
-        const messageType = schema.shape.type._def.value
+        const messageType = schema.shape.type._def.value;
 
         // Create the message object with the required structure
         const message = {
@@ -330,24 +328,24 @@ export class WebSocketRouter<
             ...meta,
           },
           ...(payload !== undefined && { payload }),
-        }
+        };
 
         // Validate the constructed message against the schema
-        const validationResult = schema.safeParse(message)
+        const validationResult = schema.safeParse(message);
 
         if (!validationResult.success) {
           console.error(
             `[ws] Failed to send message of type "${messageType}": Validation error`,
-            validationResult.error.errors,
-          )
-          return
+            validationResult.error.errors
+          );
+          return;
         }
 
         // Send the validated message
-        ws.send(JSON.stringify(validationResult.data))
+        ws.send(JSON.stringify(validationResult.data));
       } catch (error) {
-        console.error(`[ws] Error sending message:`, error)
+        console.error(`[ws] Error sending message:`, error);
       }
-    }
+    };
   }
 }

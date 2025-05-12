@@ -8,6 +8,7 @@ export {}
 declare global {
   const AUTH_EVENT_IDENTIFIERS: typeof import('../../composables/useBetterAuth')['AUTH_EVENT_IDENTIFIERS']
   const EffectScope: typeof import('vue')['EffectScope']
+  const IN_BROWSER: typeof import('../../composables/useDisplay')['IN_BROWSER']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const authClient: typeof import('../../composables/useBetterAuth')['authClient']
@@ -327,4 +328,7 @@ declare global {
   // @ts-ignore
   export type { ZilaMessagePayload, ZilaComposableMessageCallback, ZilaDecodedMessage } from '../../composables/useCashflowSocket'
   import('../../composables/useCashflowSocket')
+  // @ts-ignore
+  export type { SSROptions } from '../../composables/useDisplay'
+  import('../../composables/useDisplay')
 }

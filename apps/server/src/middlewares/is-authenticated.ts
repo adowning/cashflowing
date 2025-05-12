@@ -1,13 +1,12 @@
-import { createMiddleware } from 'hono/factory'
-import { HTTPException } from 'hono/http-exception'
+import { createMiddleware } from "hono/factory";
+import { HTTPException } from "hono/http-exception";
 
-import type { AppEnv } from '../rest/types'
+import type { AppEnv } from "../rest/types";
 
 export default createMiddleware<AppEnv>(async (c, next) => {
-  const user = c.get('user')
-  console.log(user)
+  const user = c.get("user");
   if (!user) {
-    throw new HTTPException(401, { message: 'Unauthorized' })
+    throw new HTTPException(401, { message: "Unauthorized" });
   }
-  await next()
-})
+  await next();
+});

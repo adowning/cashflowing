@@ -1,4 +1,4 @@
-import { User } from "../index";
+import { Profile, User } from "../index";
 
 export interface GetUserInfo {
   uid: string;
@@ -62,6 +62,7 @@ export interface UpdateSuspendUser {
 export type GetUserInfoResponseData = {
   code: number;
   user: Partial<User>;
+  profile: Partial<Profile>;
   // message: string;
 };
 export type GetUserBalanceResponseData = {

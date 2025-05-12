@@ -18,21 +18,21 @@ import {
   GetGameSearchResponse,
   Search,
   User,
-} from '@cashflow/types'
-import { HonoRequest } from 'hono'
+} from "@cashflow/types";
+import { HonoRequest } from "hono";
 // Helper function to get a random element from an array
 // const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
-import db from '@cashflow/db'
-import { faker } from '@faker-js/faker'
+import db from "@cashflow/db";
+import { faker } from "@faker-js/faker";
 
 // Helper function to get a random number within a range
 const getRandomInt = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min + 1)) + min
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 export async function getGameList(req: HonoRequest) {
   const games = await db.game.findMany({
     where: { isActive: true },
-  })
+  });
 
   // const list: Game = {
   //   id: "",
@@ -88,9 +88,9 @@ export async function getGameList(req: HonoRequest) {
     code: 200,
     list: games,
     total: games.length,
-  }
+  };
 
-  return new Response(JSON.stringify(response))
+  return new Response(JSON.stringify(response));
 }
 
 /**
@@ -101,12 +101,12 @@ export async function getGameList(req: HonoRequest) {
 export async function getGameGameCategory(req: HonoRequest): Promise<Response> {
   try {
     // Extract query parameters if needed (e.g., type=developers)
-    const url = new URL(req.url)
-    const type = url.searchParams.get('type')
+    const url = new URL(req.url);
+    const type = url.searchParams.get("type");
 
-    let categories: GameCategory[] = []
+    let categories: GameCategory[] = [];
 
-    if (type === 'developers') {
+    if (type === "developers") {
       // Fetch operators (acting as developers in this context based on schema)
       const operators = await db.operator.findMany({
         where: { isActive: true },
@@ -116,7 +116,7 @@ export async function getGameGameCategory(req: HonoRequest): Promise<Response> {
           slug: true,
           logo: true,
         },
-      })
+      });
 
       // categories = operators.map((operator) => ({
       //   image: operator.logo || '',
@@ -132,36 +132,36 @@ export async function getGameGameCategory(req: HonoRequest): Promise<Response> {
       // This is a simplified approach; a dedicated GameCategory model would be better
       const distinctGameBanks = await db.game.findMany({
         select: { gamebank: true },
-        distinct: ['gamebank'],
+        distinct: ["gamebank"],
         where: { active: true },
-      })
+      });
 
       const banks = distinctGameBanks.map((game) => ({
-        image: '', // No specific image for these categories
-        pictures: '',
+        image: "", // No specific image for these categories
+        pictures: "",
         game_count: 0, // Need to implement logic to count games per bank
-        name: game.gamebank || 'Unknown',
-        slug: game.gamebank || 'unknown',
+        name: game.gamebank || "Unknown",
+        slug: game.gamebank || "unknown",
         games: [], // Games are not included in this category list
         page_no: 1, // Assuming a single page
-      }))
+      }));
     }
 
     const response: GetGameCategoriesResponse = {
       code: 200,
       data: categories,
-      messsage: 'Game categories retrieved successfully',
-    }
+      messsage: "Game categories retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error fetching game categories:', error)
+    console.error("Error fetching game categories:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -172,19 +172,19 @@ export async function getGameGameCategory(req: HonoRequest): Promise<Response> {
  */
 export async function getGameSearch(req: HonoRequest): Promise<Response> {
   try {
-    const url = new URL(req.url)
-    const searchTerm = url.searchParams.get('q') || '' // Get search term from query params
-    const limit = parseInt(url.searchParams.get('limit') || '20', 10)
-    const offset = parseInt(url.searchParams.get('offset') || '0', 10)
+    const url = new URL(req.url);
+    const searchTerm = url.searchParams.get("q") || ""; // Get search term from query params
+    const limit = parseInt(url.searchParams.get("limit") || "20", 10);
+    const offset = parseInt(url.searchParams.get("offset") || "0", 10);
     // Search for games by name or title
-    const gamesessions = await db.gamesession.findMany()
+    const gamesessions = await db.gameSession.findMany();
 
     const games = await db.game.findMany({
       where: {
         active: true,
         OR: [
-          { name: { contains: searchTerm, mode: 'insensitive' } },
-          { title: { contains: searchTerm, mode: 'insensitive' } },
+          { name: { contains: searchTerm, mode: "insensitive" } },
+          { title: { contains: searchTerm, mode: "insensitive" } },
         ],
       },
       select: {
@@ -198,44 +198,44 @@ export async function getGameSearch(req: HonoRequest): Promise<Response> {
       },
       take: limit,
       skip: offset,
-    })
+    });
     const totalGames = await db.game.count({
       where: {
         active: true,
         OR: [
-          { name: { contains: searchTerm, mode: 'insensitive' } },
-          { title: { contains: searchTerm, mode: 'insensitive' } },
+          { name: { contains: searchTerm, mode: "insensitive" } },
+          { title: { contains: searchTerm, mode: "insensitive" } },
         ],
       },
-    })
+    });
 
     const searchResults: Search[] = games.map((game) => ({
       id: game.id, // Using game.id as the ID
       name: game.name,
       image: `/images/${game.developer}/${game.name}.webp`, // Placeholder for image
-      developer: game.developer || 'Unknown', // Using developer as developer
+      developer: game.developer || "Unknown", // Using developer as developer
       is_demo: game.denomination === 0, // Assuming 0 denomination means demo
-    }))
+    }));
 
     const responseData: GameSearchResponse = {
       list: searchResults,
       total: totalGames,
-    }
+    };
 
     const response: GetGameSearchResponse = {
       code: 200,
       data: responseData,
-      message: 'Game search results retrieved successfully',
-    }
-    return new Response(JSON.stringify(response))
+      message: "Game search results retrieved successfully",
+    };
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error searching games:', error)
+    console.error("Error searching games:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -246,12 +246,12 @@ export async function getGameSearch(req: HonoRequest): Promise<Response> {
  */
 export async function getGameEnter(
   req: HonoRequest,
-  user: Partial<User>,
+  user: Partial<User>
 ): Promise<Response> {
   try {
-    const body: GameEnterBody = await req.json()
-    const gameId = Array.isArray(body.id) ? body.id[0] : body.id // Handle single ID or array
-    const isDemo = body.demo || false
+    const body: GameEnterBody = await req.json();
+    const gameId = Array.isArray(body.id) ? body.id[0] : body.id; // Handle single ID or array
+    const isDemo = body.demo || false;
 
     // Fetch game details
     const game = await db.game.findUnique({
@@ -262,13 +262,13 @@ export async function getGameEnter(
         operatorId: true,
         // Add other fields needed for game entry if available in schema
       },
-    })
+    });
 
     if (!game) {
       return new Response(
-        JSON.stringify({ message: 'Game not found', code: 404 }),
-        { status: 404 },
-      )
+        JSON.stringify({ message: "Game not found", code: 404 }),
+        { status: 404 }
+      );
     }
 
     // Here you would typically interact with a game developer's API
@@ -276,28 +276,28 @@ export async function getGameEnter(
     // This is a placeholder implementation.
 
     const gameEnterData: GameEnterResponse = {
-      method: 'GET', // Or POST, depending on the developer
-      parames: '', // Parameters for the game launch
-      developer: game.operatorId || 'unknown', // Using operatorId as developer identifier
+      method: "GET", // Or POST, depending on the developer
+      parames: "", // Parameters for the game launch
+      developer: game.operatorId || "unknown", // Using operatorId as developer identifier
       reserve: faker.string.uuid(), // Placeholder for a session token or similar
       weburl: `https://example.com/launchgame?gameId=${game.id}&demo=${isDemo}&userId=${user.id}`, // Placeholder URL
-    }
+    };
 
     const response: GetGameEnterResponse = {
       code: 200,
       data: gameEnterData,
-      message: 'Game entry data retrieved successfully',
-    }
+      message: "Game entry data retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error entering game:', error)
+    console.error("Error entering game:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -308,11 +308,11 @@ export async function getGameEnter(
  */
 export async function getGameUserGame(req: HonoRequest): Promise<Response> {
   try {
-    const body: GameUserBody = await req.json()
-    const categorySlug = body.game_categories_slug
-    const page = body.page || 1
-    const limit = body.limit || 20
-    const offset = (page - 1) * limit
+    const body: GameUserBody = await req.json();
+    const categorySlug = body.game_categories_slug;
+    const page = body.page || 1;
+    const limit = body.limit || 20;
+    const offset = (page - 1) * limit;
 
     // Fetch games based on category slug (assuming category slug maps to gamebank or operator slug)
     // This logic might need refinement based on how categories are structured
@@ -330,43 +330,43 @@ export async function getGameUserGame(req: HonoRequest): Promise<Response> {
       },
       take: limit,
       skip: offset,
-    })
+    });
 
     const totalGames = await db.game.count({
       where: {
         active: true,
         OR: [{ gamebank: categorySlug }, { operator: { slug: categorySlug } }],
       },
-    })
+    });
 
     const userGames: Search[] = games.map((game) => ({
       id: game.id, // Using game.id as the ID
       name: game.name,
-      image: '', // Placeholder for image
-      developer: game.developer || 'Unknown', // Using developer as developer
+      image: "", // Placeholder for image
+      developer: game.developer || "Unknown", // Using developer as developer
       is_demo: game.denomination === 0, // Assuming 0 denomination means demo
-    }))
+    }));
 
     const responseData: GameSearchResponse = {
       list: userGames as Array<Search>,
       total: totalGames,
-    }
+    };
 
     const response: GetGameSearchResponse = {
       code: 200,
       data: responseData,
-      message: 'User games retrieved successfully',
-    }
+      message: "User games retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error fetching user games:', error)
+    console.error("Error fetching user games:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -377,12 +377,12 @@ export async function getGameUserGame(req: HonoRequest): Promise<Response> {
  */
 export async function getGameFavoriteGame(
   req: HonoRequest,
-  user: Partial<User>,
+  user: Partial<User>
 ): Promise<Response> {
   try {
-    const body = await req.json()
-    const gameId = body.gameId // Assuming gameId is provided in the body
-    const isFavorite = body.isFavorite // Assuming isFavorite (boolean) is provided
+    const body = await req.json();
+    const gameId = body.gameId; // Assuming gameId is provided in the body
+    const isFavorite = body.isFavorite; // Assuming isFavorite (boolean) is provided
 
     // You would typically have a many-to-many relationship between User and Game
     // for favorites, or a dedicated UserFavoriteGame model.
@@ -391,24 +391,24 @@ export async function getGameFavoriteGame(
 
     // Placeholder logic: Just acknowledge the request
     console.log(
-      `User ${user.id} is trying to set game ${gameId} as favorite: ${isFavorite}`,
-    )
+      `User ${user.id} is trying to set game ${gameId} as favorite: ${isFavorite}`
+    );
 
     // Assuming a simple success response is sufficient based on store action
     const response = {
       code: 200,
-      message: 'Favorite game status updated',
-    }
+      message: "Favorite game status updated",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error updating favorite game status:', error)
+    console.error("Error updating favorite game status:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -418,7 +418,7 @@ export async function getGameFavoriteGame(
  * @returns Response
  */
 export async function getGameFavoriteGameList(
-  req: HonoRequest,
+  req: HonoRequest
 ): Promise<Response> {
   try {
     // Fetch the user's favorite games.
@@ -426,7 +426,7 @@ export async function getGameFavoriteGameList(
     // in the provided schema. Assuming a relationship or a separate model exists.
     // Placeholder: Returning an empty list or some dummy data
 
-    const favoriteGameIds: (number | string)[] = [] // Placeholder for favorite game IDs
+    const favoriteGameIds: (number | string)[] = []; // Placeholder for favorite game IDs
     // Example: Fetching favorite game IDs if a relation existed:
     // const userWithFavorites = await db.user.findUnique({
     //   where: { id: user.id },
@@ -439,18 +439,18 @@ export async function getGameFavoriteGameList(
     const response: GetGameFavoriteListResponse = {
       code: 200,
       data: favoriteGameIds,
-      message: 'Favorite game list retrieved successfully',
-    }
+      message: "Favorite game list retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error fetching favorite game list:', error)
+    console.error("Error fetching favorite game list:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -461,13 +461,13 @@ export async function getGameFavoriteGameList(
  */
 export async function getGameHistory(
   req: HonoRequest,
-  user: Partial<User>,
+  user: Partial<User>
 ): Promise<Response> {
   try {
-    const body = await req.json()
-    const page = body.page || 1
-    const limit = body.limit || 20
-    const offset = (page - 1) * limit
+    const body = await req.json();
+    const page = body.page || 1;
+    const limit = body.limit || 20;
+    const offset = (page - 1) * limit;
 
     // Fetch game sessions for the user's active profile
     const gameSessions = await db.gamesession.findMany({
@@ -477,50 +477,50 @@ export async function getGameHistory(
           select: { name: true }, // Include game name from operatorgame
         },
       },
-      orderBy: { startTime: 'desc' }, // Order by most recent
+      orderBy: { startTime: "desc" }, // Order by most recent
       take: limit,
       skip: offset,
-    })
+    });
 
     const totalGameSessions = await db.gamesession.count({
       where: { profileId: user.activeProfile?.id },
-    })
+    });
 
     const gameHistoryRecords: GameHistoryItem[] = gameSessions.map(
       (session: any) => ({
-        name: session.game?.name || 'Unknown Game', // Use game name
+        name: session.game?.name || "Unknown Game", // Use game name
         created_at: session.startTime.getTime(), // Convert Date to timestamp
-        amount: session.betAmount?.toString() || '0', // Bet amount
+        amount: session.betAmount?.toString() || "0", // Bet amount
         multiplier:
           session.winAmount && session.betAmount
             ? (session.winAmount / session.betAmount).toFixed(2)
-            : '0', // Calculate multiplier
+            : "0", // Calculate multiplier
         bet_id: session.id, // Using game session ID as bet ID
-        status: session.endTime ? 'Completed' : 'In Progress', // Simple status
+        status: session.endTime ? "Completed" : "In Progress", // Simple status
         profit: session.winAmount || 0 - (session.betAmount || 0), // Calculate profit
-      }),
-    )
+      })
+    );
 
     const responseData: GameHistoryResponse = {
       total_pages: Math.ceil(totalGameSessions / limit),
       record: gameHistoryRecords,
-    }
+    };
 
     const response: GetGameHistoryResponse = {
       code: 200,
       data: responseData,
-      message: 'Game history retrieved successfully',
-    }
+      message: "Game history retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error fetching game history:', error)
+    console.error("Error fetching game history:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -535,7 +535,7 @@ export async function getGameBigWin(req: HonoRequest): Promise<Response> {
     // This is a simplified implementation. "Big Win" logic might be more complex.
 
     // Fetch some recent game sessions with high win amounts relative to bet
-    const bigWinSessions = await db.gamesession.findMany({
+    const bigWinSessions = await db.gameSession.findMany({
       where: {
         winAmount: { gt: 0 }, // Only sessions with wins
         betAmount: { gt: 0 }, // Avoid division by zero
@@ -554,17 +554,17 @@ export async function getGameBigWin(req: HonoRequest): Promise<Response> {
           },
         },
       },
-      orderBy: { winAmount: 'desc' }, // Order by win amount (simplified)
+      orderBy: { winAmount: "desc" }, // Order by win amount (simplified)
       take: 20, // Get top 20 for example
-    })
+    });
 
     const bigWinItems: GameBigWinItem[] = bigWinSessions.map((session) => {
       const _developer = session.game.name.substring(
         session.game.name.toLocaleLowerCase().length,
-        session.game.name.toLowerCase().length - 3,
-      )
+        session.game.name.toLowerCase().length - 3
+      );
       // if (_developer.toLowerCase() !== "rtg") console.log(_developer.toLowerCase());
-      let developer
+      let developer;
       // switch (_developer.toLowerCase()) {
       //   case "net":
       //     developer = "netent";
@@ -573,52 +573,52 @@ export async function getGameBigWin(req: HonoRequest): Promise<Response> {
       //   case "rtg":
       //     developer = "redtiger";
       // }
-      if (_developer.toLowerCase().includes('ng')) developer = 'netgame'
-      if (_developer.toLowerCase().includes('net')) developer = 'netent'
-      if (_developer.toLowerCase().includes('rtg')) developer = 'redtiger'
-      if (_developer.toLowerCase().includes('nlc')) developer = 'nolimit'
-      if (_developer.toLowerCase().includes('bfg')) developer = 'bigfish'
+      if (_developer.toLowerCase().includes("ng")) developer = "netgame";
+      if (_developer.toLowerCase().includes("net")) developer = "netent";
+      if (_developer.toLowerCase().includes("rtg")) developer = "redtiger";
+      if (_developer.toLowerCase().includes("nlc")) developer = "nolimit";
+      if (_developer.toLowerCase().includes("bfg")) developer = "bigfish";
       // if (developer !== "redtiger") console.log(developer);
-      let username = session.profile?.userProfileUseridtouser?.username
-      if (username.length > 6) username = username.substring(0, 6) + '..'
+      let username = session.profile?.userProfileUseridtouser?.username;
+      if (username.length > 6) username = username.substring(0, 6) + "..";
 
       return {
         game_id: session.gameId,
-        game_name: session.game?.name || 'Unknown Game',
+        game_name: session.game?.name || "Unknown Game",
         game_icon: `/images/games/${developer}/${session.game.name.toLowerCase()}.avif`, // Placeholder for game icon
-        user_name: username || 'Anonymous',
+        user_name: username || "Anonymous",
         user_vip_group: 0, // Placeholder
         user_vip_level: 0, // Placeholder
-        bet_amount: session.betAmount?.toString() || '0',
+        bet_amount: session.betAmount?.toString() || "0",
         multiplier:
           session.winAmount && session.betAmount
             ? (session.winAmount / session.betAmount).toFixed(2)
-            : '0',
-        win_amount: session.winAmount?.toString() || '0',
+            : "0",
+        win_amount: session.winAmount?.toString() || "0",
         time: session.startTime.getTime(), // Timestamp
-      }
-    })
+      };
+    });
 
     const responseData: GameBigWinData = {
       high_rollers: bigWinItems, // Using the same list for simplicity
       lucky_bets: bigWinItems, // Using the same list for simplicity
-    }
+    };
 
     const response: GetGameBigWinResponse = {
       code: 200,
       data: responseData,
-      message: 'Big win data retrieved successfully',
-    }
+      message: "Big win data retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error fetching big win data:', error)
+    console.error("Error fetching big win data:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -635,24 +635,24 @@ export async function getGameSpinPage(req: HonoRequest): Promise<Response> {
       // Add data relevant to a spin page, e.g., spin count, rewards, etc.
       spinCount: getRandomInt(0, 10),
       lastSpinTime: faker.date.recent().getTime(),
-      availableRewards: ['Bonus Cash', 'Free Spins', 'XP Boost'],
-    }
+      availableRewards: ["Bonus Cash", "Free Spins", "XP Boost"],
+    };
 
     const response = {
       code: 200,
       data: spinPageData,
-      message: 'Spin page data retrieved successfully',
-    }
+      message: "Spin page data retrieved successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error fetching spin page data:', error)
+    console.error("Error fetching spin page data:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 
@@ -670,25 +670,25 @@ export async function getGameSpin(req: HonoRequest): Promise<Response> {
     const spinResult = {
       // Add data representing the result of the spin, e.g., win amount, reward type, etc.
       winAmount: faker.datatype.boolean(0.3) ? getRandomInt(100, 1000) : 0, // 30% chance of winning
-      rewardType: faker.datatype.boolean(0.5) ? 'Bonus Cash' : 'Nothing',
-      message: 'You spun the wheel!',
-    }
+      rewardType: faker.datatype.boolean(0.5) ? "Bonus Cash" : "Nothing",
+      message: "You spun the wheel!",
+    };
 
     const response = {
       code: 200,
       data: spinResult,
-      message: 'Spin action completed',
-    }
+      message: "Spin action completed",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Error performing spin action:', error)
+    console.error("Error performing spin action:", error);
     return new Response(
       JSON.stringify({ message: `Internal server error: ${error}`, code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 

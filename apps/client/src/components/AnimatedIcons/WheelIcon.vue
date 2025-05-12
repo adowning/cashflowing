@@ -236,7 +236,7 @@
     <!-- </div> -->
     <div
       v-if="complete"
-      class="futex-cell flex justify-center text-white"
+      class="futex-cell flex justify-center text-white onacona"
       style="
         width: 90px;
         line-height: 1;

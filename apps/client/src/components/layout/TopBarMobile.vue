@@ -3,7 +3,7 @@
   // import { useSocketStore } from '@/stores/socket'
   import { useUserStore } from "@/stores/user";
   import { ref } from "vue";
-  import PlayerAvatar from "./PlayerAvatar.vue";
+  // import PlayerAvatar from "./PlayerAvatar.vue";
   // import { useSocketStore } from "@/stores/socket";
   import { useAuthStore } from "@/stores/auth";
   import { useDepositStore } from "@/stores/deposit";
@@ -137,15 +137,15 @@
     });
   }
 
-  watch(getDepositHistoryItems, (newVal) => {
-    console.log(currentProfile);
-    const pendings = newVal.find(
-      (purch: { status: string }) => purch.status === "PENDING_PAYMENT"
-    );
-    if (pendings) {
-      countdownTimer(new Date(pendings.createdAt));
-    }
-  });
+  // watch(getDepositHistoryItems, (newVal) => {
+  //   console.log(currentProfile);
+  //   const pendings = newVal.find(
+  //     (purch: { status: string }) => purch.status === "PENDING_PAYMENT"
+  //   );
+  //   if (pendings) {
+  //     countdownTimer(new Date(pendings.createdAt));
+  //   }
+  // });
   eventBus.on("updatePurchases", (newVal) => {
     // console.log(newVal);
     // console.log(pendingTransactions.value);
@@ -163,8 +163,10 @@
     // }
   });
   const currentExp = ref(0);
+  let ran = false;
   onMounted(async () => {
-    await dispatchUserDepositHistory();
+    if (ran === false) await dispatchUserDepositHistory();
+    ran = true;
     //@ts-ignore
     depositItems.value = getDepositHistoryItems;
   });

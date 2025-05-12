@@ -25,10 +25,12 @@
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "motion-v": "^1.1.0-alpha.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^4.2.0",
     "vite-plugin-app-loading": "^0.3.1",
     "vue": "^3.4.27",
+    "vue-inline-svg": "^4.0.1",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {

@@ -98,7 +98,7 @@ export class Network {
     this.request = this.createRequestFunction(this.service);
     // route = "/api" + route;
     // if (route.includes("auth")) route = route.replace("/api", "");
-    if (!route.includes("auth")) route = '/api' + route
+    if (!route.includes("auth")) route = "/api" + route;
     console.log(route);
     await this.request({
       url: route,
@@ -117,7 +117,7 @@ export class Network {
   private GET(route: string, data: any, next: Function) {
     this.request = this.createRequestFunction(this.service);
     route = "/api" + route;
-    if (!route.includes("auth")) route = '/api' + route
+    if (!route.includes("auth")) route = "/api" + route;
     return this.request({
       url: route,
       method: "GET",

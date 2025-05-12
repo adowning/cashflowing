@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="roxdisplay">
     <div v-if="initialAuthCheckComplete && globalStore.isLoading">
       <GlobalLoading />
     </div>
@@ -32,45 +32,49 @@
         <p>Processing...</p>
       </div> -->
     </div>
+    <GlobalLoading v-else />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from "vue";
-  // import { useBetterAuth } from "@/composables/useBetterAuth"; // Adjust path
   import { useGlobalStore } from "./stores/global";
   import LoginView from "./views/LoginView.vue";
   import { loadingFadeOut } from "virtual:app-loading";
-  // import { getToken } from "./utils/auth";
   import { WebSocketService } from "./utils/websocket";
   import { useAuthStore } from "./stores/auth";
   import { useUserStore } from "./stores/user";
+  import { useVipStore } from "./stores/vip";
+  import { useGameStore } from "./stores/game";
 
   const globalStore = useGlobalStore();
+  const { dispatchGameSearch, dispatchGameBigWin } = useGameStore();
+
   const {
     authenticated,
-    isLoading,
     errorState,
     initialAuthCheckComplete,
+    setInitialAuthCheckComplete,
     getToken,
-    // initializeAuthSystem,
-    // isWebSocketConnected,
   } = useAuthStore();
-  const { currentUser } = useUserStore();
-
+  const { currentUser, dispatchUpdateCurrentUser } = useUserStore();
   const { isMobile } = useDisplay();
-
-  const signInForm = ref({ email: "", password: "" });
   const isAuthenticated = computed(() => authenticated.loggedIn);
-  onMounted(() => {
-    // subscribeGlobalAuth()
+
+  const { dispatchVipInfo } = useVipStore();
+
+  onMounted(async () => {
     const token = getToken;
     if (token) {
       WebSocketService.getInstance().connect();
+      await dispatchUpdateCurrentUser();
+      await dispatchVipInfo();
+      await dispatchGameBigWin();
+      await dispatchGameSearch("");
+      setInitialAuthCheckComplete(true);
+    } else {
+      setInitialAuthCheckComplete(true);
     }
-    // console.log('App.vue mounted, useSupabaseAuth is active.')
     loadingFadeOut();
-    // isLoading = false
   });
 </script>
 <style></style>

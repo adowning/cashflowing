@@ -1,13 +1,18 @@
-<script setup></script>
+<script setup>
+  import { useAuthStore } from "@/stores/auth";
+
+  const { authenticated } = useAuthStore();
+  const isAuthenticated = computed(() => authenticated.loggedIn);
+</script>
 
 <template>
   <div
     class="relative mobile-section flex grow-1 flex-col m-0 p-0 w-screen min-h-screen h-screen overflow-hidden"
   >
-    <TopBarMobile />
+    <TopBarMobile v-if="isAuthenticated" />
 
     <slot />
-    <FooterBarMobile />
+    <FooterBarMobile v-if="isAuthenticated" />
   </div>
 </template>
 <style scoped>

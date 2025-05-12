@@ -1,12 +1,19 @@
 <script setup lang="ts">
   const { isMobile } = useDisplay();
-  console.log(isMobile.value);
+  const eventBus = useEventManager();
+  const settingsModal = ref(false);
+  // console.log(isMobile.value);
+  eventBus.on("settingsModal", (val) => {
+    console.log("x");
+    settingsModal.value = val;
+  });
 </script>
 <template>
   <BackGround />
+  <LiveWin />
   <GameCarousel />
   <FilterBar />
   <AdCarousel />
-  <FooterBar v-if="!isMobile" />
+  <SettingsView :has-cancel="false" :model-value="settingsModal" />
 </template>
 <style scoped></style>

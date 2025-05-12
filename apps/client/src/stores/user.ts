@@ -16,10 +16,8 @@ import type {
   GetUserBalanceResponseData,
 } from "@cashflow/types";
 import { Network } from "@/utils/Network";
-import type { Database } from "../types/database.types";
 
 // Define a more specific type for the user based on your Tables.user.Row
-export type UserData = Database["public"]["Tables"]["user"]["Row"] | null;
 const expScale = [
   1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000,
 ];
@@ -27,7 +25,6 @@ const expScale = [
 export const useUserStore = defineStore(
   "user",
   () => {
-    const token = ref<string>(getToken() || "");
     const currentUser = ref<Partial<User> | null>(null);
     const currentProfile = ref<Partial<Profile> | null>(null);
     const transactions = ref<Transaction[]>([]);
@@ -84,10 +81,7 @@ export const useUserStore = defineStore(
     const getUserBalance = () => {
       return userBalance;
     };
-    const setToken = (value: string) => {
-      _setToken(value);
-      token.value = value;
-    };
+
     const setSuccess = (value: boolean) => {
       success.value = value;
     };
@@ -134,16 +128,9 @@ export const useUserStore = defineStore(
       console.log(currentUser.value[stat]);
       // }
     };
-    const changeRoles = (role: string) => {
-      const newToken = `token-${role}`;
-      token.value = newToken;
-      _setToken(newToken);
-      location.reload();
-    };
 
     const resetToken = () => {
       removeToken();
-      token.value = "";
       roles.value = [];
     };
     // const register = async (username: string, password: string): Promise<boolean> => {
@@ -248,13 +235,14 @@ export const useUserStore = defineStore(
     };
     const dispatchUpdateCurrentUser = async () => {
       setSuccess(false);
-      const route: string = NETWORK_CONFIG.LOGIN.ME;
+      const route: string = "/auth/session";
       const network: Network = Network.getInstance();
       // response call back function
       const next = (response: GetUserInfoResponseData) => {
         if (response.code == 200) {
           setSuccess(true);
           setCurrentUser(response.user);
+          setCurrentProfile(response.profile);
         } else {
           setErrorMessage(handleException(response.code));
         }
@@ -311,7 +299,6 @@ export const useUserStore = defineStore(
       getCurrentProfile,
       setUserGameStat,
       dispatchUserBalance,
-      token,
       updateCurrentUserBalance,
       roles,
       setUserInfo,
@@ -325,7 +312,7 @@ export const useUserStore = defineStore(
       dispatchUserCashtag,
       // username,
       // login2,
-      setToken,
+      dispatchUpdateCurrentUser,
       currentUser,
       currentProfile,
       setCurrentProfile,
@@ -333,7 +320,6 @@ export const useUserStore = defineStore(
       clearUser,
       clearProfile,
       percentOfVipLevel,
-      changeRoles,
       resetToken,
       isAuthenticated,
     };

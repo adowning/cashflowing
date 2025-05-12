@@ -170,7 +170,7 @@ export const useDepositStore = defineStore("deposit", () => {
   const dispatchUserDepositHistory = async () => {
     // Keeping 'any' type as in original
     setSuccess(false);
-    const route: string = NETWORK_CONFIG.DEPOSIT_PAGE.HISTORY;
+    const route: string = "/api/user/deposithistory";
     const network: Network = Network.getInstance();
 
     const next = (response: GetDepositHistoryResponse) => {

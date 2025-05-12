@@ -3,8 +3,6 @@
 import { useUserStore } from '@/stores/user'
 import { useAuthStore } from '@/stores/auth'
 import { useVipStore } from '@/stores/vip'
-import AvatarXPJson from '@/assets/anim/avatar_xp.json'
-// import { CircleProgressBar } from 'circle-progress.vue'
 const expScale = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000]
 const eventBus = useEventManager()
 const props = defineProps({
@@ -13,21 +11,17 @@ const props = defineProps({
     default: false,
   },
 })
-// const userStore = useUserStore()
-const { currentUser, currentProfile } = useUserStore()
-const authStore = useAuthStore()
-const vipStore = useVipStore()
-
-// const currentUser = authStore.userInfo
+const { currentUser,  } = useUserStore()
+const {getVipInfo} = useVipStore()
 const gaining_exp = ref(false)
-const nextXpLevel = expScale[currentProfile?.vipRankLevel]
+const nextXpLevel = expScale[getVipInfo.level]
 const percentFilled = ref(1)
 const circle = ref()
 const percentage = ref(0)
-percentage.value = 10000 / currentUser?.vipPoints
-percentFilled.value = nextXpLevel - currentUser?.vipPoints / 100
+percentage.value = 10000 / getVipInfo.bet_exp
+percentFilled.value = nextXpLevel - getVipInfo.bet_exp/ 100
 eventBus.on('gainingExp', () => {
-  const expNeeded = nextXpLevel - currentUser.vipPoints
+  const expNeeded = nextXpLevel -getVipInfo.bet_exp
   console.log(expNeeded)
   setTimeout(() => {
     gaining_exp.value = true
@@ -37,10 +31,10 @@ eventBus.on('gainingExp', () => {
 async function showProfile() {
   eventBus.emit('profileOpen', true)
 }
-const vipInfo = computed(() => {
-  const { getVipInfo } = storeToRefs(vipStore)
-  return getVipInfo.value
-})
+// const vipInfo = computed(() => {
+//   const { getVipInfo } = storeToRefs(vipStore)
+//   return getVipInfo.value
+// })
 // console.log(vipInfo.value.deposit_exp)
 // console.log(vipInfo.value.rank_deposit_exp)
 // const depositRate = computed(() => {
@@ -52,10 +46,10 @@ const vipInfo = computed(() => {
 // })
 // console.log((2 / 100) * 100)
 const betRate = computed(() => {
-  if ((vipInfo.value.bet_exp / vipInfo.value.rank_bet_exp) * 100 >= 100) {
+  if ((getVipInfo.bet_exp / getVipInfo.rank_bet_exp) * 100 >= 100) {
     return 100
   } else {
-    return (vipInfo.value.bet_exp / vipInfo.value.rank_bet_exp) * 100
+    return (getVipInfo.bet_exp / getVipInfo.rank_bet_exp) * 100
   }
 })
 function pulseGlow() {
@@ -230,7 +224,7 @@ watch(props, (newValue) => {
       <!-- <img v-if="sparkle" class="absolute h-[60px] w-[40px] flex" src="/images/sparkle.gif" /> -->
       <div
         class="absolute h-[19px] flex bg-white opacity-99"
-        :style="`${currentUser?.name.length <= 6 ? 'font-size: large' : 'font-size: medium'}`"
+        :style="`${currentUser.name?.length <= 6 ? 'font-size: large' : 'font-size: medium'}`"
         style="
           border-radius: 5px;
           left: -10px;
@@ -303,7 +297,7 @@ watch(props, (newValue) => {
           "
         >
           <!-- {{ currentUser.vipRank.rankLevel }} -->
-          {{ currentUser?.vipRankLevel }}
+          {{ getVipInfo.level }}
         </div>
       </div>
 

@@ -329,6 +329,8 @@
     "authClient": true,
     "AUTH_EVENT_IDENTIFIERS": true,
     "ZilaDecodedMessage": true,
-    "IEventManagerService": true
+    "IEventManagerService": true,
+    "IN_BROWSER": true,
+    "SSROptions": true
   }
 }

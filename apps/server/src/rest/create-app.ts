@@ -87,7 +87,6 @@ export default function createApp() {
   app
     .use("/*", cors())
     .use("*", logger())
-    .basePath(BASE_PATH)
 
     .use(async (c, next) => {
       if (c.req.method === "OPTIONS") {
@@ -100,7 +99,7 @@ export default function createApp() {
         });
       }
       // console.log("here2");
-      // console.log("here1");
+      console.log("here1");
       if (c.req.path.startsWith("/auth/session")) return await me(c.req);
       if (c.req.path.startsWith("/auth/login")) return await login(c.req);
       if (c.req.path.startsWith("/auth/register")) return await register(c.req);
@@ -114,7 +113,8 @@ export default function createApp() {
       }
 
       return serveStatic({ path: "./public" })(c, next);
-    });
+    })
+    .basePath(BASE_PATH);
 
   app
     // .use(
@@ -147,10 +147,8 @@ export default function createApp() {
         return next();
       }
     )
-
     .use(isAuthenticated)
     .notFound(notFound)
-
     .onError(onError) as OpenAPIHono;
   registerRoutes(app);
   return app;

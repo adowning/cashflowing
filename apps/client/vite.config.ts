@@ -15,7 +15,7 @@ const proxy: Record<string, string | any> = {
 
     headers: { Connection: "keep-alive" },
   },
-  "/auth/me": {
+  "/auth/session": {
     target: "http://localhost:6589",
     secure: false,
     rewrite: (path: string) => path.replace(/^\/api/, "\/"),
@@ -39,7 +39,7 @@ const proxy: Record<string, string | any> = {
   "/api": {
     target: "http://localhost:6589",
     secure: false,
-    rewrite: (path: string) => path.replace(/^\/api/, "/api"),
+    rewrite: (path: string) => path.replace(/^\/api/, ""),
     headers: { Connection: "keep-alive" },
   },
 

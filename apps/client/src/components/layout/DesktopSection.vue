@@ -1,4 +1,8 @@
 <script setup>
+  import { useAuthStore } from "@/stores/auth";
+
+  const { authenticated } = useAuthStore();
+  const isAuthenticated = computed(() => authenticated.loggedIn);
   const { isMobile } = useDisplay();
   console.log(isMobile.value);
 </script>
@@ -22,7 +26,7 @@
     <div class="w-full h-screen flex items-center justify-center">
       <!-- <div class="w-screen"> -->
       <div
-        class="game-area-frame-background w-[90%] rounded-xl shadow-2xl border-1 border-white-800 relative overflow-hidden flex flex-col"
+        class="game-area-frame-background w-[90%] rounded-xl shadow-2xl border-1 border-white-800 relative overflow-hidden flex flex-col max-w-[1500px]"
       >
         <div
           class="h-full w-full flex flex-col items-center justify-center p-0 sm:p-0"
@@ -41,7 +45,9 @@
                   class="mt-0 space-y-0 w-full h-full min-w-[580px] overflow-hidden"
                 >
                   <ShowToasts />
+                  <TopBar v-if="isAuthenticated" />
                   <slot />
+                  <FooterBar v-if="isAuthenticated" />
                   <!-- <div
                     class="h-16 bg-slate-700/40 rounded flex items-center justify-center text-slate-500 text-sm"
                   >

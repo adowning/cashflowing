@@ -81,7 +81,7 @@ const isFeatured = (game: Game) => game.featured === true
             }"
             style="background-size: 100% 100%; background-repeat: no-repeat"
           >
-            <div :class="isFeatured(game) ? 'card__banner_feat' : 'card__banner'">
+            <div :class="isFeatured(game) ? 'card__banner_feat' : 'card__banner'" style="">
               <img
                 v-if="game.temperature === 'cold'"
                 src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/49240/hand-banner-blue.png"
@@ -96,11 +96,11 @@ const isFeatured = (game: Game) => game.featured === true
               />
               <img
                 v-else
-                src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/49240/hand-banner-black.png"
+                src="/images/games/hand-banner-black.png"
                 alt=""
                 class="card__banner-img"
               />
-              <div class="card__banner__text bungee pt-.5" style="line-height: 1.7">
+              <div class="card__banner__text bungee pt-1" style="line-height: 1.7">
                 <span :style="game.name.length > 12 ? 'font-size: .8rem; ' : 'font-size: 1rem'">
                   {{ game.name }}
                 </span>
@@ -109,17 +109,25 @@ const isFeatured = (game: Game) => game.featured === true
 
             <div
               :class="isFeatured(game) ? 'card-image-container feat box' : 'card-image-container'"
-              class="absolute top-0"
+              class="absolute top-0 overflow-hidden"
               style="z-index: 1"
             >
-              <img
+              <!-- <img
                 :src="`https://images.cashflowcasino.com/${game.developer}/${game.name.toLowerCase()}.avif`"
                 :alt="game.title"
-                class="game-image absolute top-0"
-                style="z-index: 0"
+                class="game-image absolute "
+                style="z-index: 0; height: 70% ; width: 100%"
+                @error="onImageError"
+              /> -->
+              <div
+                style="width: 92%; top: 20px; height: 260px; padding-top: 20px; background-position: bottom; 
+                background-size: 100% 100%; background-repeat: no-repeat;
+                "
+                :style="`background-image: url('https://images.cashflowcasino.com/${game.developer}/${game.name.toLowerCase()}.avif');`"
+                :alt="game.title"
+                class="game-image absolute  "
                 @error="onImageError"
               />
-
                 <!-- <SnowEffectOverlay
                 class="absolute bottom-20"
                 style="z-index: 2;  width: 30px; bottom: -30px; opacity: .8; height: 20%; "
@@ -319,7 +327,8 @@ const isFeatured = (game: Game) => game.featured === true
 .game-card {
   flex-shrink: 0;
   min-width: 200px;
-  max-width: 280px;
+  max-width: 220px;
+  max-height: 400px;
   width: calc(100vw - 220px);
   margin-left: 10px;
   height: 100%;

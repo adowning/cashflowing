@@ -1,4 +1,4 @@
-import { TransactionType, TransactionStatus } from '@cashflow/db/prisma/client'
+import { TransactionType, TransactionStatus } from "@cashflow/db/prisma/client";
 import {
   DepositHistoryItem,
   DepositHistoryResponse,
@@ -12,72 +12,72 @@ import {
   ProductWithoutTransactions,
   SubmitDepositResponse,
   User,
-} from '@cashflow/types'
-import { HonoRequest } from 'hono'
-import db from '@cashflow/db'
+} from "@cashflow/types";
+import { HonoRequest } from "hono";
+import db from "@cashflow/db";
 
 // Import PrismaClient
 
 export async function getDepositMethods(
   req: Request | HonoRequest,
-  user: Partial<User>,
+  user: Partial<User>
 ): Promise<Response> {
   const methods: GetPaymentItem[] = [
     {
-      id: 'pix',
-      icon: 'pix-icon',
-      name: 'PIX',
-      description: 'Instant Brazilian payment',
+      id: "pix",
+      icon: "pix-icon",
+      name: "PIX",
+      description: "Instant Brazilian payment",
       min: 10,
       max: 5000,
     },
-  ]
+  ];
 
   return new Response(
     JSON.stringify({
       code: 200,
       data: methods,
-      message: 'Success',
-    }),
-  )
+      message: "Success",
+    })
+  );
 }
 
 export async function createDeposit(
   req: Request | HonoRequest,
-  user: Partial<User>,
+  user: Partial<User>
 ): Promise<Response> {
   return new Response(
     JSON.stringify({
       code: 200,
-      data: { transactionId: 'tx_12345' },
-      message: 'Deposit created successfully',
-    } as SubmitDepositResponse),
-  )
+      data: { transactionId: "tx_12345" },
+      message: "Deposit created successfully",
+    } as SubmitDepositResponse)
+  );
 }
 // Assuming NETWORK_CONFIG is defined in a shared module
 // Assuming getUserFromHeader is a utility function for authentication
 
 export async function getProducts(req: HonoRequest): Promise<Response> {
   const products = await db.product.findMany({
-    orderBy: { priceInCents: 'asc' },
+    orderBy: { priceInCents: "asc" },
     include: {
       // operator: true,
       // transactions: true,
     },
-  })
+  });
 
   const response: GetProductsResponse = {
     code: 200,
     products,
-    message: 'Products',
-  }
+    message: "Products",
+  };
 
-  return new Response(JSON.stringify(response))
+  return new Response(JSON.stringify(response));
 }
 
 export async function getOperatorData(
   req: HonoRequest,
-  user: Partial<User>,
+  user: Partial<User>
 ): Promise<Response> {
   const _operator = await db.operator.findUnique({
     where: {
@@ -86,8 +86,8 @@ export async function getOperatorData(
     include: {
       products: true,
     },
-  })
-  if (_operator == null) throw new Error('Operator not found')
+  });
+  if (_operator == null) throw new Error("Operator not found");
   const products: ProductWithoutTransactions[] = _operator.products.map(
     (product): ProductWithoutTransactions => {
       return {
@@ -110,22 +110,22 @@ export async function getOperatorData(
         createdAt: product.createdAt,
         updatedAt: null,
         operator: null,
-      }
-    },
-  )
+      };
+    }
+  );
 
   const operator: OperatorData = {
     id: _operator.id,
     acceptedPayments: _operator.acceptedPayments,
     products,
-  }
+  };
   const response: GetOperatorDataResponse = {
     code: 200,
     operator,
-    message: 'Operator data with products',
-  }
+    message: "Operator data with products",
+  };
 
-  return new Response(JSON.stringify(response))
+  return new Response(JSON.stringify(response));
 }
 
 // Helper function to fetch deposit configuration
@@ -162,41 +162,41 @@ export async function getDepositConfig(req: HonoRequest, user: User) {
   const sampleCurrencyCfg = {
     BRL: [
       {
-        channel_id: 'pix_1',
-        channel_name: 'PIX 1',
-        channel_type: 'BRL',
+        channel_id: "pix_1",
+        channel_name: "PIX 1",
+        channel_type: "BRL",
         min: 20,
         max: 150000,
       },
       {
-        channel_id: 'pix_2',
-        channel_name: 'PIX 2',
-        channel_type: 'BRL',
+        channel_id: "pix_2",
+        channel_name: "PIX 2",
+        channel_type: "BRL",
         min: 50,
         max: 200000,
       },
     ],
     USD: [
       {
-        channel_id: 'usdt_trc20',
-        channel_name: 'USDT TRC20',
-        channel_type: 'USDT',
+        channel_id: "usdt_trc20",
+        channel_name: "USDT TRC20",
+        channel_type: "USDT",
         min: 10,
         max: 10000,
       },
     ],
     // Add other currencies and payment methods as needed, ideally fetched from DB
-  }
+  };
 
-  const sampleAmountList = ['20', '50', '100', '200', '500'] // Sample predefined amounts, ideally fetched from DB
+  const sampleAmountList = ["20", "50", "100", "200", "500"]; // Sample predefined amounts, ideally fetched from DB
 
   const sampleBonusConfig = [
     { type: 0, min: 100, max: 500, award: 50 }, // Fixed bonus of 50 for deposits between 100 and 500
     { type: 1, min: 501, max: 0, rate: 0.1 }, // 10% bonus for deposits over 500 (max 0 means no max), ideally fetched from DB
     // Add other bonus rules as needed
-  ]
+  ];
 
-  const depositUserSwitch = false // Example switch for user info requirement, ideally fetched from DB
+  const depositUserSwitch = false; // Example switch for user info requirement, ideally fetched from DB
 
   const configData = {
     cfg: sampleCurrencyCfg,
@@ -204,16 +204,16 @@ export async function getDepositConfig(req: HonoRequest, user: User) {
     bonus: sampleBonusConfig,
     deposit_user_switch: depositUserSwitch,
     // Add other configuration fields as needed
-  }
+  };
   // --- End Database Logic Placeholder ---
 
   const response: GetDepositResponse = {
     code: 200,
     data: configData,
-    message: 'Deposit configuration fetched successfully',
-  }
+    message: "Deposit configuration fetched successfully",
+  };
 
-  return new Response(JSON.stringify(response))
+  return new Response(JSON.stringify(response));
 }
 
 // Helper function to submit a deposit
@@ -221,7 +221,7 @@ export async function submitDeposit(req: HonoRequest, user: User) {
   // Authenticate the user
 
   // Parse the request body to get deposit details
-  const depositData: DepositItem = await req.json()
+  const depositData: DepositItem = await req.json();
 
   // --- Database and Payment Gateway Logic for Processing Deposit ---
   // In a real application, you would:
@@ -232,38 +232,38 @@ export async function submitDeposit(req: HonoRequest, user: User) {
   // 5. Update the 'transaction' status based on the payment gateway response (often via webhooks).
   // 6. Update the user's balance upon successful payment confirmation (usually via webhook).
 
-  console.log('Received deposit submission:', depositData)
+  console.log("Received deposit submission:", depositData);
 
-  let submissionResult: any = {} // Placeholder for the result from payment gateway
-  let newTransaction
+  let submissionResult: any = {}; // Placeholder for the result from payment gateway
+  let newTransaction;
 
   try {
     // 1. Validate deposit data (basic example)
-    if (typeof depositData.amount !== 'number' || depositData.amount <= 0) {
+    if (typeof depositData.amount !== "number" || depositData.amount <= 0) {
       return new Response(
-        JSON.stringify({ message: 'Invalid deposit amount', code: 400 }),
-        { status: 400 },
-      )
+        JSON.stringify({ message: "Invalid deposit amount", code: 400 }),
+        { status: 400 }
+      );
     }
     if (!depositData.channels_id) {
       return new Response(
-        JSON.stringify({ message: 'Payment channel not specified', code: 400 }),
+        JSON.stringify({ message: "Payment channel not specified", code: 400 }),
         {
           status: 400,
-        },
-      )
+        }
+      );
     }
 
     // Find the user's active profile to link the transaction
     const userProfile = await db.profile.findFirst({
       where: { userId: user.id, isActive: true },
-    })
+    });
 
     if (!userProfile) {
       return new Response(
-        JSON.stringify({ message: 'User profile not found', code: 404 }),
-        { status: 404 },
-      )
+        JSON.stringify({ message: "User profile not found", code: 404 }),
+        { status: 404 }
+      );
     }
 
     // 2. Create a new 'transaction' record with status PENDING
@@ -285,19 +285,19 @@ export async function submitDeposit(req: HonoRequest, user: User) {
         // reference: '...', // Generate or get a unique reference from payment gateway
         // processedAt: null, // Set upon successful processing
       },
-    })
+    });
 
     // 3. Interact with a payment gateway (simulated)
     // This is where you would call your payment gateway's API
     // The response from the payment gateway would determine submissionResult
 
     // Example: Simulate PIX payment response
-    if (depositData.channels_id.startsWith('pix')) {
+    if (depositData.channels_id.startsWith("pix")) {
       // Simulate generating a PIX code URL from a payment gateway
       submissionResult = {
         code_url: `simulated_pix_code_${newTransaction.id}_${Date.now()}`,
         // Add other PIX specific data if needed
-      }
+      };
       // In a real scenario, you might update the transaction with payment gateway details here
       // await prisma.transaction.update({
       //     where: { id: newTransaction.id },
@@ -308,7 +308,7 @@ export async function submitDeposit(req: HonoRequest, user: User) {
       submissionResult = {
         url: `simulated_payment_gateway_url_${newTransaction.id}_${Date.now()}`,
         // Add other redirect specific data if needed
-      }
+      };
       // In a real scenario, you might update the transaction with payment gateway details here
       // await prisma.transaction.update({
       //     where: { id: newTransaction.id },
@@ -346,7 +346,7 @@ export async function submitDeposit(req: HonoRequest, user: User) {
       }
       */
   } catch (error) {
-    console.error('Failed to process deposit submission:', error)
+    console.error("Failed to process deposit submission:", error);
     // If transaction was created but gateway failed, maybe update transaction status to FAILED
     if (newTransaction) {
       await db.transaction
@@ -358,12 +358,12 @@ export async function submitDeposit(req: HonoRequest, user: User) {
             // metadata: { error },
           },
         })
-        .catch(console.error) // Log update error but don't block the original error response
+        .catch(console.error); // Log update error but don't block the original error response
     }
     return new Response(
-      JSON.stringify({ message: 'Failed to process deposit', code: 500 }),
-      { status: 500 },
-    )
+      JSON.stringify({ message: "Failed to process deposit", code: 500 }),
+      { status: 500 }
+    );
   }
 
   // --- End Database and Payment Gateway Logic ---
@@ -371,10 +371,10 @@ export async function submitDeposit(req: HonoRequest, user: User) {
   const response: SubmitDepositResponse = {
     code: 200,
     data: submissionResult, // Return the result from the payment process (e.g., code_url or redirect url)
-    message: 'Deposit submitted successfully',
-  }
+    message: "Deposit submitted successfully",
+  };
 
-  return new Response(JSON.stringify(response))
+  return new Response(JSON.stringify(response));
 }
 
 // Helper function to fetch deposit history
@@ -382,9 +382,9 @@ export async function getDepositHistory(req: HonoRequest, user: Partial<User>) {
   // Authenticate the user
 
   // Parse request parameters (e.g., pagination)
-  const url = new URL(req.url)
-  const page = parseInt(url.searchParams.get('page') || '1', 10)
-  const limit = parseInt(url.searchParams.get('limit') || '10', 10)
+  const url = new URL(req.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
   // --- Database Logic for Fetching History ---
   // Query the 'transaction' table for the user's deposit history with pagination.
@@ -394,31 +394,31 @@ export async function getDepositHistory(req: HonoRequest, user: Partial<User>) {
     const userProfiles = await db.profile.findMany({
       where: { userId: user.id },
       select: { id: true },
-    })
-    const profileIds = userProfiles.map((profile) => profile.id)
+    });
+    const profileIds = userProfiles.map((profile) => profile.id);
 
     if (profileIds.length === 0) {
       // User has no profiles, return empty history
       const emptyHistory: DepositHistoryResponse = {
         total_pages: 0,
         record: [],
-      }
+      };
       const response: GetDepositHistoryResponse = {
         code: 200,
         data: emptyHistory,
-        message: 'No deposit history found',
-      }
-      return new Response(JSON.stringify(response))
+        message: "No deposit history found",
+      };
+      return new Response(JSON.stringify(response));
     }
 
     // Fetch deposit transactions for the user's profiles
     const transactions = await db.transaction.findMany({
       where: {
         profileId: { in: profileIds }, // Filter by user's profile IDs
-        type: TransactionType.DEPOSIT, // Filter for deposit transactions
+        transactionType: TransactionType.DEPOSIT, // Filter for deposit transactions
       },
       orderBy: {
-        createdAt: 'desc', // Order by latest first
+        createdAt: "desc", // Order by latest first
       },
       skip: (page - 1) * limit, // Apply pagination
       take: limit,
@@ -426,7 +426,7 @@ export async function getDepositHistory(req: HonoRequest, user: Partial<User>) {
         // Select the fields needed for DepositHistoryItem
         id: true,
         createdAt: true,
-        type: true, // Will be 'DEPOSIT'
+        transactionType: true, // Will be 'DEPOSIT'
         amount: true,
         status: true,
         reference: true, // Using reference for note if available
@@ -437,17 +437,17 @@ export async function getDepositHistory(req: HonoRequest, user: Partial<User>) {
         },
         product: true,
       },
-    })
+    });
 
     // Count total deposit transactions for pagination
     const totalRecords = await db.transaction.count({
       where: {
         profileId: { in: profileIds },
-        type: TransactionType.DEPOSIT,
+        transactionType: TransactionType.DEPOSIT,
       },
-    })
+    });
 
-    const totalPages = Math.ceil(totalRecords / limit)
+    const totalPages = Math.ceil(totalRecords / limit);
 
     // Map Prisma results to DepositHistoryItem interface
     const historyRecords: DepositHistoryItem[] = transactions.map((tx) => ({
@@ -456,32 +456,32 @@ export async function getDepositHistory(req: HonoRequest, user: Partial<User>) {
       type: tx.paymentMethod || tx.type, // Use payment method or transaction type
       amount: tx.amount.toString(), // Convert amount to string
       status: tx.status, // === TransactionStatus.COMPLETED ? 1 : 0, // Map status to 1 or 0
-      note: tx.reference || '', // Use reference as note
-      currency: 'USD', // tx.profile.currency,
+      note: tx.reference || "", // Use reference as note
+      currency: "USD", // tx.profile.currency,
       product: tx.product, // Get currency from related profile
-    }))
+    }));
 
     const historyData: DepositHistoryResponse = {
       total_pages: totalPages,
       record: historyRecords,
-    }
+    };
     // --- End Database Logic ---
 
     const response: GetDepositHistoryResponse = {
       code: 200,
       data: historyData,
-      message: 'Deposit history fetched successfully',
-    }
+      message: "Deposit history fetched successfully",
+    };
 
-    return new Response(JSON.stringify(response))
+    return new Response(JSON.stringify(response));
   } catch (error) {
-    console.error('Failed to fetch deposit history:', error)
+    console.error("Failed to fetch deposit history:", error);
     return new Response(
-      JSON.stringify({ message: 'Failed to fetch deposit history', code: 500 }),
+      JSON.stringify({ message: "Failed to fetch deposit history", code: 500 }),
       {
         status: 500,
-      },
-    )
+      }
+    );
   }
 }
 

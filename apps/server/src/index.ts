@@ -5,7 +5,7 @@ import createApp from "./rest/create-app";
 import { registerRoutes } from "./routes";
 import { WebSocketRouter } from "./sockets";
 import { chatRouter } from "./sockets/chat.wsroute";
-import { swaggerUI } from "@hono/swagger-ui";
+import { heartbeatRouter } from "./sockets/heartbeat.wsroute";
 
 export const app = createApp();
 // registerRoutes(app)
@@ -17,6 +17,7 @@ interface MyWebSocketData {
 type AdditionalWsData = Omit<MyWebSocketData, "clientId">;
 const wsRouter = new WebSocketRouter<AdditionalWsData>();
 wsRouter.addRoutes(chatRouter);
+wsRouter.addRoutes(heartbeatRouter);
 
 const PORT = 6589;
 console.log(`Attempting to start server on port ${PORT}...`);
@@ -72,8 +73,7 @@ const server = Bun.serve<AdditionalWsData, {}>({
     req: Request,
     server: Server
   ): Response | Promise<Response> | undefined {
-    const url = new URL(req.url);
-    console.log("x");
+    // const url = new URL(req.url);
     //   // Pass the server instance in the environment object for Hono context
     const honoEnv = { serverInstance: server };
     return app.fetch(req, honoEnv);

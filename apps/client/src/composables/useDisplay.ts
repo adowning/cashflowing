@@ -1,4 +1,12 @@
 import { ref, onMounted, onUnmounted } from "vue";
+export type SSROptions =
+  | boolean
+  | {
+      clientWidth: number;
+      clientHeight?: number;
+    };
+
+export const IN_BROWSER = typeof window !== "undefined";
 
 export function useDisplay(maxWidth = 768) {
   const isMobile = ref(window.innerWidth < maxWidth);
@@ -12,7 +20,11 @@ export function useDisplay(maxWidth = 768) {
   const handleResize = () => {
     isMobile.value = window.innerWidth < maxWidth;
   };
-
+  function getClientWidth(ssr?: SSROptions) {
+    return IN_BROWSER && !ssr
+      ? window.innerWidth
+      : (typeof ssr === "object" && ssr.clientWidth) || 0;
+  }
   onMounted(() => {
     window.addEventListener("resize", handleResize);
     handleResize(); // Initial check on mount
@@ -22,5 +34,11 @@ export function useDisplay(maxWidth = 768) {
     window.removeEventListener("resize", handleResize);
   });
 
-  return { isMobile, containerMaxW, desktopMaxHeight, desktopMinHeight };
+  return {
+    isMobile,
+    containerMaxW,
+    getClientWidth,
+    desktopMaxHeight,
+    desktopMinHeight,
+  };
 }

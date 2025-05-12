@@ -359,12 +359,16 @@ export async function me(req: HonoRequest): Promise<Response> {
     where: { id: session.user.id },
     include: {},
   });
-
+  const profile = await prisma.profile.findUnique({
+    where: { id: session.user.activeProfileId },
+    include: {},
+  });
   return new Response(
     JSON.stringify({
       // token: session?.session.token as string,
       // session: session as unknown as Session,
       user,
+      profile,
       code: 200,
     })
   );

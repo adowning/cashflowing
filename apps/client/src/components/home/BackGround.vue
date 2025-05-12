@@ -12,9 +12,13 @@
     if (z >= 3) z = 0;
     sparks.value.push(spark);
   }
+  const { isMobile } = useDisplay();
 </script>
 <template>
-  <div class="home h-full w-full position absolute">
+  <div
+    class="home h-full position absolute"
+    :style="`width: ${isMobile ? '100%' : '50%'}`"
+  >
     <div class="sparkle" style="top: 15%; left: 20%"></div>
     <div
       class="sparkle"

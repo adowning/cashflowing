@@ -8,6 +8,7 @@
   import { oneTapClient } from "better-auth/client/plugins";
   import { useUserStore } from "@/stores/user";
 
+  const googleLoginBtn = ref();
   const authClient = createAuthClient({
     plugins: [
       oneTapClient({
@@ -173,6 +174,7 @@
       );
       return;
     }
+    console.log(response);
     if (response.credential) {
       componentLoading.value = true;
       await signInWithGoogleIdToken(response.credential);
@@ -220,9 +222,49 @@
     { immediate: false }
   ); // Don't run immediately, only on change from false to true after component setup
 
+  function loadGSIClient() {
+    return new Promise<void>((resolve, reject) => {
+      let googleSignIn = document.createElement("script");
+      googleSignIn.setAttribute(
+        "src",
+        "https://accounts.google.com/gsi/client"
+      );
+      googleSignIn.defer = true;
+      googleSignIn.async = true;
+      googleSignIn.onload = () => {
+        resolve();
+      };
+      googleSignIn.onerror = () => {
+        reject();
+      };
+
+      document.body.appendChild(googleSignIn);
+    });
+  }
+
   // To expose handleGoogleSignIn to the global scope for the Google button callback
   onMounted(() => {
     loadingFadeOut();
+
+    let self = this as any;
+    loadGSIClient()
+      .then(() => {
+        console.log("gsi loaded");
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+        });
+        window.google.accounts.id.renderButton(
+          document.getElementById("googleSignInButtonContainer"),
+          {
+            theme: "outline",
+            size: "large",
+          }
+        );
+      })
+      .catch((err: any) => {
+        console.log("error", err);
+      });
 
     authStore.clearAuthError();
     // Make sure Google Sign-In script is loaded
@@ -420,16 +462,19 @@
               </button>
             </form>
             <div class="social-login-divider">OR</div>
-            <!-- <div
-              id="googleSignInButtonContainer"
-              class="google-signin-container"
-            ></div> -->
-            <button
+
+            <!-- <button
               id="googleSignInButtonContainer"
               class="google-signin-button"
+              ref="googleLoginBtn"
               @click="baOneTap"
               :disabled="isAuthLoading || componentLoading"
-            />
+            /> -->
+            <!-- <button
+              id="googleSignInButtonContainer"
+              class="google-signin-button"
+              ref="googleLoginBtn"googleSignInButtonContainer
+            /> -->
           </div>
 
           <div class="flip-card__back">
@@ -480,6 +525,13 @@
           </div>
         </div>
       </label>
+      <div id="googleSignInButtonContainer" class="google-signin-container">
+        <button
+          @click="handleGoogleSignIn"
+          class="w-72 max-w-72 mb-3"
+          ref="googleLoginBtn"
+        ></button>
+      </div>
     </div>
   </div>
   <!-- </div> -->

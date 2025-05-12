@@ -52,6 +52,7 @@ export class WebSocketService {
       }
 
       this.forceClose = false;
+      this.close();
       const wsURL = `${location.protocol === "https:" ? "wss:" : "ws:"}//${
         import.meta.env.VITE_HONO_WEBSOCKET_URL
       }/ws?token=${encodeURIComponent(token)}`;
@@ -127,8 +128,8 @@ export class WebSocketService {
 
   private startHeartbeat(): void {
     this.timer = setInterval(() => {
-      this.send({ type: "ping" });
-    }, 30000);
+      this.send({ type: "PING", meta: {}, payload: {} });
+    }, 20000);
   }
 
   private stopHeartbeat(): void {

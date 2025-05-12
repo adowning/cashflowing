@@ -361,6 +361,7 @@ export const useAuthStore = defineStore(
     }
 
     async function signInWithGoogleIdToken(idToken: string) {
+      const userStore = useUserStore();
       logToPage("info", "Attempting Google Sign In... ");
       try {
         // const sessionData = (await fetchApi("/auth/google", {

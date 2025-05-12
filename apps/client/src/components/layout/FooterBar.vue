@@ -67,11 +67,11 @@
         style="display: flex; flex-wrap: nowrap; grid-gap: 0px; padding: 2px"
       >
         <div class="wn-btn-item" @click="changeWheelPageOpen">
-          <!-- <WheelIcon
+          <WheelIcon
             :pressed="pressed"
             :current-user="currentUser"
             style="z-index: 999; margin-bottom: 35px; margin-left: -32px"
-          /> -->
+          />
         </div>
         <div class="flex w-9" />
 
