@@ -88,7 +88,7 @@ export const auth = betterAuth({
     google: {
       clientId:
         "740187878164-qoahkvecq5tu5d8os02pomr7nifcgh8s.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientSecret: process.env.GOOGLE_SECRET as string,
     },
   },
   plugins: [
