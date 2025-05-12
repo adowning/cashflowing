@@ -3,7 +3,7 @@ import type { Server, ErrorLike } from "bun"; // Import Bun's Server type and Er
 import { auth } from "./rest/auth";
 import createApp from "./rest/create-app";
 import { registerRoutes } from "./routes";
-import { WebSocketRouter } from "./sockets";
+import { PgRealtimeClientOptions, WebSocketRouter } from "./sockets";
 import { chatRouter } from "./sockets/chat.wsroute";
 import { heartbeatRouter } from "./sockets/heartbeat.wsroute";
 
@@ -14,8 +14,24 @@ interface MyWebSocketData {
   roomId?: string;
   username?: string;
 }
+//DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiY2RmNGZiNWUtMDBjOC00MThiLWFjYTEtYWJlMzEzMGMyNjBmIiwidGVuYW50X2lkIjoiOTJmNjcwMzJiYjU1N2VjZDU5NWNkN2MwMDkyZTg2MGRmOTdlNTVmMGVhOWZkYzY2NzBkZDExYzVhODUyNmY4MCIsImludGVybmFsX3NlY3JldCI6ImQ3NGRmNTU5LTUxYzEtNDAxNS1iNGJkLTYyZGRiOWFiNWI0MCJ9.z_eWzb9kX0r5V4xeIrg6cOYHzrF1teNCtyBmw4OsLuY"
+
+const pgOptions: PgRealtimeClientOptions = {
+  user: "postgres",
+  password: "postgres",
+  host: "password",
+  port: 5432,
+  database: "dev",
+  // minPoolConnections?: number;
+  // maxPoolConnections?: number;
+  // channel?: string;
+  // bufferInterval?: number;
+  // maxBufferSize?: number;
+  onError: (error: Error) => console.log(error),
+};
+
 type AdditionalWsData = Omit<MyWebSocketData, "clientId">;
-const wsRouter = new WebSocketRouter<AdditionalWsData>();
+const wsRouter = new WebSocketRouter<AdditionalWsData>(pgOptions);
 wsRouter.addRoutes(chatRouter);
 wsRouter.addRoutes(heartbeatRouter);
 
