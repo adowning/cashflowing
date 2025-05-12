@@ -11,13 +11,10 @@
 
   const eventBus = useEventManager();
   console.log(eventBus);
-  // const { api } = useRequest()
   const router = useRouter();
   const countdownActive = ref(false);
   const sparkle = ref(false);
-  const currency = ref("0");
-  const userStore = useUserStore();
-  const { currentUser, transactions, currentProfile } = useUserStore();
+  const { currentUser,  currentProfile } = useUserStore();
   const { dispatchUserDepositHistory, getDepositHistoryItems } =
     useDepositStore();
 
@@ -137,15 +134,15 @@
     });
   }
 
-  // watch(getDepositHistoryItems, (newVal) => {
-  //   console.log(currentProfile);
-  //   const pendings = newVal.find(
-  //     (purch: { status: string }) => purch.status === "PENDING_PAYMENT"
-  //   );
-  //   if (pendings) {
-  //     countdownTimer(new Date(pendings.createdAt));
-  //   }
-  // });
+  watch(getDepositHistoryItems, (newVal) => {
+    console.log(currentProfile);
+    const pendings = newVal.find(
+      (purch: { status: string }) => purch.status === "PENDING_PAYMENT"
+    );
+    if (pendings) {
+      countdownTimer(new Date(pendings.createdAt));
+    }
+  });
   eventBus.on("updatePurchases", (newVal) => {
     // console.log(newVal);
     // console.log(pendingTransactions.value);
@@ -237,7 +234,7 @@
           "
         >
           <div
-            v-if="userStore.currentUser !== undefined"
+            v-if="currentUser !== undefined"
             class="flex justify-center mt--2 glow"
             style="
               line-height: 0.6;
@@ -246,7 +243,7 @@
               font-weight: 800;
             "
           >
-            {{ userStore.currentProfile?.balance }}
+            {{ currentProfile?.balance }}
           </div>
         </div>
       </div>

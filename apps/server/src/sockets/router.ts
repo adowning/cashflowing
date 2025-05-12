@@ -15,7 +15,19 @@ import type {
   WebSocketData,
   WebSocketRouterOptions,
 } from "./types";
+import PgRealtimeClient from "@/services/update.service";
+import { PgRealtimeClientOptions } from "@/services/dbupdates/types";
+/**
+ * Creates a new Spec Realtime Client.
+ */
+const createRealtimeClient = (
+  options?: PgRealtimeClientOptions
+): PgRealtimeClient => {
+  return new PgRealtimeClient(options);
+};
 
+export { createRealtimeClient, PgRealtimeClient };
+export * from "@/services/dbupdates/types";
 /**
  * WebSocket router for Bun that provides type-safe message routing with Zod validation.
  * Routes incoming messages to handlers based on message type.
@@ -28,9 +40,14 @@ export class WebSocketRouter<
 > {
   private readonly server: Server;
   private readonly handlers = new WebSocketHandlers<WebSocketData<T>>();
+  public pgUpdatesClient: PgRealtimeClient;
 
-  constructor(options?: WebSocketRouterOptions) {
+  constructor(
+    pgOptions: PgRealtimeClientOptions,
+    options?: WebSocketRouterOptions
+  ) {
     this.server = options?.server ?? (undefined as unknown as Server);
+    this.pgUpdatesClient = createRealtimeClient(pgOptions);
   }
 
   /**

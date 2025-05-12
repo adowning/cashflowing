@@ -18,7 +18,10 @@
     "better-auth": "^1.2.7",
     "hono": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.15.6",
+    "pg-listen": "^1.7.0",
     "resend": "^4.5.1",
+    "short-uuid": "^5.2.0",
     "stoker": "^1.4.2",
     "uuid": "^11.1.0",
     "zod": "^3.22.4"
@@ -26,6 +29,7 @@
   "devDependencies": {
     "@types/bun": "^1.2.12",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/pg": "^8.15.1",
     "bun-types": "latest",
     "typescript": "^5.0.0"
   }

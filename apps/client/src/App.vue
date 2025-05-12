@@ -34,6 +34,12 @@
     </div>
     <GlobalLoading v-else />
   </div>
+  <OverlayLayer
+    v-if="depositStore.shopOpen"
+    :model-value="depositStore.shopOpen"
+  >
+    <ShopView v-if="depositStore.shopOpen" />
+  </OverlayLayer>
 </template>
 
 <script setup lang="ts">
@@ -45,6 +51,7 @@
   import { useUserStore } from "./stores/user";
   import { useVipStore } from "./stores/vip";
   import { useGameStore } from "./stores/game";
+  import { useDepositStore } from "./stores/deposit";
 
   const globalStore = useGlobalStore();
   const { dispatchGameSearch, dispatchGameBigWin } = useGameStore();
@@ -61,6 +68,7 @@
   const isAuthenticated = computed(() => authenticated.loggedIn);
 
   const { dispatchVipInfo } = useVipStore();
+  const depositStore = useDepositStore();
 
   onMounted(async () => {
     const token = getToken;

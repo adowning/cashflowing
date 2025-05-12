@@ -1,24 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue' // Import reactive functions
 import type * as Vip from '@cashflow/types'
-// import { i18n } from '@/locale/index' // Assuming this path is correct and i18n is initialized
 import { NETWORK_CONFIG } from '@cashflow/types'
-// import * as Toast from "vue-toastification/dist/index.mjs"; // Replaced with Nuxt UI useToast if applicable
 import { handleException } from './exception' // Assuming this path is correct
 import { Network } from '@/utils/Network'
 
-// Assuming SuccessIcon and WarningIcon are available or replaced by Nuxt UI icons
-// import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
-// import WarningIcon from "@/components/global/notification/WarningIcon.vue";
-
-// If using Nuxt UI Pro, you would use:
-// import { useI18n } from 'vue-i18n'
-// const toast = useToast();
 
 export const useVipStore = defineStore(
   'vip',
   () => {
-    // State properties converted to reactive references
     const success = ref(false)
     const errMessage = ref('')
     const levelUpDialogVisible = ref(false)

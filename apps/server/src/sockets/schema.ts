@@ -53,6 +53,16 @@ export const Pong = messageSchema("PONG", {
   // content: z.string(),
   // timestamp: z.number().optional(),
 });
+export const Subscribe = messageSchema("SUBSCRIBE", {
+  userId: z.string(),
+  tableName: z.string(),
+  // timestamp: z.number().optional(),
+});
+export const SubscribeResponse = messageSchema("PONG", {
+  userId: z.string(),
+  status: z.boolean(),
+  // timestamp: z.number().optional(),
+});
 
 /**
  * Base message schema that all specific message types extend.

@@ -1,7 +1,10 @@
 <script setup>
   import { useAuthStore } from "@/stores/auth";
+  import { useDepositStore } from "@/stores/deposit";
 
   const { authenticated } = useAuthStore();
+  const depositStore = useDepositStore();
+
   const isAuthenticated = computed(() => authenticated.loggedIn);
 </script>
 
@@ -9,10 +12,10 @@
   <div
     class="relative mobile-section flex grow-1 flex-col m-0 p-0 w-screen min-h-screen h-screen overflow-hidden"
   >
-    <TopBarMobile v-if="isAuthenticated" />
+    <TopBarMobile v-if="isAuthenticated && !depositStore.shopOpen" />
 
     <slot />
-    <FooterBarMobile v-if="isAuthenticated" />
+    <FooterBarMobile v-if="isAuthenticated && !depositStore.shopOpen" />
   </div>
 </template>
 <style scoped>
