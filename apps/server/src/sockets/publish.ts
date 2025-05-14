@@ -26,11 +26,25 @@ export function publish<Schema extends MessageSchemaType>(
       ? z.infer<P>
       : unknown
     : unknown,
-  meta: Partial<z.infer<Schema["shape"]["meta"]>> = {},
+  meta: Schema["shape"] extends { meta: infer M }
+    ? M extends ZodType<any, any, any>
+      ? Partial<z.infer<M>>
+      : Record<string, never>
+    : Record<string, never> = {} as Schema["shape"] extends { meta: infer M }
+    ? M extends ZodType<any, any, any>
+      ? Partial<z.infer<M>>
+      : Record<string, never>
+    : Record<string, never>
 ): boolean {
   try {
     // Extract the message type from the schema
-    const messageType = schema.shape.type._def.value;
+    const typeDef = schema.shape.type._def;
+    const messageType =
+      "value" in typeDef
+        ? typeDef.value
+        : typeof schema.shape.type === "object" && "value" in schema.shape.type
+          ? (schema.shape.type as any).value
+          : undefined;
 
     // Create the message object with the required structure
     const message = {
@@ -49,7 +63,7 @@ export function publish<Schema extends MessageSchemaType>(
     if (!validationResult.success) {
       console.error(
         `[ws] Failed to publish message of type "${messageType}" to topic "${topic}": Validation error`,
-        validationResult.error.errors,
+        validationResult.error.errors
       );
       return false;
     }

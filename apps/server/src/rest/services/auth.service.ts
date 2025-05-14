@@ -1,7 +1,5 @@
-import { auth } from "../rest/auth";
 import prisma from "@cashflow/db";
 import { Session } from "better-auth";
-import { decodeToken, generateAccessToken } from "../rest/jwt";
 import db from "@cashflow/db";
 import { dmmfToRuntimeDataModel } from "@cashflow/db/prisma/client/runtime/library";
 import { GetSession, User } from "@cashflow/types";
@@ -10,6 +8,8 @@ import { v4 as randomUUIDv7 } from "uuid";
 const { scrypt } = await import("node:crypto");
 const crypto = await import("node:crypto");
 import { HonoRequest } from "hono";
+import { auth } from "../auth";
+import { decodeToken } from "../jwt";
 const salt = "82f13bc7362b2778b6dabc9dc93c0d15";
 // Auth utility stubs - TODO: Implement properly
 const validateUser = async (username: string, password: string) => {
@@ -303,8 +303,14 @@ export async function google(req: HonoRequest): Promise<Response> {
     },
   });
   console.log(signInUsername);
-  const user = signInUsername.user;
-  const token = signInUsername.token;
+  const user =
+    signInUsername && "user" in signInUsername
+      ? signInUsername.user
+      : undefined;
+  const token =
+    signInUsername && "token" in signInUsername
+      ? signInUsername.token
+      : undefined;
   console.log(user);
   if (user == null) {
     return new Response(
@@ -355,14 +361,61 @@ export async function me(req: HonoRequest): Promise<Response> {
   if (!session || session == null) {
     return new Response(JSON.stringify({ message: "Unauthorized" }));
   }
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { id: session.user.id },
     include: {},
   });
-  const profile = await prisma.profile.findUnique({
-    where: { id: session.user.activeProfileId },
+  if (!user || user == null) {
+    return new Response(
+      JSON.stringify({ code: 405, success: false, message: "User not found" })
+    );
+  }
+  console.log(user);
+  let profile;
+  if (user.activeProfileId == undefined || user.activeProfileId == null)
+    profile = await prisma.profile.create({
+      data: {
+        balance: 0,
+        xpEarned: 0,
+        isActive: true,
+        lastPlayed: new Date(),
+        phpId: 0,
+        userId: user.id,
+        shopId: "cmaldhvn8000cliybhdhfy2b1",
+        currency: "USD", // Ensure these match Currency enum
+      },
+    });
+  if (
+    user.activeProfileId == undefined ||
+    (user.activeProfileId == null && profile !== null && profile !== undefined)
+  )
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        activeProfileId: profile.id,
+      },
+    });
+  // return new Response(
+  //   JSON.stringify({
+  //     code: 405,
+  //     success: false,
+  //     message: "User does not have activeProfileId",
+  //   })
+  // );
+
+  profile = await prisma.profile.findUnique({
+    where: { id: user.activeProfileId },
     include: {},
   });
+  if (!profile || profile == null) {
+    return new Response(
+      JSON.stringify({
+        code: 405,
+        success: false,
+        message: "Profile not found",
+      })
+    );
+  }
   return new Response(
     JSON.stringify({
       // token: session?.session.token as string,
@@ -401,6 +454,12 @@ export async function register(req: HonoRequest) {
   // console.log(headers)
   console.log(response);
   // const token = await generateAccessToken(user.user.id)
+  if (!response) {
+    return new Response(
+      JSON.stringify({ message: "Registration failed", code: 500 }),
+      { status: 500 }
+    );
+  }
   const token = response.token;
   const user = response.user;
   // cookies.set('cookie', token)
@@ -443,7 +502,7 @@ export async function login(req: HonoRequest) {
   let signInUsername;
 
   // const salt = crypto.randomBytes(16).toString('hex')
-
+  console.log(password, username);
   try {
     signInUsername = await auth.api.signInUsername({
       body: { password, username },
@@ -459,8 +518,12 @@ export async function login(req: HonoRequest) {
 
   console.log("signInUsername", signInUsername);
   // const user = await validateUser(username, password)
-  const user = signInUsername?.user;
-  const token = signInUsername?.token;
+  const user =
+    signInUsername && "user" in signInUsername ? signInUsername.user : null;
+  const token =
+    signInUsername && "token" in signInUsername
+      ? signInUsername.token
+      : undefined;
   console.log(user);
   if (user == null) {
     return new Response(

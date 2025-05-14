@@ -3,6 +3,7 @@
   import { router } from "@/router";
   // import { resetAllStores } from '@/stores/index'
   import { useUserStore } from "@/stores/user";
+  import { useAuthStore } from "@/stores/auth";
   const eventBus = useEventManager();
   const props = defineProps({
     hasCancel: Boolean,
@@ -14,12 +15,19 @@
   const emit = defineEmits(["update:modelValue"]);
   function logout() {
     const userStore = useUserStore();
+    const authStore = useAuthStore();
     userStore.isAuthenticated = false;
-    userStore.currentUser = undefined;
-    userStore.token = "";
+    authStore.setAuthenticated(false);
+    authStore.isAuthenticated = false;
+    authStore.setToken(null);
+
+    // userStore.currentUser = undefined;
+    // userStore.token = "";
+
     localStorage.clear();
     value.value = false;
-    router.push("/login");
+    // router.push("/login");
+    // window.location.reload();
   }
   // const isOpen = ref(false)
   const customElementsForm = reactive({

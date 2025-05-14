@@ -1,8 +1,10 @@
 <script setup>
   import { useAuthStore } from "@/stores/auth";
+  import { useUserStore } from "@/stores/user";
   import { useDepositStore } from "@/stores/deposit";
 
   const { authenticated } = useAuthStore();
+  const { currentUser } = useUserStore();
   const depositStore = useDepositStore();
 
   const isAuthenticated = computed(() => authenticated.loggedIn);
@@ -12,10 +14,24 @@
   <div
     class="relative mobile-section flex grow-1 flex-col m-0 p-0 w-screen min-h-screen h-screen overflow-hidden"
   >
-    <TopBarMobile v-if="isAuthenticated && !depositStore.shopOpen" />
+    <TopBarMobile
+      v-if="
+        isAuthenticated &&
+        !depositStore.shopOpen &&
+        currentUser != undefiend &&
+        currentUser !== null
+      "
+    />
 
     <slot />
-    <FooterBarMobile v-if="isAuthenticated && !depositStore.shopOpen" />
+    <FooterBarMobile
+      v-if="
+        isAuthenticated &&
+        !depositStore.shopOpen &&
+        currentUser != undefiend &&
+        currentUser !== null
+      "
+    />
   </div>
 </template>
 <style scoped>

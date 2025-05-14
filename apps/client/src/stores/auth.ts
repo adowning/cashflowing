@@ -27,6 +27,7 @@ export const useAuthStore = defineStore(
     const sessionState = ref<ClientSession | null>(null);
     const success = ref(false);
     const loadingState = ref<boolean>(false);
+    const isAuthenticated = ref<boolean>(false);
     const authenticated = ref<AuthenticatedState>({ loggedIn: false });
     const errorState = ref<ApiAuthError | null>(null);
     const initialAuthCheckCompleteState = ref<boolean>(false);
@@ -47,6 +48,9 @@ export const useAuthStore = defineStore(
     const setSuccess = (isSuccess: boolean) => {
       success.value = isSuccess;
     };
+    function setAuthenticated(val: boolean) {
+      authenticated.value = { loggedIn: val };
+    }
     // --- Actions (Functions) ---
     function setSession(newSession: ClientSession | null) {
       sessionState.value = newSession;
@@ -232,57 +236,57 @@ export const useAuthStore = defineStore(
     //   }
     // }
 
-    async function handleProfileUpdate(profilePayload: Partial<ProfileData>) {
-      logToPage(
-        "event",
-        "Handling Profile Update event for profile ID:",
-        profilePayload?.id
-      );
-      if (
-        profilePayload &&
-        profilePayload.id &&
-        userStore.currentProfile?.id === profilePayload.id &&
-        userStore.currentUser?.id
-      ) {
-        setLoading(true);
-        // Re-fetch for full consistency
-        await fetchUserProfile(profilePayload.id);
-        // userStore.setProfile(fullProfileData); // fetchUserProfile already does this
-        setLoading(false);
-      }
-    }
+    // async function handleProfileUpdate(profilePayload: Partial<ProfileData>) {
+    //   logToPage(
+    //     "event",
+    //     "Handling Profile Update event for profile ID:",
+    //     profilePayload?.id
+    //   );
+    //   if (
+    //     profilePayload &&
+    //     profilePayload.id &&
+    //     userStore.currentProfile?.id === profilePayload.id &&
+    //     userStore.currentUser?.id
+    //   ) {
+    //     setLoading(true);
+    //     // Re-fetch for full consistency
+    //     await fetchUserProfile(profilePayload.id);
+    //     // userStore.setProfile(fullProfileData); // fetchUserProfile already does this
+    //     setLoading(false);
+    //   }
+    // }
 
-    // --- Auth Actions ---
-    async function commonPostAuthActions(
-      sessionData: ClientSession | null,
-      isInitialAuth: boolean = false
-    ) {
-      const oldToken = session.value?.token;
-      setSession(sessionData); // Update store immediately
-      const newToken = sessionData?.token;
+    // // --- Auth Actions ---
+    // async function commonPostAuthActions(
+    //   sessionData: ClientSession | null,
+    //   isInitialAuth: boolean = false
+    // ) {
+    //   const oldToken = session.value?.token;
+    //   setSession(sessionData); // Update store immediately
+    //   const newToken = sessionData?.token;
 
-      // Re-establish WebSocket only if token status actually changes or if it's an initial auth process
-      // if (newToken !== oldToken || isInitialAuth || !isWebSocketConnected.value) {
-      //   logToPage(
-      //     "debug",
-      //     `Token status changed or initial auth. Old: ${oldToken ? "yes" : "no"}, New: ${newToken ? "yes" : "no"}. Re-establishing WS.`
-      //   );
-      //   await establishWebSocketConnection();
-      // }
+    //   // Re-establish WebSocket only if token status actually changes or if it's an initial auth process
+    //   // if (newToken !== oldToken || isInitialAuth || !isWebSocketConnected.value) {
+    //   //   logToPage(
+    //   //     "debug",
+    //   //     `Token status changed or initial auth. Old: ${oldToken ? "yes" : "no"}, New: ${newToken ? "yes" : "no"}. Re-establishing WS.`
+    //   //   );
+    //   //   await establishWebSocketConnection();
+    //   // }
 
-      // After setting session and potentially reconnecting WS, process the state
-      // Server should push AUTH_STATE_CHANGE via WebSocket after successful login/logout/session update.
-      // If immediate data update is critical and server push might be delayed, can call handleAuthStateChange.
-      // However, relying on server push promotes a single source of truth for state updates.
-      if (isInitialAuth && sessionData?.user) {
-        // For initial load with a valid session
-        await handleAuthStateChange(sessionData);
-      } else if (!sessionData?.user && (oldToken || isInitialAuth)) {
-        // For logout or initial load with no session
-        await handleAuthStateChange(null);
-      }
-      // For login/signup, handleAuthStateChange will be triggered by the server's WebSocket push.
-    }
+    //   // After setting session and potentially reconnecting WS, process the state
+    //   // Server should push AUTH_STATE_CHANGE via WebSocket after successful login/logout/session update.
+    //   // If immediate data update is critical and server push might be delayed, can call handleAuthStateChange.
+    //   // However, relying on server push promotes a single source of truth for state updates.
+    //   if (isInitialAuth && sessionData?.user) {
+    //     // For initial load with a valid session
+    //     await handleAuthStateChange(sessionData);
+    //   } else if (!sessionData?.user && (oldToken || isInitialAuth)) {
+    //     // For logout or initial load with no session
+    //     await handleAuthStateChange(null);
+    //   }
+    //   // For login/signup, handleAuthStateChange will be triggered by the server's WebSocket push.
+    // }
 
     async function signInWithPassword(credentials: AuthCredentials) {
       logToPage("info", `Attempting sign in for ${credentials.email}...`);
@@ -364,35 +368,19 @@ export const useAuthStore = defineStore(
       const userStore = useUserStore();
       logToPage("info", "Attempting Google Sign In... ");
       try {
-        // const sessionData = (await fetchApi("/auth/google", {
-        //   method: "POST",
-        //   body: JSON.stringify({ token: idToken }),
-        // })) as ClientSession | null;
-        // const route: string = NETWORK_CONFIG.LOGIN.GOOGLE;
         const route: string = "/auth/google";
         const network: Network = Network.getInstance();
         setSuccess(false);
-        const next = (response: ClientSession) => {
-          console.log("next ", response);
-          // {"authenticated":true,
-          //   "token":"hQWQp1gkOA0zsCjpPX0AvZR6xdehg9Iv",
-          //   "user":{"id":"b4cOnB54Ph5Ra2BuebaCieDs8wwVfcnu",
-          //     "email":"ashdowning@gmail.com",
-          //     "name":"Ash Downing",
-          //     "image":"https://lh3.googleusercontent.com/a/ACg8ocIO2WeWfygLcCyY5U-O5fXbm7qonbTxFTIKJpW4JI1Sc5jZK9mn=s96-c",
-          //     "emailVerified":true,
-          //     "createdAt":"2025-05-11T11:03:12.376Z",
-          //     "updatedAt":"2025-05-11T11:13:26.856Z"},
-          //     "code":200}
+        const next = async (response: ClientSession) => {
+          // console.log("next ", response);
           if (response.code === 200) {
-            console.log(response.token);
+            await userStore.dispatchUpdateCurrentUser();
             setToken(response.token);
             setSession(response);
-
-            console.log(success.value);
-            userStore.dispatchUpdateCurrentUser();
+            setAuthenticated(true);
+            isAuthenticated.value = true;
+            console.log(authenticated.value);
             setSuccess(true);
-            authenticated.value = { loggedIn: true };
 
             return {
               user: response?.user || null,
@@ -485,8 +473,7 @@ export const useAuthStore = defineStore(
       authenticated,
       isLoading,
       error,
-      initialAuthCheckComplete,
-
+      isAuthenticated,
       // Actions
       setToken,
       signInWithPassword,
@@ -495,9 +482,11 @@ export const useAuthStore = defineStore(
       setError,
       setInitialAuthCheckComplete,
       clearAuthError,
+
       logout,
       signOut,
       signUpNewUser,
+      setAuthenticated,
     };
   },
   {

@@ -5,22 +5,21 @@ import { Session } from "better-auth";
 import type { AppApi } from "./types";
 import notFound from "../middlewares/not-found";
 import onError from "../middlewares/on-error";
-import { auth } from "./auth";
 import { BASE_PATH } from "./constans";
 import createRouter from "./create-router";
 import isAuthenticated from "../middlewares/is-authenticated";
 import { Server } from "bun";
 import { User } from "@cashflow/types";
-import { google, login, logout, me, register } from "../services/auth.service";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { swaggerUI } from "@hono/swagger-ui"; //
-import { registerRoutes } from "../routes";
 import { PrismaClient } from "@cashflow/db";
 import { enhance } from "@cashflow/db/node_modules/@zenstackhq/runtime";
 import { createHonoHandler } from "@zenstackhq/server/hono";
 import { createServerClient } from "@supabase/ssr";
 import { Context } from "hono";
-import { getDepositHistory } from "@/services/transactions/deposit";
+import { registerRoutes } from "./routes";
+import { me, login, register, logout, google } from "./services/auth.service";
+import { auth } from "./auth";
 const prisma = new PrismaClient();
 const supabaseAnonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5a2ppeGZ1YXJncWtqa2d4c3ljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDczMDEyMjIsImV4cCI6MjAyMjg3NzIyMn0.t2ayCugyEAii4KHDG0rWRZcvQcILYtF_-UApm0XGlKg";

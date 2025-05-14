@@ -1,11 +1,11 @@
 import { User } from "better-auth/types";
-import createRouter from "../rest/create-router";
 import {
   createDeposit,
   getDepositHistory,
   getDepositMethods,
 } from "../services/transactions/deposit";
 import { NETWORK_CONFIG } from "@cashflow/types";
+import createRouter from "../create-router";
 
 const router = createRouter();
 

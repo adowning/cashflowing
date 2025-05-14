@@ -16,6 +16,10 @@ import type {
   GetUserBalanceResponseData,
 } from "@cashflow/types";
 import { Network } from "@/utils/Network";
+import { logToPage } from "@/utils/logger";
+import { fetchApi } from "@/utils/fetchApi";
+import { useGlobalStore } from "./global";
+import { useAuthStore } from "./auth";
 
 // Define a more specific type for the user based on your Tables.user.Row
 const expScale = [
@@ -233,22 +237,83 @@ export const useUserStore = defineStore(
       };
       await network.sendMsg(route, {}, next, 1, 4);
     };
-    const dispatchUpdateCurrentUser = async () => {
+    const dispatchUpdateCurrentUser2 = async (): Promise<void> => {
+      console.log("dissin cu ");
       setSuccess(false);
       const route: string = "/auth/session";
       const network: Network = Network.getInstance();
       // response call back function
       const next = (response: GetUserInfoResponseData) => {
+        console.log(response);
         if (response.code == 200) {
           setSuccess(true);
           setCurrentUser(response.user);
           setCurrentProfile(response.profile);
         } else {
+          setSuccess(false);
           setErrorMessage(handleException(response.code));
         }
       };
-      await network.sendMsg(route, {}, next, 1, 4);
+      network.sendMsg(route, {}, next, 1, 4);
     };
+    const dispatchUpdateCurrentUser = async () => {
+      logToPage(
+        "event",
+        "Handling User Update event for user ID:"
+        // userPayload?.id
+      );
+      const authStore = useAuthStore();
+      // if (
+      //   userPayload &&
+      //   userPayload.id &&
+      //   currentUser.value?.id === userPayload.id
+      // ) {
+      const { isLoading, startLoading, finishLoading } = useGlobalStore();
+      startLoading();
+      // Re-fetch for full consistency is safer than merging partials
+      // const fullUserData = await fetchPublicUserData(userPayload.id);
+      const token = authStore.session?.token;
+      const headers = new Headers({});
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      const response = await fetch(`/auth/session`, { headers });
+      const fullUserData = await response.json();
+      //       if (userData) {
+      //         userStore.setUser(userData as Partial<User>); // Update store
+      //         logToPage("info", `User data fetched and set for ${userId}`);
+      //       }
+      //       return userData as Partial<User> | null;
+      console.log(fullUserData);
+      if (fullUserData) {
+        // userStore.setUser(fullUserData); // fetchPublicUserData already does this
+        // If ClientAuthUser structure (in session) needs updating based on UserData
+        // if (
+        //   // authStore.session?.user &&
+        //   // authStore.session.user.id === fullUserData.id
+
+        // ) {
+        setCurrentUser(fullUserData.user);
+        setCurrentProfile(fullUserData.profile);
+        // authStore.setSession({
+        //   ...authStore.session,
+        //   user: {
+        //     // Map fields from UserData to ClientAuthUser as needed
+        //     ...authStore.session.user, // Keep existing ClientAuthUser fields
+        //     id: fullUserData.id, // from UserData
+        //     email: fullUserData.email as string, // from UserData
+        //     username: fullUserData.username, // from UserData
+        //     avatarUrl: fullUserData.avatar, // from UserData
+        //     // ... other fields from UserData that map to ClientAuthUser
+        //   },
+        // });
+        finishLoading();
+      } else {
+        finishLoading();
+      }
+      // }
+    };
+
     const dispatchUserCashtag = async (cashtag: string) => {
       setSuccess(false);
       const route: string = NETWORK_CONFIG.PERSONAL_INFO_PAGE.USER_CASHTAG;
@@ -310,6 +375,7 @@ export const useUserStore = defineStore(
       updateCurrentUser,
       setCurrentUser,
       dispatchUserCashtag,
+      errMessage,
       // username,
       // login2,
       dispatchUpdateCurrentUser,

@@ -1,418 +1,340 @@
-/* SPDX-FileCopyrightText: 2025-present Kriasoft */
-/* SPDX-License-Identifier: MIT */
-
+/**
+ * WebSocket Router (`apps/server/src/sockets/router.ts`)
+ * Refactored Version
+ */
 import type { Server, ServerWebSocket, WebSocketHandler } from "bun";
 import { v4 as randomUUIDv7 } from "uuid";
 import { z } from "zod";
-import { WebSocketHandlers } from "./handlers";
 import type {
-  CloseHandler,
-  MessageHandler,
+  WsData,
   MessageSchemaType,
+  MessageHandler,
+  MessageHandlerEntry,
   OpenHandler,
+  CloseHandler,
   SendFunction,
-  UpgradeOptions,
-  WebSocketData,
-  WebSocketRouterOptions,
-} from "./types";
-import PgRealtimeClient from "@/services/update.service";
-import {
-  EventCallback,
-  PendingEvent,
-  PgRealtimeClientOptions,
-} from "@/services/dbupdates/types";
+  UpgradeRequestOptions,
+  MessageHandlerContext,
+  OpenHandlerContext,
+  CloseHandlerContext,
+} from "./types"; // Adjust path if needed
+import { safeJsonParse, publish } from "./utils"; // Adjust path if needed
+import { UserLeft } from "./schema"; // Adjust path if needed
 
-const pgOptions: PgRealtimeClientOptions = {
-  user: "postgres",
-  password: "password",
-  host: "192.168.1.35",
-  port: 5432,
-  database: "dev",
-  // minPoolConnections?: number;
-  // maxPoolConnections?: number;
-  // channel?: string;
-  // bufferInterval?: number;
-  // maxBufferSize?: number;
-  onError: (error: Error) => console.log(error),
-};
-/**
- * Creates a new Spec Realtime Client.
- */
-const createRealtimeClient = (
-  options?: PgRealtimeClientOptions
-): PgRealtimeClient => {
-  return new PgRealtimeClient(options);
-};
-
-export { createRealtimeClient, PgRealtimeClient };
-export * from "@/services/dbupdates/types";
-/**
- * WebSocket router for Bun that provides type-safe message routing with Zod validation.
- * Routes incoming messages to handlers based on message type.
- *
- * @template T - Application-specific data to store with each WebSocket connection.
- *               Always includes a clientId property generated automatically.
- */
 export class WebSocketRouter<
-  T extends Record<string, unknown> = Record<string, never>,
+  T extends Omit<WsData, "clientId"> = Record<string, never>,
 > {
-  public server: Server;
-  private readonly handlers = new WebSocketHandlers<WebSocketData<T>>();
-  public pgUpdatesClient: PgRealtimeClient;
-  public connectedClients: ServerWebSocket<WebSocketData<T>>[];
-  constructor(options?: WebSocketRouterOptions) {
-    this.server = options?.server ?? (undefined as unknown as Server);
-    this.connectedClients = [];
-  }
-  addServer(server: Server) {
-    this.server = server;
-  }
-  /**
-   * Merges open, close, and message handlers from another WebSocketRouter instance.
-   */
-  addRoutes(ws: WebSocketRouter<T>): this {
-    ws.handlers.message.forEach((handler, value) => {
-      this.handlers.message.set(value, handler);
-    });
-    this.handlers.open.push(...ws.handlers.open);
-    this.handlers.close.push(...ws.handlers.close);
-    return this;
-  }
-  setupDbListener(): this {
-    try {
-      this.pgUpdatesClient = createRealtimeClient(pgOptions);
-      this.pgUpdatesClient._createSubscriber();
-      // export interface Event {
-      //   timestamp: string;
-      //   operation: Operation;
-      //   schema: string;
-      //   table: string;
-      //   data: StringKeyMap;
-      //   columnNamesChanged?: string[];
-      // }
-      this.pgUpdatesClient.table("user", { schema: "public" });
-      this.pgUpdatesClient
-        .table("profiles", { schema: "public" })
-        .onUpdate((data: any) => {
-          console.log(data);
-          const event = data as unknown as PendingEvent;
-          if (this.server) {
-            // this.server.publish("db_updates", JSON.stringify(data), false);
-            console.log(this.server.subscriberCount("db_updates"));
-            this.connectedClients.forEach((client) => {
-              if (event.table === "user")
-                if (client.data.userId === event.primaryKeyData["id"]) {
-                  client.send(data);
-                }
-              if (event.table === "profiles")
-                if (client.data.userId === event.data.userId) {
-                  client.send(data);
-                }
-            });
-          }
-        });
+  // Server instance will be set after Bun.serve() returns
+  private server!: Server; // Use definite assignment assertion `!`
+  private isServerSet: boolean = false;
 
-      this.pgUpdatesClient.listen();
-    } catch (e) {
-      console.log(e);
+  private readonly openHandlers: OpenHandler<WsData & T>[] = [];
+  private readonly closeHandlers: CloseHandler<WsData & T>[] = [];
+  private readonly messageHandlers = new Map<
+    string,
+    MessageHandlerEntry<WsData & T>
+  >();
+
+  constructor(/* No server instance here initially */) {
+    console.log("[WebSocketRouter] Initialized.");
+    // Initialization without server instance
+  }
+
+  /**
+   * Injects the Bun Server instance after it has been created.
+   * This is crucial for enabling publish operations.
+   */
+  public setServer(server: Server): void {
+    if (!server) {
+      throw new Error("[WebSocketRouter] Invalid Server instance provided.");
     }
+    if (this.isServerSet) {
+      console.warn("[WebSocketRouter] Server instance is already set.");
+      return;
+    }
+    this.server = server;
+    this.isServerSet = true;
+    console.log("[WebSocketRouter] Server instance has been set.");
+  }
+
+  /**
+   * Registers a handler for the WebSocket 'open' event.
+   */
+  public onOpen(handler: OpenHandler<WsData & T>): this {
+    this.openHandlers.push(handler);
     return this;
   }
+
   /**
-   * Upgrades an HTTP request to a WebSocket connection.
-  //  */
-  public upgrade(req: Request, options: UpgradeOptions<WebSocketData<T>>) {
-    const { server, data, headers } = options;
+   * Registers a handler for the WebSocket 'close' event.
+   */
+  public onClose(handler: CloseHandler<WsData & T>): this {
+    this.closeHandlers.push(handler);
+    return this;
+  }
+
+  /**
+   * Registers a handler for a specific message type.
+   */
+  public onMessage<Schema extends MessageSchemaType>(
+    schema: Schema,
+    handler: MessageHandler<Schema, WsData & T>
+  ): this {
+    const messageType = schema.shape.type._def.value;
+    if (!messageType || typeof messageType !== "string") {
+      console.error(
+        "[WS Router] Schema must have a literal string 'type'. Invalid schema:",
+        schema
+      );
+      return this;
+    }
+    if (this.messageHandlers.has(messageType)) {
+      console.warn(
+        `[WS Router] Overwriting handler for message type "${messageType}".`
+      );
+    }
+    this.messageHandlers.set(messageType, {
+      schema,
+      handler: handler as MessageHandler<MessageSchemaType, WsData & T>,
+    });
+    return this;
+  }
+
+  /**
+   * Handles the HTTP upgrade request. Requires the server instance.
+   */
+  public upgrade(options: UpgradeRequestOptions<T>) {
+    // Ensure server instance is passed correctly during the actual upgrade process
+    const { server, request, data, headers } = options;
+    if (!server) {
+      console.error(
+        "[WS Upgrade] Failed: Server instance missing in upgrade options."
+      );
+      return new Response("WebSocket upgrade configuration error", {
+        status: 500,
+      });
+    }
     const clientId = randomUUIDv7();
-    const upgraded = server.upgrade(req, {
-      data: { clientId, ...data },
-      headers: {
-        "x-client-id": clientId,
-        ...headers,
-      },
+
+    if (!data?.userId) {
+      console.warn("[WS Upgrade] Denied: userId is missing in upgrade data.");
+      return new Response("Unauthorized: userId required.", { status: 401 });
+    }
+
+    const wsData: WsData & T = { ...(data as T), clientId };
+
+    const upgraded = server.upgrade(request, {
+      data: wsData,
+      headers: { "X-Client-ID": clientId, ...headers },
     });
 
     if (!upgraded) {
-      return new Response(
-        "Failed to upgrade the request to a WebSocket connection",
-        {
-          status: 500,
-          headers: {
-            "Content-Type": "text/plain",
-          },
-        }
-      );
+      console.error("[WS Upgrade] Failed. Server did not upgrade request.");
+      return new Response("WebSocket upgrade failed", { status: 500 });
     }
-    return new Response(null, data);
+    // console.log(`[WS Upgrade] Successful for user ${wsData.userId}, client ${clientId}`);
+    return undefined; // Bun handles the 101 response
   }
 
-  onOpen(handler: OpenHandler<WebSocketData<T>>): this {
-    this.handlers.open.push(handler);
+  // --- Private Handler Methods Bound to Bun's Websocket Interface ---
 
-    console.log("opened");
-    return this;
-  }
+  private handleOpen(ws: ServerWebSocket<WsData & T>) {
+    const { clientId, userId } = ws.data;
+    console.log(
+      `[WS OPEN] Connection opened: Client ${clientId}, User ${userId}`
+    );
 
-  onClose(handler: CloseHandler<WebSocketData<T>>): this {
-    this.handlers.close.push(handler);
-    return this;
-  }
+    if (!this.isServerSet) {
+      console.error(
+        `[WS OPEN] Server instance not set for Client ${clientId}. Cannot fully handle open event.`
+      );
+      // Optionally close the connection if server is required immediately
+      // ws.close(1011, "Server configuration error");
+      // return;
+    }
 
-  onMessage<Schema extends MessageSchemaType>(
-    schema: Schema,
-    handler: MessageHandler<Schema, WebSocketData<T>>
-  ): this {
-    const messageType = schema.shape.type._def.value;
-    if (this.handlers.message.has(messageType)) {
+    const send = this.createSendFunction(ws);
+    // Subscribe user to their dedicated updates topic
+    if (userId) {
+      const userTopic = `user_${userId}_updates`;
+      ws.subscribe(userTopic);
+      // console.log(`[WS OPEN] Subscribed user ${userId} to topic ${userTopic}`);
+    } else {
       console.warn(
-        `Handler for message type "${messageType}" is being overwritten.`
+        `[WS OPEN] Cannot subscribe to user topic: userId missing for client ${clientId}`
       );
     }
 
-    this.handlers.message.set(messageType, {
-      schema,
-      handler: handler as MessageHandler<MessageSchemaType, WebSocketData<T>>,
-    });
-
-    return this;
-  }
-
-  /**
-   * Returns a WebSocket handler that can be used with `Bun.serve`.
-   */
-  get websocket(): WebSocketHandler<WebSocketData<T>> {
-    return {
-      open: this.handleOpen.bind(this),
-      message: this.handleMessage.bind(this),
-      close: this.handleClose.bind(this),
-    };
-  }
-
-  // ———————————————————————————————————————————————————————————————————————————
-  // Private methods
-  // ———————————————————————————————————————————————————————————————————————————
-
-  private handleOpen(ws: ServerWebSocket<WebSocketData<T>>) {
-    const clientId = ws.data.clientId;
-
-    console.log(`[ws] Connection opened: ${clientId}`);
-    const userId = ws.data.userId;
-    const context = {
-      ws,
-      send: this.createSendFunction(ws),
-    };
-    // console.log(this.handlers)
-    // Execute all registered open handlers
-    this.handlers.open.forEach((handler) => {
+    // Execute registered open handlers
+    const context: OpenHandlerContext<WsData & T> = { ws, send };
+    // console.log(this.openHandlers);
+    this.openHandlers.forEach((handler) => {
       try {
-        // Call the handler, passing the WebSocket instance
+        // Add server to context if needed by specific open handlers
+        // context.server = this.server;
         const result = handler(context);
-        // Handle async handlers if they return a promise
+        console.log(result);
         if (result instanceof Promise) {
-          result.catch((error) => {
+          result.catch((error) =>
             console.error(
-              `Unhandled promise rejection in open handler for ${clientId}:`,
+              `[WS OPEN] Error in async open handler for ${clientId}:`,
               error
-            );
-          });
+            )
+          );
         }
       } catch (error) {
-        console.error(`Error in open handler for ${clientId}:`, error);
-        // ws.close(1011, "Internal server error during connection setup");
+        console.error(
+          `[WS OPEN] Error in sync open handler for ${clientId}:`,
+          error
+        );
       }
     });
-
-    // ws.data.userId || `guest-${Math.random().toString(36).substring(2, 9)}`
-    // ws.data.userId = userId
-    // ws.data.username = ws.data.username || 'Anonymous' // Set a default username
-
-    // connectedClients.set(userId, ws)
-    console.log(
-      `WebSocket connection opened for user: ${userId} (username: ${ws.data.username})`
-    );
-    ws.send(
-      JSON.stringify({
-        type: "connection_ack",
-        message: "Connected to WebSocket server!",
-        userId,
-      })
-    );
-
-    // Subscribe to a default room or based on ws.data.roomId
-    const roomId = "db_updates";
-    ws.subscribe(roomId);
-    console.log(`User ${userId} subscribed to room: ${roomId}`);
-    // Announce new user to the room
-    this.server.publish(
-      roomId,
-      JSON.stringify({
-        type: "user_join",
-        username: ws.data.username,
-        userId: ws.data.userId,
-        timestamp: new Date().toISOString(),
-      })
-    );
-    this.connectedClients.push(ws);
   }
 
   private handleClose(
-    ws: ServerWebSocket<WebSocketData<T>>,
+    ws: ServerWebSocket<WsData & T>,
     code: number,
     reason?: string
   ) {
-    const clientId = ws.data.clientId;
+    const { clientId, userId, currentRoomId } = ws.data;
     console.log(
-      `[ws] Connection closed: ${clientId} (Code: ${code}, Reason: ${
-        reason || "N/A"
-      })`
+      `[WS CLOSE] Connection closed: Client ${clientId}, User ${userId}. Code: ${code}, Reason: ${reason || "N/A"}`
     );
 
-    const context = {
-      ws,
-      code,
-      reason,
-      send: this.createSendFunction(ws),
-    };
+    // Ensure server instance is available for potential publish
+    if (!this.isServerSet) {
+      console.error(
+        `[WS CLOSE] Server instance not set for Client ${clientId}. Cannot publish UserLeft.`
+      );
+    }
 
-    // Execute all registered close handlers
-    this.handlers.close.forEach((handler) => {
+    // Unsubscribe user from their topic
+    if (userId) {
+      const userTopic = `user_${userId}_updates`;
+      ws.unsubscribe(userTopic);
+      // console.log(`[WS CLOSE] Unsubscribed user ${userId} from topic ${userTopic}`);
+    }
+
+    // If user was in a room, unsubscribe and notify others
+    if (this.isServerSet && userId && currentRoomId) {
+      // console.log(`[WS CLOSE] User ${userId} leaving room ${currentRoomId}`);
+      ws.unsubscribe(currentRoomId);
+      // Use the central publish utility, requires the server instance
+      publish(ws, this.server, currentRoomId, UserLeft, {
+        roomId: currentRoomId,
+        userId,
+      });
+    } else if (userId && currentRoomId) {
+      console.warn(
+        `[WS CLOSE] Cannot publish UserLeft for user ${userId} in room ${currentRoomId}: Server instance not set yet.`
+      );
+    }
+
+    // Execute registered close handlers
+    const send = this.createSendFunction(ws);
+    const context: CloseHandlerContext<WsData & T> = { ws, code, reason, send };
+    this.closeHandlers.forEach((handler) => {
       try {
-        // Call the handler, passing the WebSocket instance, code, and reason
+        // context.server = this.server; // Add if needed
         const result = handler(context);
-        // Handle async handlers if they return a promise
         if (result instanceof Promise) {
-          result.catch((error) => {
+          result.catch((error) =>
             console.error(
-              `[ws] Unhandled promise rejection in close handler for ${clientId}:`,
+              `[WS CLOSE] Error in async close handler for ${clientId}:`,
               error
-            );
-          });
+            )
+          );
         }
       } catch (error) {
-        // Catch synchronous errors in handlers
-        console.error(`[ws] Error in close handler for ${clientId}:`, error);
+        console.error(
+          `[WS CLOSE] Error in sync close handler for ${clientId}:`,
+          error
+        );
       }
     });
   }
 
   private handleMessage(
-    ws: ServerWebSocket<WebSocketData<T>>,
+    ws: ServerWebSocket<WsData & T>,
     message: string | Buffer
   ) {
-    const clientId = ws.data.clientId;
-    let parsedMessage: unknown;
+    const { clientId } = ws.data;
 
-    try {
-      // Assuming messages are JSON strings
-      if (typeof message === "string") {
-        parsedMessage = JSON.parse(message);
-      } else if (message instanceof Buffer) {
-        // Or handle Buffer messages if needed, e.g., parse as JSON
-        parsedMessage = JSON.parse(message.toString());
-      } else {
-        console.warn(
-          `[ws] Received non-string/buffer message from ${clientId}`
-        );
-        return;
-      }
-
-      // Basic validation for message structure (must have a 'type' property)
-      if (
-        typeof parsedMessage !== "object" ||
-        parsedMessage === null ||
-        typeof (parsedMessage as { type: unknown }).type !== "string"
-      ) {
-        console.warn(
-          `[ws] Received invalid message format from ${clientId}:`,
-          parsedMessage
-        );
-        // Optionally send an error message back or close the connection
-        // ws.send(JSON.stringify({ error: "Invalid message format" }));
-        // ws.close(1003, "Invalid message format");
-        return;
-      }
-    } catch (error) {
-      console.error(`[ws] Failed to parse message from ${clientId}:`, error);
-      // Optionally send an error message back or close the connection
-      // ws.send(JSON.stringify({ error: "Invalid JSON" }));
-      // ws.close(1003, "Invalid JSON");
+    // Ensure server instance is set before processing messages if handlers need it
+    if (!this.isServerSet) {
+      console.error(
+        `[WS MSG] Received message from Client ${clientId}, but server instance not set. Cannot process.`
+      );
+      // Optionally close or send an error
+      // ws.close(1011, "Server not ready");
       return;
     }
-    const messageType = (parsedMessage as { type: string }).type;
-    const handlerEntry = this.handlers.message.get(messageType);
+
+    const parseResult = safeJsonParse(message);
+    if (!parseResult.success || !parseResult.data) {
+      console.warn(
+        `[WS MSG] Failed parsing message from client ${clientId}`,
+        parseResult.error
+      );
+      return;
+    }
+
+    const parsedMessage = parseResult.data;
+    const messageType = parsedMessage.type as string;
+    const handlerEntry = this.messageHandlers.get(messageType);
 
     if (!handlerEntry) {
       console.warn(
-        `[ws] No handler found for message type "${messageType}" from ${clientId}`
-      );
-      // Optionally send a message indicating the type is unsupported
-      ws.send(
-        JSON.stringify({ error: `Unsupported message type: ${messageType}` })
+        `[WS MSG] No handler found for type "${messageType}" from client ${clientId}.`
       );
       return;
     }
 
     const { schema, handler } = handlerEntry;
+    const validationResult = schema.safeParse(parsedMessage);
 
+    if (!validationResult.success) {
+      console.error(
+        `[WS MSG] Validation failed for type "${messageType}" from client ${clientId}:`,
+        validationResult.error.flatten()
+      );
+      return;
+    }
+
+    const validatedData = validationResult.data;
+    const send = this.createSendFunction(ws);
+
+    // Construct context, **including the server instance**
+    // Construct the context object for the handler
+    const context: MessageHandlerContext<MessageSchemaType, WsData & T> = {
+      ws,
+      meta: validatedData.meta,
+      send,
+      server: this.server, // <<<<< ADD THIS LINE >>>>>
+      ...(validatedData.payload !== undefined && {
+        payload: validatedData.payload,
+      }),
+    };
     try {
-      // Validate the message against the registered schema
-      const validationResult = schema.safeParse(parsedMessage);
-
-      if (!validationResult.success) {
-        console.error(
-          `[ws] Message validation failed for type "${messageType}" from ${clientId}:`,
-          validationResult.error.errors // Log Zod errors
-        );
-        // Optionally send detailed validation errors back (be cautious with sensitive info)
-        // ws.send(JSON.stringify({ error: "Validation failed", details: validationResult.error.flatten() }));
-        // ws.close(1007, "Invalid message payload");
-        return;
-      }
-
-      // Prepare the context for the handler
-      const validatedData = validationResult.data;
-      const context = {
-        ws,
-        type: validatedData.type, // Already known, but include for consistency
-        meta: validatedData.meta,
-        // Conditionally add payload if it exists in the schema and data
-        ...(validatedData.payload !== undefined && {
-          payload: validatedData.payload,
-        }),
-        send: this.createSendFunction(ws),
-      };
-
-      // Execute the handler
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const result = handler(context as any);
-
-      // Handle async handlers
+      const result = handler(context as any); // Cast needed due to generic handler storage
       if (result instanceof Promise) {
         result.catch((error) => {
           console.error(
-            `[ws] Unhandled promise rejection in message handler for type "${messageType}" from ${clientId}:`,
+            `[WS MSG] Unhandled rejection in handler for type "${messageType}" from client ${clientId}:`,
             error
           );
         });
       }
     } catch (error) {
-      // Catch synchronous errors in handlers
       console.error(
-        `[ws] Error in message handler for type "${messageType}" from ${clientId}:`,
+        `[WS MSG] Error in handler for type "${messageType}" from client ${clientId}:`,
         error
       );
-      // Optionally close the connection on handler error
-      // ws.close(1011, "Internal server error during message handling");
     }
   }
 
-  /**
-   * Creates a send function for a specific WebSocket connection.
-   * This function allows handlers to send typed messages with proper validation.
-   */
-  private createSendFunction(
-    ws: ServerWebSocket<WebSocketData<T>>
-  ): SendFunction {
+  /** Creates a validated `send` function scoped to a specific WebSocket connection. */
+  private createSendFunction(ws: ServerWebSocket<WsData & T>): SendFunction {
     return <Schema extends MessageSchemaType>(
       schema: Schema,
       payload: Schema["shape"] extends { payload: infer P }
@@ -420,39 +342,50 @@ export class WebSocketRouter<
           ? z.infer<P>
           : unknown
         : unknown,
-      meta: Partial<z.infer<Schema["shape"]["meta"]>> = {}
+      meta: Partial<
+        Omit<z.infer<Schema["shape"]["meta"]>, "clientId" | "timestamp">
+      > = {}
     ) => {
       try {
-        // Extract the message type from the schema
         const messageType = schema.shape.type._def.value;
-
-        // Create the message object with the required structure
         const message = {
           type: messageType,
           meta: {
             clientId: ws.data.clientId,
+            userId: ws.data.userId,
             timestamp: Date.now(),
             ...meta,
           },
-          ...(payload !== undefined && { payload }),
+          ...(schema.shape.payload && payload !== undefined && { payload }),
         };
-
-        // Validate the constructed message against the schema
         const validationResult = schema.safeParse(message);
-
         if (!validationResult.success) {
           console.error(
-            `[ws] Failed to send message of type "${messageType}": Validation error`,
-            validationResult.error.errors
+            `[WS SEND] Validation failed for type "${messageType}" to client ${ws.data.clientId}:`,
+            validationResult.error.flatten()
           );
           return;
         }
-
-        // Send the validated message
         ws.send(JSON.stringify(validationResult.data));
       } catch (error) {
-        console.error(`[ws] Error sending message:`, error);
+        console.error(
+          `[WS SEND] Error sending message type "${schema.shape.type._def.value}" to client ${ws.data.clientId}:`,
+          error
+        );
+        if (ws.readyState !== 1) {
+          // 1 === OPEN
+          // console.warn(`[WS SEND] Attempted to send to closed or closing socket ${ws.data.clientId}`);
+        }
       }
+    };
+  }
+
+  /** Returns the WebSocket handler object required by `Bun.serve`. */
+  public get websocket(): WebSocketHandler<WsData & T> {
+    return {
+      open: this.handleOpen.bind(this),
+      close: this.handleClose.bind(this),
+      message: this.handleMessage.bind(this),
     };
   }
 }

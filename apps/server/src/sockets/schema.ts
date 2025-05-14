@@ -63,7 +63,23 @@ export const SubscribeResponse = messageSchema("PONG", {
   status: z.boolean(),
   // timestamp: z.number().optional(),
 });
-
+// Example schema for database updates pushed to clients
+// export const DatabaseUpdate = messageSchema(
+//   "DATABASE_UPDATE",
+//   z.object({
+//     table: z.string(),
+//     operation: z.enum(["INSERT", "UPDATE", "DELETE"]),
+//     recordId: z.union([z.string(), z.number(), z.null()]).optional(), // Allow string/number/null IDs
+//     data: z.record(z.any()).nullable(), // The row data (can be null on DELETE)
+//     // changedColumns: z.array(z.string()).optional(), // Optional: if needed by client
+//   })
+// );
+export const DatabaseUpdate = z.object({
+  table: z.string(),
+  operation: z.enum(["INSERT", "UPDATE", "DELETE"]),
+  recordId: z.union([z.string(), z.number(), z.null()]).optional(), // Allow string/number/null IDs
+  data: z.record(z.any()).nullable(), // The row data (can be null on DELETE))
+});
 /**
  * Base message schema that all specific message types extend.
  * Defines the minimum structure required for routing.

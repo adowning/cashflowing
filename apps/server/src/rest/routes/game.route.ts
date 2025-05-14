@@ -1,5 +1,4 @@
-import { NETWORK_CONFIG } from '@cashflow/types'
-import createRouter from '../rest/create-router'
+import { NETWORK_CONFIG } from "@cashflow/types";
 import {
   getGameList,
   getGameGameCategory,
@@ -12,41 +11,42 @@ import {
   getGameSpin,
   getGameSpinPage,
   getGameFavoriteGame,
-} from '../services/game.service'
+} from "../services/game.service";
+import createRouter from "../create-router";
 
-const router = createRouter()
+const router = createRouter();
 router.get(NETWORK_CONFIG.GAME_INFO.GAME_LIST, async (c) => {
-  return await getGameList(c.req)
-})
+  return await getGameList(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.GAME_CATEGORY, async (c) => {
-  return await getGameGameCategory(c.req)
-})
+  return await getGameGameCategory(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.GAME_SEARCH, async (c) => {
-  return await getGameSearch(c.req)
-})
+  return await getGameSearch(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.GAME_ENTER, async (c) => {
-  return await getGameEnter(c.req, c.get('user')!)
-})
+  return await getGameEnter(c.req, c.get("user")!);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.USER_GAME, async (c) => {
-  return await getGameUserGame(c.req)
-})
+  return await getGameUserGame(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.FAVORITE_GAME, async (c) => {
-  return await getGameFavoriteGame(c.req, c.get('user')!)
-})
+  return await getGameFavoriteGame(c.req, c.get("user")!);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.FAVORITE_GAME_LIST, async (c) => {
-  return await getGameFavoriteGameList(c.req)
-})
+  return await getGameFavoriteGameList(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.GAME_HISTORY, async (c) => {
-  return await getGameHistory(c.req, c.get('user')!)
-})
+  return await getGameHistory(c.req, c.get("user")!);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.GAME_BIGWIN, async (c) => {
-  return await getGameBigWin(c.req)
-})
+  return await getGameBigWin(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.SPIN, async (c) => {
-  return await getGameSpin(c.req)
-})
+  return await getGameSpin(c.req);
+});
 router.get(NETWORK_CONFIG.GAME_INFO.SPINPAGE, async (c) => {
-  return await getGameSpinPage(c.req)
-})
+  return await getGameSpinPage(c.req);
+});
 
-export default router
+export default router;

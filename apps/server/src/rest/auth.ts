@@ -9,7 +9,6 @@ import { anonymous } from "better-auth/plugins";
 import { resend } from "./email";
 import db from "@cashflow/db";
 import { Gender, UserStatus } from "@cashflow/db/prisma/client";
-import { oneTapClient } from "better-auth/client/plugins";
 
 // eslint-disable-next-line node/no-process-env
 const { BETTER_AUTH_URL, JWT_SECRET, ALLOWED_ORIGINS, PORT } = process.env;

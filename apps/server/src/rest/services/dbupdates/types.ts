@@ -30,6 +30,7 @@ export type StringKeyMap = { [key: string]: any };
 export type TableOperationSubs = { [key: string]: EventCallback };
 
 export interface PendingEvent {
+  type: "INSERT" | "UPDATE" | "DELETE";
   timestamp: string;
   operation: Operation;
   schema: string;

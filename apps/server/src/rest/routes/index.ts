@@ -1,9 +1,7 @@
-import type { AppApi } from "../rest/types";
 import type { OpenAPIHono } from "@hono/zod-openapi"; // If using OpenAPIHono for the main app
 // import userRoutes from '../rest/routes/user.routes'; //
 
 import { BASE_PATH } from "@cashflow/types";
-import createRouter from "../rest/create-router";
 import healthRoute from "./health.route";
 import userRoute from "./user.route";
 import depositRoute from "./deposit.route";
@@ -12,6 +10,7 @@ import vipRoute from "./vip.route";
 import gameRoute from "./game.route";
 import authRoute from "./auth.route";
 import { Env } from "hono";
+import createRouter from "../create-router";
 
 export default [
   healthRoute,

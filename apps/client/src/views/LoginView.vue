@@ -7,6 +7,7 @@
   import { createAuthClient } from "better-auth/vue";
   import { oneTapClient } from "better-auth/client/plugins";
   import { useUserStore } from "@/stores/user";
+  import { useGlobalStore } from "@/stores/global";
 
   const googleLoginBtn = ref();
   const authClient = createAuthClient({
@@ -59,6 +60,7 @@
 
   // --- Component State ---
   const uiMode = ref<"signIn" | "signUp">("signIn"); // To toggle between sign-in and sign-up views in the flip card
+  const { finishLoading } = useGlobalStore();
 
   const formData = reactive({
     email: "", // Default to empty or test values for quick testing
@@ -179,12 +181,17 @@
       componentLoading.value = true;
       await signInWithGoogleIdToken(response.credential);
       componentLoading.value = false;
-      if (!errorState && authenticated.loggedIn) {
+
+      console.log(errorState);
+      console.log(authenticated.loggedIn);
+      if (errorState == null && authenticated.loggedIn == true) {
+        console.log("success");
         notificationStore.addNotification(
           "success",
           "Successfully signed in with Google!"
         );
-        // router.push('/dashboard');
+        router.push("/home");
+        // window.location.reload();
       } else if (errorState) {
         notificationStore.addNotification(
           "error",
@@ -346,6 +353,7 @@
     if (authenticated.loggedIn) {
       router.push({ name: "Home" }); // Or your main app page
     }
+    finishLoading();
   });
   const isSignUpMode = ref(false); // false = login, true = signup
   const flipCardInner = ref<HTMLElement | null>(null);
@@ -410,7 +418,7 @@
         >Sign Up</span
       >
     </div>
-    <div class="mt-14 flex flex-col justify-center items-start pt-16">
+    <div class="mt-14 flex flex-col justify-center items-center pt-16">
       <!-- <div class="flex flex-col items-center" style="width: 100%; height: 40px"> -->
 
       <!-- </div> -->

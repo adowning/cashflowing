@@ -1,8 +1,8 @@
 import { NETWORK_CONFIG } from "@cashflow/types";
-import createRouter from "../rest/create-router";
 import { login, register, me, logout, google } from "../services/auth.service";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
+import createRouter from "../create-router";
 // import { GetMe, LoginSchema, RegisterSchema } from './schema'
 export const LoginSchema = z.object({
   username: z.string(),
