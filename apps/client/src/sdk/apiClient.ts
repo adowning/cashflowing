@@ -31,44 +31,21 @@ import type {
   UserVipStatus,
   VipBenefit as VipBenefitType,
   UpdatePasswordDto,
+  ApiErrorData,
+  ClientClaimVipRewardPayload,
+  InitializeDepositResponseDto,
+  LaunchGameResponseDto,
+  PaginatedResponse,
 } from "@cashflow/types"; // Or your monorepo's types package alias like @repo/types
 
 // --- Custom Client-Specific DTOs (Payloads sent from client) ---
 // Ideally, these should also be in @cashflow/types if they represent standard client->server contracts
 
-export interface ClientClaimVipRewardPayload {
-  benefit_id: string;
-}
-
-// --- Custom Response DTOs (if not explicitly in @cashflow/types) ---
-export interface InitializeDepositResponseDto {
-  payment_url?: string;
-  deposit_id: string;
-  message?: string;
-  address?: string; // For crypto
-}
-
-export interface LaunchGameResponseDto {
-  launch_url: string;
-  game_session_id: string;
-}
-
-export interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page?: number;
-  limit?: number;
-}
-
 // --- Configuration ---
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api/v1";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // --- ApiError Class ---
-export interface ApiErrorData {
-  message: string;
-  code?: number | string;
-  errors?: Array<{ field: string; message: string }>; // For validation errors
-}
+
 export class ApiError extends Error {
   public code: number | string | undefined;
   public data: ApiErrorData;

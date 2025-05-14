@@ -328,3 +328,8 @@ export interface VipBenefit {
   created_at: Date;
   updated_at: Date;
 }
+// Suggested location: packages/types/src/interface/vip.ts
+// (Assuming VipBenefitId is a string, typically a UUID or CUID)
+export interface ClientClaimVipRewardPayload {
+  benefit_id: string; // The unique identifier of the VIP benefit to be claimed.
+}

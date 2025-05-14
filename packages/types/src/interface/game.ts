@@ -1,4 +1,4 @@
-import { CurrencyType } from "./currency";
+import { Currency } from "./currency";
 import { UserType } from "./user";
 
 export type GameCategoryName = "TABLE" | "FISH" | "POKER" | "SLOTS" | "OTHER";
@@ -242,5 +242,33 @@ export interface GameRound {
   updated_at: Date;
   user?: UserType; // Optional relation
   game?: GameType; // Optional relation
-  currency?: CurrencyType; // Optional relation
+  currency?: Currency; // Optional relation
+}
+
+// Suggested location: packages/types/src/interface/game.ts
+export interface LaunchGameResponseDto {
+  /**
+   * The URL to launch the game session.
+   * This could be an iframe source or a URL for redirection.
+   */
+  launch_url: string;
+
+  /**
+   * A unique session identifier for this game launch, if provided by the game aggregator or server.
+   * Can be used for tracking or further communication related to this session.
+   */
+  game_session_id?: string;
+
+  /**
+   * Any specific strategy for launching the game (e.g., 'IFRAME', 'REDIRECT', 'POPUP').
+   * Optional, defaults to client figuring it out or a standard method.
+   */
+  launch_strategy?: "IFRAME" | "REDIRECT" | "POPUP";
+
+  /**
+   * Additional parameters or tokens required by the game provider, serialized as a string
+   * or as a nested object.
+   * Optional.
+   */
+  provider_parameters?: Record<string, any> | string;
 }

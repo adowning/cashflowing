@@ -52,8 +52,8 @@ export interface UpdateUserInput {
  * Requires current password for verification.
  */
 export interface UpdateEmailDto {
-  new_email: Email;
-  password_hash: string; // Current password for verification (ensure server expects 'password')
+  _email: Email;
+  password: string; // Current password for verification (ensure server expects 'password')
 }
 
 /**
@@ -61,8 +61,8 @@ export interface UpdateEmailDto {
  * Requires current password for verification.
  */
 export interface UpdateCashtagDto {
-  new_cashtag: string; // The new cashtag value
-  password_hash: string; // Current password for verification (ensure server expects 'password')
+  cashtag: string; // The new cashtag value
+  password: string; // Current password for verification (ensure server expects 'password')
 }
 
 /**
@@ -70,7 +70,7 @@ export interface UpdateCashtagDto {
  */
 export interface UpdatePasswordDto {
   current_password: string; // User's current plain text password
-  new_password: string; // User's new plain text password
+  password: string; // User's new plain text password
 }
 
 /**
@@ -214,225 +214,3 @@ export interface StatsUpdate {
   >;
   event_id?: string; // Unique event identifier
 }
-// import { CurrencyType, Profile, User, VipBenefit } from "../index";
-
-// export interface GetUserInfo {
-//   uid: string;
-//   username: string;
-//   avatar: string;
-//   first_name: string;
-//   last_name: string;
-//   id: number | string;
-//   id_number: string;
-//   email: string;
-//   email_confirmd: boolean;
-//   phone: string;
-//   phone_confirmd: boolean;
-//   date_of_birth: string;
-//   county: string;
-//   state: string;
-//   city: string;
-//   address: string;
-//   postal_code: string;
-//   language: string;
-//   locale: string;
-//   initial_profile_complete: boolean;
-//   is_supended: number;
-//   sys_communications: boolean;
-//   locked_personal_info_fields: Array<string>;
-//   create_at: number;
-// }
-// export interface GetUserAmount {
-//   amount: number;
-//   currency: {
-//     fiat: true;
-//     name: string;
-//     symbol: string;
-//     type: string;
-//   };
-//   withdraw: number;
-//   rate: number;
-// }
-// export interface UpdateEmail {
-//   email: string;
-//   password: string;
-// }
-// export interface UpdateCashtag {
-//   cashtag: string;
-//   password: string;
-// }
-// export interface UpdatePassword {
-//   now_password: string;
-//   new_password: string;
-// }
-// export interface GetUserBalance {
-//   amount: number;
-//   currency: string;
-//   availabe_balance: number;
-//   real: number | string;
-//   bonus: number | string;
-// }
-// export interface UpdateSuspendUser {
-//   time: number;
-// }
-// export type GetUserInfoResponseData = {
-//   code: number;
-//   user: Partial<User>;
-//   profile: Partial<Profile>;
-//   // message: string;
-// };
-// export type GetUserBalanceResponseData = {
-//   code: number;
-//   data: GetUserBalance;
-//   message: string;
-// };
-// export type GetUserEmailVerifyResponseData = {
-//   code: number;
-//   time: number;
-//   message: string;
-// };
-// export type GetUserAmountResponseData = {
-//   code: number;
-//   data: GetUserAmount;
-//   message: string;
-// };
-
-// export type ProfileStatsUpdateData = {
-//   balance: number;
-//   createdAt: Date;
-//   currency: "USD";
-//   id: string;
-//   isActive: boolean;
-//   lastPlayed: Date;
-//   phpId: number;
-//   shopId: string;
-//   updatedAt: string | null;
-//   userId: string;
-//   xpEarned: number;
-// };
-
-// export type UserStatsUpdateData = {
-//   balance: number;
-//   totalXp: number;
-// };
-
-// export type StatsUpdate = {
-//   table: string;
-//   table_name: string;
-//   row_id: string;
-//   operation: "UPDATE" | "INSERT" | "DELETE";
-//   data: UserStatsUpdateData | ProfileStatsUpdateData;
-//   event_id: number;
-// };
-// // You would typically place these in relevant files within your @cashflow/types package
-// // e.g., auth.interface.ts, user.interface.ts, vip.interface.ts, etc.
-// // Ensure that types like 'User', 'Currency', 'Game' (Prisma models) are properly exported
-// // from your @cashflow/types package, potentially aliased (e.g., User as UserType).
-
-// // For example, you might have in your main types export (e.g., packages/types/src/index.ts):
-// // export type { User as UserType, Currency as CurrencyType, Game as GameType } from './prisma/interfaces';
-// // Assuming 'Email' and 'Username' are branded string types or simple strings:
-// type Email = string;
-// type Username = string;
-
-// // --- Prisma Model Based Types (Illustrative Structures) ---
-// // These interfaces are representative of what your Prisma models might look like.
-// // You would typically import these directly from your Prisma client generation or your re-export file.
-
-// /**
-//  * Represents a User. Based on the Prisma 'User' model.
-//  */
-// export interface UserType {
-//   id: string;
-//   email: Email;
-//   username?: Username | null;
-//   password_hash?: string | null; // Usually not sent to client
-//   is_email_verified: boolean;
-//   email_verified_at?: Date | null;
-//   avatar_url?: string | null;
-//   referral_code: string;
-//   referred_by_id?: string | null;
-//   balance_cash: number; // Consider using a Decimal library for precision if needed
-//   balance_bonus: number; // Consider using a Decimal library for precision if needed
-//   total_deposited: number;
-//   total_withdrawn: number;
-//   total_wagered: number;
-//   total_won: number;
-//   vip_level: number;
-//   vip_progress: number; // This could be XP points
-//   last_login_at?: Date | null;
-//   is_banned: boolean;
-//   ban_reason?: string | null;
-//   banned_at?: Date | null;
-//   roles: string[]; // e.g., ['USER', 'ADMIN']
-//   created_at: Date;
-//   updated_at: Date;
-//   // Include any other relevant fields from your User model
-// }
-
-// /**
-//  * Represents a User's Balance for a specific currency.
-//  * Based on the Prisma 'Balance' model.
-//  */
-// export interface Balance {
-//   id: string;
-//   user_id: string;
-//   currency_id: string;
-//   balance_cash: number; // Consider using a Decimal library for precision
-//   balance_bonus: number; // Consider using a Decimal library for precision
-//   created_at: Date;
-//   updated_at: Date;
-//   user?: UserType; // Optional relation
-//   currency?: CurrencyType; // Optional relation
-// }
-
-// /**
-//  * DTO for updating user information.
-//  * This should contain only the fields a user is allowed to modify.
-//  * Based on your `packages/types/src/interface/user.ts` `UpdateUserInput`
-//  * and server's `updateUserSchema`.
-//  */
-// export interface UpdateUserInput {
-//   username?: Username;
-//   avatar_url?: string; // If user can set avatar via URL
-//   // Add other fields that are updatable by the user,
-//   // e.g., profile settings, notification preferences.
-//   // Make sure these align with what your server endpoint accepts.
-// }
-
-// /**
-//  * DTO for setting a referrer for a user.
-//  */
-// export interface SetReferrerDto {
-//   referrerCode: string;
-// }
-
-// /**
-//  * DTO for tipping another user.
-//  */
-// export interface TipUserDto {
-//   recipientUsername: Username;
-//   amount: number; // Should be positive
-//   currency_id: string; // ID of the currency being tipped
-// }
-
-// /**
-//  * DTO representing the user's VIP status.
-//  * Based on `packages/types/src/interface/vip.ts`.
-//  */
-// export interface UserVipStatus {
-//   level: number;
-//   currentPoints: number; // Current VIP XP or points
-//   pointsToNextLevel: number; // Points needed to reach the next level from 0 (or from start of current level)
-//   // Or, this could be 'pointsRemainingToNextLevel'
-//   nextLevel?: number; // The number of the next level
-//   progressPercentage: number; // Percentage towards the next level (0-100)
-//   currentLevelName: string;
-//   nextLevelName?: string;
-//   benefits: VipBenefit[]; // A list of currently unlocked and active benefits for the user.
-//   // Or could be string descriptions as per your original type.
-//   // Using VipBenefit[] is more structured.
-//   // Consider adding:
-//   // xpForCurrentLevelStart?: number; // XP required to enter the current level
-//   // xpForNextLevelStart?: number; // XP required to enter the next level
-// }

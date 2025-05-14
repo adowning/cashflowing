@@ -58,3 +58,13 @@ export interface ChatSummary {
 export interface ChatSummaryMap {
   [userId: number]: ChatSummary;
 }
+
+// Specific interface from shared/interface/chat.ts
+export interface ChatMessagePayload {
+  type?: string; // 'new_message', 'user_join', 'user_leave', etc.
+  content: string;
+  roomId?: string;
+  userId?: string;
+  username?: string;
+  timestamp?: string;
+}

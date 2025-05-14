@@ -101,38 +101,52 @@ export interface Transaction {
   // Add other relevant fields
 }
 
-export interface ChatMessage {
-  id: string;
-  content: string;
-  userId: string;
-  roomId?: string | null;
-  channel: ChatChannel;
-  createdAt: Date;
-  user?: Partial<User>; // Optional: include user details
+// Suggested location: packages/types/src/index.ts or a common types file like common.interface.ts
+/**
+ * Generic interface for paginated API responses.
+ * @template T The type of the items in the paginated list.
+ */
+export interface PaginatedResponse<T> {
+  /**
+   * Array of items for the current page.
+   */
+  items: T[];
+
+  /**
+   * Total number of items available across all pages.
+   */
+  total: number;
+
+  /**
+   * The current page number (usually 1-indexed).
+   * Optional, but highly recommended for pagination controls.
+   */
+  page?: number;
+
+  /**
+   * The number of items per page.
+   * Optional, but highly recommended.
+   */
+  limit?: number;
+
+  /**
+   * Total number of pages.
+   * Optional, can be calculated if 'total' and 'limit' are present.
+   */
+  totalPages?: number;
+
+  /**
+   * Indicates if there is a next page.
+   * Optional, can be calculated.
+   */
+  hasNextPage?: boolean;
+
+  /**
+   * Indicates if there is a previous page.
+   * Optional, can be calculated.
+   */
+  hasPrevPage?: boolean;
 }
-
-// Specific interface from shared/interface/chat.ts
-export interface ChatMessagePayload {
-  type?: string; // 'new_message', 'user_join', 'user_leave', etc.
-  content: string;
-  roomId?: string;
-  userId?: string;
-  username?: string;
-  timestamp?: string;
-}
-
-// Add other interfaces from your 'shared/interface/*.ts' files as needed
-// Example:
-// export interface GetUserData {
-//   id: string;
-//   avatar: string;
-//   name: string;
-//   grade_level: string;
-//   grade: string;
-//   wallet: number | string;
-//   currency: string;
-// }
-
 // Placeholder for other types you might have
 export type GenericApiResponse<T = any> = {
   code: number;
@@ -148,8 +162,3 @@ export type GenericApiResponse<T = any> = {
 //   email: string;
 //   password_hash: string;
 // } // Field name 'password_hash' in DTO, but it carries the plain password.
-export interface ClientRegisterPayload {
-  email: string;
-  password_hash: string;
-  username: string;
-}

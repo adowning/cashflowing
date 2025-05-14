@@ -99,3 +99,59 @@ export interface InitializeDepositDto {
   method: string; // Payment method identifier (e.g., 'CASHAPP', 'CRYPTO_BTC', 'CREDIT_CARD')
   currency_id: string; // ID of the currency for the deposit
 }
+
+// Suggested location: packages/types/src/interface/deposit.ts
+export interface InitializeDepositResponseDto {
+  /**
+   * The unique identifier for the initiated deposit transaction.
+   */
+  deposit_id: string;
+
+  /**
+   * The payment method used (e.g., "CRYPTO", "CASHAPP", "CARD").
+   * This helps the client understand the next steps or display relevant info.
+   */
+  payment_method: string;
+
+  /**
+   * URL to redirect the user to for completing the payment (e.g., a payment gateway page).
+   * Optional, as some methods might not require immediate redirection (e.g., crypto address display).
+   */
+  payment_url?: string;
+
+  /**
+   * For crypto deposits, this would be the address to send funds to.
+   * Optional, only relevant for certain payment methods.
+   */
+  crypto_address?: string;
+
+  /**
+   * For crypto deposits that use memo/destination tags (e.g., XRP, XLM).
+   * Optional.
+   */
+  crypto_memo?: string;
+
+  /**
+   * Any additional message or instructions for the user.
+   * e.g., "Please send an exact amount for faster processing."
+   */
+  message?: string;
+
+  /**
+   * QR code data for payment, could be the crypto address or a payment link.
+   * Optional.
+   */
+  qr_code_data?: string;
+
+  /**
+   * Expected amount for the deposit, could be useful if there are fees or conversions.
+   * Optional.
+   */
+  expected_amount?: string; // Using string for precise currency representation
+
+  /**
+   * Currency ID for the expected amount.
+   * Optional.
+   */
+  currency_id?: string;
+}
