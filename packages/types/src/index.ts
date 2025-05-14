@@ -139,3 +139,17 @@ export type GenericApiResponse<T = any> = {
   data: T;
   message: string;
 };
+export interface ClientLoginPayload {
+  email: string;
+  password_hash: string;
+} // If server route expects 'password_hash' and you send plain text in this field.
+// OR, more likely and correctly:
+export interface ClientLoginPayload {
+  email: string;
+  password_hash: string;
+} // Field name 'password_hash' in DTO, but it carries the plain password.
+export interface ClientRegisterPayload {
+  email: string;
+  password_hash: string;
+  username: string;
+}

@@ -91,3 +91,11 @@ export type GetDepositHistoryResponse = {
   data: DepositHistoryResponse;
   message: string;
 };
+/**
+ * DTO for initializing a deposit.
+ */
+export interface InitializeDepositDto {
+  amount: number; // Should be positive
+  method: string; // Payment method identifier (e.g., 'CASHAPP', 'CRYPTO_BTC', 'CREDIT_CARD')
+  currency_id: string; // ID of the currency for the deposit
+}

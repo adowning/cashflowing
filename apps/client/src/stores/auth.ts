@@ -1,365 +1,239 @@
 // apps/client/src/stores/auth.ts
-import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import {
-  type ClientSession,
-  type ApiAuthError,
-  type AuthCredentials,
-  type SignUpPayload,
-  NETWORK_CONFIG,
-  type GetSession, // Assuming this is used for the /auth/session response
-  type ProfileStatsUpdateData, // Assuming this might be returned sometimes
-} from "@cashflow/types"; // Ensure these types are correctly imported
-import { useNotificationStore } from "./notifications";
-import { logToPage } from "@/utils/logger";
-import { handleException } from "./exception";
-import { Network } from "@/utils/Network";
-import { useUserStore } from "./user"; // Import user store to trigger user data fetching
+import { ref, computed, watch } from "vue";
+import { getApiClient } from "@/sdk/apiClient";
+import type {
+  UserType,
+  AuthResponseDto,
+  GoogleSignInDto,
+  RefreshTokenDto, // For logout payload
+} from "@cashflow/types"; // Or @repo/types
+import type {
+  ApiError,
+  ClientLoginPayload,
+  ClientRegisterPayload,
+} from "@/sdk/apiClient"; // Assuming these are exported from apiClient or defined in types
 
-export const useAuthStore = defineStore(
-  "auth",
-  () => {
-    // --- State ---
-    // Use sessionState as the single source of truth for the current session data
-    const sessionState = ref<ClientSession | null>(null);
-    const loadingState = ref<boolean>(false);
-    const errorState = ref<ApiAuthError | null>(null);
-    // Tracks if the initial check (on app load) has completed
-    const initialAuthCheckCompleteState = ref<boolean>(false);
+const TOKEN_KEY = "accessToken";
+const REFRESH_TOKEN_KEY = "refreshToken";
 
-    // --- Getters (Computed properties) ---
-    const session = computed(() => sessionState.value);
-    const isLoading = computed(() => loadingState.value);
-    const error = computed(() => errorState.value);
+interface AuthErrorState {
+  message: string;
+  code?: number | string;
+}
 
-    // Single source of truth for authentication status
-    const isAuthenticated = computed(() => !!sessionState.value?.token);
-    const initialAuthCheckComplete = computed(
-      () => initialAuthCheckCompleteState.value
-    );
+export const useAuthStore = defineStore("auth", () => {
+  const accessToken = ref<string | null>(
+    localStorage.getItem(TOKEN_KEY) || null
+  );
+  const refreshToken = ref<string | undefined>(
+    localStorage.getItem(REFRESH_TOKEN_KEY) || undefined
+  ); // Changed to string | undefined
+  const currentUser = ref<UserType | null>(null);
+  const isLoading = ref<boolean>(false);
+  const error = ref<AuthErrorState | null>(null);
+  const initialAuthCheckComplete = ref<boolean>(false);
 
-    // --- Actions (Functions) ---
+  const isAuthenticated = computed(
+    () => !!accessToken.value && !!currentUser.value
+  );
 
-    // Helper to set the session state
-    function setSession(newSession: ClientSession | null) {
-      sessionState.value = newSession;
-      // When session changes, clear any lingering auth error
-      if (newSession !== null) {
-        clearAuthError();
-      }
+  // This action is crucial for updating auth state, including after token refresh by apiClient
+  function setAuthData(data: AuthResponseDto) {
+    console.log("AuthStore: Setting auth data", data);
+    accessToken.value = data.accessToken;
+    refreshToken.value = data.refreshToken; // data.refreshToken is string | undefined
+    currentUser.value = data.user;
+    error.value = null; // Clear previous errors on successful auth data set
+
+    localStorage.setItem(TOKEN_KEY, data.accessToken);
+    if (data.refreshToken) {
+      localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+    } else {
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
     }
-
-    function setLoading(loading: boolean) {
-      loadingState.value = loading;
-    }
-
-    function setError(newError: ApiAuthError | null) {
-      const notificationStore = useNotificationStore();
-      errorState.value = newError;
-      if (newError !== null) {
-        logToPage("error", "Auth Error:", newError.message);
-        // Optionally only show notification for certain errors
-        notificationStore.addNotification("error", newError.message);
-      }
-    }
-
-    function setInitialAuthCheckComplete(complete: boolean) {
-      initialAuthCheckCompleteState.value = complete;
-    }
-
-    function clearAuthError() {
-      errorState.value = null;
-    }
-
-    /**
-     * @description Initializes the authentication state on app startup.
-     * Checks for an existing session/token and fetches user data if found.
-     */
-    async function initializeAuth() {
-      logToPage("info", "Initializing authentication...");
-      setLoading(true);
-      setInitialAuthCheckComplete(false);
-      clearAuthError();
-
-      // Assuming the token is persisted (e.g., in local storage or cookies)
-      // Your current implementation seems to rely on sessionState being persisted by Pinia plugin
-      // If using local storage/cookies directly, read it here
-      // const token = readTokenFromStorage(); // Implement this utility if needed
-      const initialSession = sessionState.value; // Check session from persisted state
-
-      if (initialSession?.token) {
-        logToPage(
-          "debug",
-          "Found existing token, attempting to validate session and fetch user data."
-        );
-        // Attempt to fetch/validate the session and get fresh user data
-        try {
-          // Use the Network class to call the session endpoint
-          const network = Network.getInstance();
-          const route: string = NETWORK_CONFIG.LOGIN.ME; // Or your session validation endpoint
-
-          // Assuming the session endpoint returns user/profile data if token is valid
-          const response = await network.sendMsg(
-            route,
-            undefined,
-            (res: GetSession) => res,
-            1
-          );
-
-          if (response?.code === 200 && response.session) {
-            // Update session state with potentially fresh data from the server
-            setSession(response.session);
-            logToPage("info", "Session validated and state updated.");
-
-            // *** User data fetching is now handled by userStore subscription ***
-            // The userStore will react to sessionState.value being set and fetch user data
-          } else {
-            // Token was invalid or expired
-            logToPage(
-              "warn",
-              "Existing token invalid or expired. Clearing session."
-            );
-            await signOut(false); // Clear session locally, don't call logout API again
-          }
-        } catch (e: any) {
-          logToPage("error", "Error during initial session validation:", e);
-          // Assume token is invalid on network error during validation
-          await signOut(false); // Clear session locally
-          setError({ message: "Failed to validate session.", code: 500 }); // Or a more specific error
-        }
-      } else {
-        logToPage(
-          "info",
-          "No existing token found. User is not authenticated."
-        );
-        // Ensure session and user data are cleared if no token was found
-        setSession(null);
-        const userStore = useUserStore(); // Access user store to clear its state
-        userStore.clearUser();
-        userStore.clearProfile();
-      }
-
-      setInitialAuthCheckComplete(true);
-      setLoading(false);
-      logToPage("info", "Authentication initialization complete.");
-    }
-
-    async function signInWithPassword(credentials: AuthCredentials) {
-      logToPage("info", `Attempting sign in for ${credentials.email}...`);
-      setLoading(true);
-      clearAuthError();
-      try {
-        const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
-        const network: Network = Network.getInstance();
-
-        const response = await network.sendMsg(
-          route,
-          credentials,
-          (res: ClientSession) => res,
-          1
-        );
-
-        if (response?.code === 200 && response.session) {
-          logToPage("info", "Sign in successful.");
-          setSession(response.session);
-          // The userStore subscription will automatically fetch user data now
-          return { success: true, error: null };
-        } else {
-          const errorMessage = handleException(response?.code || 500);
-          setError({
-            message: errorMessage,
-            code: response?.code || 500,
-          });
-          setSession(null); // Ensure session is null on failure
-          logToPage("error", "Sign in failed:", errorMessage);
-          return { success: false, error: errorState.value };
-        }
-      } catch (e: any) {
-        logToPage("error", "Sign in network error:", e);
-        setError({ message: "Network error during sign in.", code: 500 }); // Or refine error handling
-        setSession(null); // Ensure session is null on network error
-        return { success: false, error: errorState.value };
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function signUpNewUser(payload: SignUpPayload) {
-      logToPage("info", `Attempting sign up for ${payload.email}...`);
-      setLoading(true);
-      clearAuthError();
-      try {
-        const route: string = NETWORK_CONFIG.LOGIN.REGISTER;
-        const network: Network = Network.getInstance();
-
-        // Assuming register endpoint also logs in the user and returns a session
-        const response = await network.sendMsg(
-          route,
-          payload,
-          (res: ClientSession) => res,
-          1
-        );
-
-        if (response?.code === 200 && response.session) {
-          logToPage("info", "Sign up successful and user logged in.");
-          setSession(response.session);
-          // The userStore subscription will automatically fetch user data now
-          return { success: true, error: null };
-        } else {
-          const errorMessage = handleException(response?.code || 500);
-          setError({
-            message: errorMessage,
-            code: response?.code || 500,
-          });
-          setSession(null); // Ensure session is null on failure
-          logToPage("error", "Sign up failed:", errorMessage);
-          return { success: false, error: errorState.value };
-        }
-      } catch (e: any) {
-        logToPage("error", "Sign up network error:", e);
-        setError({ message: "Network error during sign up.", code: 500 }); // Or refine error handling
-        setSession(null); // Ensure session is null on network error
-        return { success: false, error: errorState.value };
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function signInWithGoogleIdToken(idToken: string) {
-      logToPage("info", "Attempting Google Sign In...");
-      setLoading(true);
-      clearAuthError();
-      try {
-        const route: string = "/auth/google"; // Adjust if your Google auth endpoint is different
-        const network: Network = Network.getInstance();
-
-        const response = await network.sendMsg(
-          route,
-          { token: idToken },
-          (res: ClientSession) => res,
-          1
-        );
-
-        if (response?.code === 200 && response.session) {
-          logToPage("info", "Google Sign In successful.");
-          setSession(response.session);
-          // The userStore subscription will automatically fetch user data now
-          return { success: true, error: null };
-        } else {
-          const errorMessage = handleException(response?.code || 500);
-          setError({
-            message: errorMessage,
-            code: response?.code || 500,
-          });
-          setSession(null); // Ensure session is null on failure
-          logToPage("error", "Google Sign In failed:", errorMessage);
-          return { success: false, error: errorState.value };
-        }
-      } catch (e: any) {
-        logToPage("error", "Google Sign In network error:", e);
-        setError({
-          message: "Network error during Google Sign In.",
-          code: 500,
-        }); // Or refine error handling
-        setSession(null); // Ensure session is null on network error
-        return { success: false, error: errorState.value };
-      } finally {
-        setLoading(false);
-        // Note: initialAuthCheckComplete is set in initializeAuth on app load,
-        // Login/Signup success doesn't reset this flag.
-      }
-    }
-
-    /**
-     * @description Signs out the user. Optionally calls the logout API.
-     * @param callApi - Whether to call the server's logout endpoint. Defaults to true.
-     */
-    async function signOut(callApi: boolean = true) {
-      logToPage("info", "Attempting sign out...");
-      setLoading(true); // Maybe a separate logout loading state is useful?
-      clearAuthError(); // Clear any previous errors on sign out attempt
-
-      if (callApi) {
-        try {
-          const route: string = NETWORK_CONFIG.LOGIN.LOGOUT;
-          const network: Network = Network.getInstance();
-          // Assuming logout is a POST request, potentially with token in headers (handled by Network)
-          const response = await network.sendMsg(
-            route,
-            undefined,
-            (res: any) => res,
-            1
-          );
-
-          if (response?.code === 200) {
-            logToPage("info", "Server logout successful.");
-          } else {
-            // Log server-side logout error, but proceed with client-side clear
-            logToPage("warn", "Server logout failed:", response?.code);
-            setError({
-              message: handleException(response?.code || 500),
-              code: response?.code || 500,
-            });
-          }
-        } catch (e: any) {
-          logToPage("error", "Sign out network error:", e);
-          setError({ message: "Network error during sign out.", code: 500 }); // Or refine
-        }
-      }
-
-      // Always clear client-side state regardless of API call success/failure
-      setSession(null); // This will trigger userStore to clear its state via subscription
-      // Clear token from storage if not handled by setSession/persistence plugin
-      // removeTokenFromStorage(); // Implement this utility if needed
-
-      setLoading(false);
-      logToPage("info", "Client-side sign out complete.");
-
-      // Redirecting after logout is handled by App.vue watcher or navigation guard
-    }
-
-    // Return state, getters, and actions
-    return {
-      // State (exposed as refs for use with storeToRefs)
-      sessionState,
-      loadingState,
-      errorState,
-      initialAuthCheckCompleteState,
-
-      // Getters (computed properties)
-      session, // Provides the full session object reactively
-      isLoading,
-      error,
-      isAuthenticated, // Primary auth status indicator
-      initialAuthCheckComplete, // Primary initial check indicator
-
-      // Actions
-      initializeAuth, // New action for app bootstrap
-      signInWithPassword,
-      signUpNewUser,
-      signInWithGoogleIdToken,
-      signOut,
-      clearAuthError,
-
-      // Internal setters (only expose if strictly necessary for external use,
-      // prefer actions for state changes)
-      // setSession, // Keep private, managed by actions
-      // setLoading, // Keep private, managed by actions
-      // setError, // Keep private, managed by actions
-      setInitialAuthCheckComplete, // Might be needed if another part of the app confirms initialization externally? Review usage.
-    };
-  },
-  {
-    // Pinia persistence configuration (if used)
-    persist: {
-      paths: ["sessionState"], // Only persist the session data
-      storage: localStorage, // or sessionStorage, choose based on requirements
-    },
   }
-);
 
-// Removed useAuthStoreOutside as it encourages bypassing Pinia's provide/inject,
-// which is generally not needed in typical Vue 3 + Pinia applications.
-// If you strictly need to access the store outside setup(), ensure Pinia is installed
-// and imported correctly before use. If using in a router guard or similar,
-// you can import and use it directly after Pinia initialization in main.ts.
+  function clearAuthData() {
+    console.log("AuthStore: Clearing auth data");
+    accessToken.value = null;
+    refreshToken.value = undefined; // Set to undefined
+    currentUser.value = null;
+    // Do not clear 'error' here, let the action that calls clearAuthData decide if error should persist
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+  }
+
+  async function initializeAuth() {
+    console.log("AuthStore: Initializing authentication...");
+    isLoading.value = true;
+    initialAuthCheckComplete.value = false;
+    const storedToken = localStorage.getItem(TOKEN_KEY);
+    const storedRefreshTokenItem = localStorage.getItem(REFRESH_TOKEN_KEY);
+
+    if (storedToken) {
+      accessToken.value = storedToken;
+      refreshToken.value =
+        storedRefreshTokenItem === null ? undefined : storedRefreshTokenItem; // Ensure it's string | undefined
+      try {
+        const api = getApiClient();
+        const user = await api.auth.getMe(); // This might trigger token refresh in apiClient
+        // If getMe is successful (either directly or after refresh),
+        // the apiClient's refresh logic would have already called setAuthData.
+        // So, we just need to ensure currentUser is correctly set if not already by refresh.
+        if (currentUser.value?.id !== user.id) {
+          // Check if user data needs updating locally
+          currentUser.value = user;
+        }
+        console.log(
+          "AuthStore: User successfully authenticated via initializeAuth."
+        );
+      } catch (e: any) {
+        console.warn(
+          "AuthStore: Token verification or refresh failed during initializeAuth.",
+          e.message
+        );
+        // ApiClient's request handler would have attempted refresh.
+        // If it still fails (e.g. refresh token invalid), logout should have been called by ApiClient.
+        // We ensure clearAuthData is called if state is inconsistent.
+        if (e.name === "ApiError" && e.code === 401) {
+          // Already handled by apiClient's logout on final failure usually.
+          // If not, clearAuthData here is a safeguard.
+          clearAuthData();
+        } else if (!refreshToken.value && accessToken.value) {
+          // Has access token but no refresh token, and getMe failed not due to 401 (e.g. network error)
+          // This state is ambiguous, for safety clear auth.
+          clearAuthData();
+        }
+        error.value = {
+          message: e.message || "Session initialization failed",
+          code: e.code,
+        };
+      }
+    } else {
+      console.log("AuthStore: No stored token found during initializeAuth.");
+      clearAuthData();
+    }
+    isLoading.value = false;
+    initialAuthCheckComplete.value = true;
+  }
+
+  async function signInWithPassword(payload: ClientLoginPayload) {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      const api = getApiClient();
+      const responseData = await api.auth.login(payload);
+      setAuthData(responseData);
+      return { success: true, data: responseData };
+    } catch (e: any) {
+      console.error("AuthStore: Sign-in failed", e);
+      error.value = { message: e.message || "Sign-in failed", code: e.code };
+      clearAuthData(); // Clear partial auth data on failure
+      return { success: false, error: e as ApiError };
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function signUpNewUser(payload: ClientRegisterPayload) {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      const api = getApiClient();
+      const responseData = await api.auth.register(payload);
+      setAuthData(responseData);
+      return { success: true, data: responseData };
+    } catch (e: any) {
+      console.error("AuthStore: Sign-up failed", e);
+      error.value = { message: e.message || "Sign-up failed", code: e.code };
+      clearAuthData();
+      return { success: false, error: e as ApiError };
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function signInWithGoogleIdToken(idToken: string) {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      const api = getApiClient();
+      const googleSignInPayload: GoogleSignInDto = { idToken };
+      const responseData = await api.auth.signInWithGoogle(googleSignInPayload);
+      setAuthData(responseData);
+      return { success: true, data: responseData };
+    } catch (e: any) {
+      console.error("AuthStore: Google Sign-in failed", e);
+      error.value = {
+        message: e.message || "Google Sign-in failed",
+        code: e.code,
+      };
+      clearAuthData();
+      return { success: false, error: e as ApiError };
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function logout() {
+    isLoading.value = true;
+    const currentRefreshToken = refreshToken.value; // Capture before clearing
+    try {
+      const api = getApiClient();
+      if (currentRefreshToken) {
+        await api.auth.logout({
+          refreshToken: currentRefreshToken,
+        } as RefreshTokenDto);
+      }
+    } catch (e: any) {
+      console.warn(
+        "AuthStore: Logout API call failed (token might have been invalid or already expired):",
+        e.message
+      );
+    } finally {
+      clearAuthData();
+      isLoading.value = false;
+      error.value = null; // Clear any errors on logout
+      console.log("AuthStore: User logged out.");
+    }
+  }
+
+  function setStoreError(newError: AuthErrorState | null) {
+    error.value = newError;
+  }
+  function clearAuthError() {
+    error.value = null;
+  }
+
+  // Watchers for localStorage sync (optional, as setAuthData/clearAuthData handle it)
+  watch(accessToken, (newToken) => {
+    if (newToken) localStorage.setItem(TOKEN_KEY, newToken);
+    else localStorage.removeItem(TOKEN_KEY);
+  });
+  watch(refreshToken, (newRefreshToken) => {
+    // newRefreshToken is string | undefined
+    if (newRefreshToken)
+      localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
+    else localStorage.removeItem(REFRESH_TOKEN_KEY);
+  });
+
+  return {
+    accessToken,
+    refreshToken,
+    currentUser,
+    isLoading,
+    error,
+    initialAuthCheckComplete,
+    isAuthenticated,
+    initializeAuth,
+    signInWithPassword,
+    signUpNewUser,
+    signInWithGoogleIdToken,
+    logout,
+    setAuthData, // Important to expose for apiClient's token refresh
+    clearAuthData,
+    setError: setStoreError,
+    clearAuthError,
+  };
+});

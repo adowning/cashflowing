@@ -1,3 +1,6 @@
+import { CurrencyType } from "./currency";
+import { UserType } from "./user";
+
 export type GameCategoryName = "TABLE" | "FISH" | "POKER" | "SLOTS" | "OTHER";
 
 export interface Game {
@@ -178,3 +181,66 @@ export type GetGameHistoryResponse = {
   data: GameHistoryResponse;
   message: string;
 };
+
+/**
+ * Represents a Game Provider.
+ * Based on the Prisma 'GameProvider' model.
+ */
+export interface GameProvider {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  logo_url?: string | null;
+  is_enabled: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
+/**
+ * Represents a Game. Based on the Prisma 'Game' model.
+ */
+export interface GameType {
+  id: string;
+  name: string;
+  slug: string;
+  provider_id: string;
+  category_id?: string | null;
+  description?: string | null;
+  thumbnail_url?: string | null;
+  banner_url?: string | null;
+  external_game_id?: string | null; // ID from the game provider
+  tags?: string[];
+  rtp?: number | null; // Return to Player percentage
+  volatility?: string | null; // e.g., 'low', 'medium', 'high'
+  is_active: boolean;
+  is_featured?: boolean;
+  launch_options?: Record<string, any> | null; // JSON for specific launch params
+  created_at: Date;
+  updated_at: Date;
+  provider?: GameProvider; // Optional relation
+  // category?: GameCategoryType; // Optional relation
+}
+
+/**
+ * Represents a Game Round or history entry.
+ * Based on the Prisma 'GameRound' model.
+ */
+export interface GameRound {
+  id: string;
+  user_id: string;
+  game_id: string;
+  currency_id: string;
+  bet_amount: number; // Consider using a Decimal library
+  win_amount: number; // Consider using a Decimal library
+  profit: number; // Consider using a Decimal library (win_amount - bet_amount)
+  external_round_id?: string | null; // ID from the game provider, if available
+  status: string; // e.g., 'PENDING', 'COMPLETED', 'FAILED'
+  bet_details?: Record<string, any> | null; // JSON for complex bet info
+  win_details?: Record<string, any> | null; // JSON for complex win info
+  created_at: Date;
+  updated_at: Date;
+  user?: UserType; // Optional relation
+  game?: GameType; // Optional relation
+  currency?: CurrencyType; // Optional relation
+}

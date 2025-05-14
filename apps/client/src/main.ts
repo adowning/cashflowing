@@ -25,6 +25,7 @@ var app = createApp(App);
 // import { router } from '@/router'
 // import Vue3Marquee from 'vue3-marquee'
 import { resetAllStores, setupStore } from "./stores";
+import { initializeApiClient } from "./sdk/apiClient";
 // import { posthog } from 'posthog-js'
 // import InlineSvg from 'vue-inline-svg'
 
@@ -45,10 +46,21 @@ import { resetAllStores, setupStore } from "./stores";
 // app.use(VueQueryPlugin)
 // ;(window as any).posthog = posthog
 await setupStore(app);
+try {
+  initializeApiClient();
+} catch (error) {
+  console.error("Failed to initialize API client:", error);
+  // Handle critical initialization failure if necessary
+}
+
 // app.component('inline-svg', InlineSvg)
 // resetAllStores()
 app.use(router);
 // app.use(Vue3Marquee)
-app.mount("#app");
+// app.mount("#app");
 // const playerId = ''
 // startSubscriptions()
+router.isReady().then(() => {
+  app.mount("#app");
+  // loadingFadeOut(); // If you want to call this after router is ready and app is mounted
+});

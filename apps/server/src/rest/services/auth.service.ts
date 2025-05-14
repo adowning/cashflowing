@@ -292,7 +292,7 @@ export async function google(req: HonoRequest): Promise<Response> {
   // console.log(req);
   const json = await req.json();
   console.log(json);
-  const _token = json.token;
+  const _token = json.idToken;
   const signInUsername = await auth.api.signInSocial({
     body: {
       provider: "google",
