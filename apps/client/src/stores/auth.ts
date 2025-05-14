@@ -6,13 +6,11 @@ import type {
   UserType,
   AuthResponseDto,
   GoogleSignInDto,
-  RefreshTokenDto, // For logout payload
+  RefreshTokenDto,
+  AuthCredentials,
+  SignUpPayload, // For logout payload
 } from "@cashflow/types"; // Or @repo/types
-import type {
-  ApiError,
-  ClientLoginPayload,
-  ClientRegisterPayload,
-} from "@/sdk/apiClient"; // Assuming these are exported from apiClient or defined in types
+import type { ApiError } from "@/sdk/apiClient"; // Assuming these are exported from apiClient or defined in types
 
 const TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
@@ -118,7 +116,7 @@ export const useAuthStore = defineStore("auth", () => {
     initialAuthCheckComplete.value = true;
   }
 
-  async function signInWithPassword(payload: ClientLoginPayload) {
+  async function signInWithPassword(payload: AuthCredentials) {
     isLoading.value = true;
     error.value = null;
     try {
@@ -136,7 +134,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  async function signUpNewUser(payload: ClientRegisterPayload) {
+  async function signUpNewUser(payload: SignUpPayload) {
     isLoading.value = true;
     error.value = null;
     try {

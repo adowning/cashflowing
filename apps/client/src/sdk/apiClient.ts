@@ -12,10 +12,11 @@ import type {
   SetReferrerDto,
 
   // Currency and Transaction related
-  Balance as BalanceType,
+  BalanceType,
   Transaction as TransactionType,
   TipUserDto,
-
+  SignUpPayload,
+  AuthCredentials,
   // Deposit related
   InitializeDepositDto,
   Product as ProductType,
@@ -29,23 +30,12 @@ import type {
   // VIP related
   UserVipStatus,
   VipBenefit as VipBenefitType,
+  UpdatePasswordDto,
 } from "@cashflow/types"; // Or your monorepo's types package alias like @repo/types
 
 // --- Custom Client-Specific DTOs (Payloads sent from client) ---
 // Ideally, these should also be in @cashflow/types if they represent standard client->server contracts
-export interface ClientLoginPayload {
-  email: string;
-  password_hash: string;
-} // name it 'password' if server expects 'password'
-export interface ClientRegisterPayload {
-  email: string;
-  password_hash: string;
-  username: string;
-}
-export interface ClientChangePasswordPayload {
-  currentPassword: string;
-  newPassword: string;
-}
+
 export interface ClientClaimVipRewardPayload {
   benefit_id: string;
 }
@@ -248,9 +238,9 @@ class ApiClient {
 
   // --- Service Groups (ensure types match actual DTOs and Prisma models from @cashflow/types) ---
   public auth = {
-    login: (payload: ClientLoginPayload): Promise<AuthResponseDto> =>
+    login: (payload: AuthCredentials): Promise<AuthResponseDto> =>
       this.request<AuthResponseDto>("/auth/login", "POST", payload),
-    register: (payload: ClientRegisterPayload): Promise<AuthResponseDto> =>
+    register: (payload: SignUpPayload): Promise<AuthResponseDto> =>
       this.request<AuthResponseDto>("/auth/register", "POST", payload),
     logout: (payload: RefreshTokenDto): Promise<void> =>
       this.request<void>("/auth/logout", "POST", payload),
@@ -296,7 +286,7 @@ class ApiClient {
     },
     updateAvatar: (formData: FormData): Promise<UserType> =>
       this.request<UserType>("/users/me/avatar", "POST", formData),
-    changePassword: (payload: ClientChangePasswordPayload): Promise<void> =>
+    changePassword: (payload: UpdatePasswordDto): Promise<void> =>
       this.request<void>("/users/me/change-password", "POST", payload),
   };
 

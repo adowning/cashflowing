@@ -160,10 +160,10 @@ export interface ApiAuthError { // This is the old one. Replace or remove.
 // export interface GoogleSignInDto {
 //   idToken: string;
 // }
-// export interface SignUpPayload {
-//   // Or RegisterDto, ClientRegisterPayload etc.
-//   email: string;
-//   password: string; // Ensure this field name matches server Zod schema for registration
-//   username: string;
-//   // ... other fields
-// }
+export interface SignUpPayload {
+  // Or RegisterDto, ClientRegisterPayload etc.
+  email: string;
+  password: string; // Ensure this field name matches server Zod schema for registration
+  username: string;
+  // ... other fields
+}
