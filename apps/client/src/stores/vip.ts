@@ -1,32 +1,31 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue' // Import reactive functions
-import type * as Vip from '@cashflow/types'
-import { NETWORK_CONFIG } from '@cashflow/types'
-import { handleException } from './exception' // Assuming this path is correct
-import { Network } from '@/utils/Network'
-
+import { defineStore } from "pinia";
+import { ref, computed } from "vue"; // Import reactive functions
+import type * as Vip from "@cashflow/types";
+import { NETWORK_CONFIG } from "@cashflow/types";
+import { handleException } from "./exception"; // Assuming this path is correct
+import { Network } from "@/utils/Network";
 
 export const useVipStore = defineStore(
-  'vip',
+  "vip",
   () => {
-    const success = ref(false)
-    const errMessage = ref('')
-    const levelUpDialogVisible = ref(false)
-    const vipInfo = ref<Vip.VipInfo>({} as Vip.VipInfo) // Keeping type assertion as in original
-    const vipLevels = ref<Array<Vip.VipLevel>>([])
-    const vipTasks = ref<Array<Vip.VipTaskItem>>([])
+    const success = ref(false);
+    const errMessage = ref("");
+    const levelUpDialogVisible = ref(false);
+    const vipInfo = ref<Vip.VipInfo>({} as Vip.VipInfo); // Keeping type assertion as in original
+    const vipLevels = ref<Array<Vip.VipLevel>>([]);
+    const vipTasks = ref<Array<Vip.VipTaskItem>>([]);
     const vipRebateHistory = ref<Vip.VipRebateHistoryData>({
       total: 0,
       list: [],
-    })
+    });
     const vipLevelRewardHistory = ref<Vip.VipLevelRewardHistoryData>({
       total: 0,
       list: [],
-    })
+    });
     const vipTimesHistory = ref<Vip.VipTimesHistoryData>({
       total: 0,
       list: [],
-    })
+    });
     const vipSignIn = ref<Vip.VipSignInData>({
       award: [],
       signin_day: 0,
@@ -34,119 +33,121 @@ export const useVipStore = defineStore(
       limited_bet: 0,
       limited_deposit: 0,
       vip_level: 0,
-    })
+    });
     const vipLevelUpList = ref<Vip.VipLevelUpListData>(
-      {} as Vip.VipLevelUpListData,
-    ) // Keeping type assertion as in original
+      {} as Vip.VipLevelUpListData
+    ); // Keeping type assertion as in original
     const vipLevelUpReceive = ref<Vip.VipLevelUpReceiveData>(
-      {} as Vip.VipLevelUpReceiveData,
-    ) // Keeping type assertion as in original
-    const vipNavBarToggle = ref(localStorage.getItem('vipBar') || '') // Initialize from localStorage
+      {} as Vip.VipLevelUpReceiveData
+    ); // Keeping type assertion as in original
+    const vipNavBarToggle = ref(localStorage.getItem("vipBar") || ""); // Initialize from localStorage
     const vipCycleawardList = ref<Vip.VipCycleawardListData>(
-      {} as Vip.VipCycleawardListData,
-    ) // Keeping type assertion as in original
+      {} as Vip.VipCycleawardListData
+    ); // Keeping type assertion as in original
     const vipLevelAward = ref<Vip.VipLevelAwardData>(
-      {} as Vip.VipLevelAwardData,
-    ) // Keeping type assertion as in original
+      {} as Vip.VipLevelAwardData
+    ); // Keeping type assertion as in original
     const vipBetawardList = ref<Vip.vipBetawardListData>(
-      {} as Vip.vipBetawardListData,
-    ) // Keeping type assertion as in original
+      {} as Vip.vipBetawardListData
+    ); // Keeping type assertion as in original
 
     // Getters converted to computed properties
-    const getSuccess = computed(() => success.value)
-    const getErrMessage = computed(() => errMessage.value)
-    const getVipInfo = computed(() => vipInfo.value)
-    const getVipLevels = computed(() => vipLevels.value)
-    const getVipTasks = computed(() => vipTasks.value)
-    const getVipRebateHistory = computed(() => vipRebateHistory.value)
-    const getVipLevelRewardHistory = computed(() => vipLevelRewardHistory.value)
-    const getVipTimesHistory = computed(() => vipTimesHistory.value)
-    const getVipSignIn = computed(() => vipSignIn.value)
-    const getLevelUpDialogVisible = computed(() => levelUpDialogVisible.value)
-    const getVipLevelUpList = computed(() => vipLevelUpList.value)
-    const getVipLevelUpReceive = computed(() => vipLevelUpReceive.value)
-    const getVipNavBarToggle = computed(() => vipNavBarToggle.value)
-    const getVipCycleawardList = computed(() => vipCycleawardList.value)
-    const getVipLevelAward = computed(() => vipLevelAward.value)
-    const getVipBetawardList = computed(() => vipBetawardList.value)
+    const getSuccess = computed(() => success.value);
+    const getErrMessage = computed(() => errMessage.value);
+    const getVipInfo = computed(() => vipInfo.value);
+    const getVipLevels = computed(() => vipLevels.value);
+    const getVipTasks = computed(() => vipTasks.value);
+    const getVipRebateHistory = computed(() => vipRebateHistory.value);
+    const getVipLevelRewardHistory = computed(
+      () => vipLevelRewardHistory.value
+    );
+    const getVipTimesHistory = computed(() => vipTimesHistory.value);
+    const getVipSignIn = computed(() => vipSignIn.value);
+    const getLevelUpDialogVisible = computed(() => levelUpDialogVisible.value);
+    const getVipLevelUpList = computed(() => vipLevelUpList.value);
+    const getVipLevelUpReceive = computed(() => vipLevelUpReceive.value);
+    const getVipNavBarToggle = computed(() => vipNavBarToggle.value);
+    const getVipCycleawardList = computed(() => vipCycleawardList.value);
+    const getVipLevelAward = computed(() => vipLevelAward.value);
+    const getVipBetawardList = computed(() => vipBetawardList.value);
 
     // const { t } = useI18n()
 
     // Actions converted to regular functions
     const setSuccess = (isSuccess: boolean) => {
-      success.value = isSuccess
-    }
+      success.value = isSuccess;
+    };
 
     const setErrorMessage = (message: string) => {
-      errMessage.value = message
-    }
+      errMessage.value = message;
+    };
 
     const setVipInfo = (info: Vip.VipInfo) => {
-      vipInfo.value = info
-    }
+      vipInfo.value = info;
+    };
 
     const setVipLevels = (levels: Array<Vip.VipLevel>) => {
-      vipLevels.value = levels
-    }
+      vipLevels.value = levels;
+    };
 
     const setVipTasks = (tasks: Array<Vip.VipTaskItem>) => {
-      vipTasks.value = tasks
-    }
+      vipTasks.value = tasks;
+    };
 
     const setVipRebateHistory = (history: Vip.VipRebateHistoryData) => {
-      vipRebateHistory.value = history
-    }
+      vipRebateHistory.value = history;
+    };
 
     const setVipLevelRewardHistory = (
-      history: Vip.VipLevelRewardHistoryData,
+      history: Vip.VipLevelRewardHistoryData
     ) => {
-      vipLevelRewardHistory.value = history
-    }
+      vipLevelRewardHistory.value = history;
+    };
 
     const setVipTimesHistory = (history: Vip.VipTimesHistoryData) => {
-      vipTimesHistory.value = history
-    }
+      vipTimesHistory.value = history;
+    };
 
     const setVipSignIn = (signInData: Vip.VipSignInData) => {
-      vipSignIn.value = signInData
-    }
+      vipSignIn.value = signInData;
+    };
 
     const setLevelUpDialogVisible = (visible: boolean) => {
-      levelUpDialogVisible.value = visible
-    }
+      levelUpDialogVisible.value = visible;
+    };
 
     const setVipLevelUpList = (list: Vip.VipLevelUpListData) => {
-      vipLevelUpList.value = list
-    }
+      vipLevelUpList.value = list;
+    };
 
     const setVipLevelUpReceive = (receiveData: Vip.VipLevelUpReceiveData) => {
-      vipLevelUpReceive.value = receiveData
-    }
+      vipLevelUpReceive.value = receiveData;
+    };
 
     const setVipNavBarToggle = (toggle: string) => {
-      vipNavBarToggle.value = toggle
-      localStorage.setItem('vipBar', toggle) // Update localStorage
-    }
+      vipNavBarToggle.value = toggle;
+      localStorage.setItem("vipBar", toggle); // Update localStorage
+    };
 
     // Storing periodic rewards  存储周期性奖励
     const setVipCycleawardList = (list: Vip.VipCycleawardListData) => {
-      vipCycleawardList.value = list
-    }
+      vipCycleawardList.value = list;
+    };
 
     // Storage level related rewards  存储等级相关奖励
     const setVipLevelAward = (awardData: Vip.VipLevelAwardData) => {
-      vipLevelAward.value = awardData
-    }
+      vipLevelAward.value = awardData;
+    };
 
     // Storage coding rebate  存储打码返利
     const setVipBetawardList = (list: Vip.vipBetawardListData) => {
-      vipBetawardList.value = list
-    }
+      vipBetawardList.value = list;
+    };
 
     // Reward collection prompt information  奖励领取提示信息
     const alertMessage = (
       successMessage: Vip.SuccessMessageParams,
-      message?: string,
+      message?: string
     ) => {
       // If using Nuxt UI Pro, uncomment and use toast:
       // toast.add({
@@ -156,234 +157,233 @@ export const useVipStore = defineStore(
       //     timeout: 3000,
       // });
       // Otherwise, implement your custom notification logic here
-      const text = message || successMessage.message
-      console.log('Alert Message:', text, 'Type:', successMessage.type) // Placeholder
-    }
+      const text = message || successMessage.message;
+      console.log("Alert Message:", text, "Type:", successMessage.type); // Placeholder
+    };
 
     // Get VIP check-in content
     async function dispatchVipSignIn() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_SIGNIN
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_SIGNIN;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipSignInResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipSignIn(response.data)
+          setSuccess(true);
+          setVipSignIn(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     async function dispatchVipSigninawardReceive() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_SIGNINAWARD_RECEIVE
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_SIGNINAWARD_RECEIVE;
+      const network: Network = Network.getInstance();
 
       const next = (response: any) => {
         // Note: response type is 'any' in original
         if (response.code == 200) {
-          setSuccess(true)
-          dispatchVipSignIn() // Call the action
+          setSuccess(true);
+          dispatchVipSignIn(); // Call the action
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1)
+      };
+      await network.sendMsg(route, {}, next, 1);
     }
 
     // Receive VIP sign-in rewards
     async function dispatchVipSignInReward() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_SIGNIN_REWARDS
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_SIGNIN_REWARDS;
+      const network: Network = Network.getInstance();
 
       const next = (response: any) => {
         // Note: response type is 'any' in original
         if (response.code == 200) {
-          setSuccess(true)
+          setSuccess(true);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1)
+      };
+      await network.sendMsg(route, {}, next, 1);
     }
 
     // user vip information api
     async function dispatchVipInfo() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_INFO
-      const network: Network = Network.getInstance()
-
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_INFO;
+      const network: Network = Network.getInstance();
       const next = (response: Vip.GetVipInfoResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipInfo(response.data)
+          setSuccess(true);
+          setVipInfo(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     // user vip level api
     async function dispatchVipLevels() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_LEVEL
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_LEVEL;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipLevels(response.data)
+          setSuccess(true);
+          setVipLevels(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     // user vip task api
     async function dispatchVipTasks() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_TASKS
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_TASKS;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipTaskResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipTasks(response.data)
+          setSuccess(true);
+          setVipTasks(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     // receive VIP code rebate rewards
     async function dispatchVipRebateAward(data: any) {
       // Keeping 'any' type as in original
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_REBATE_AWARD
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_REBATE_AWARD;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipRebateAwardResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
+          setSuccess(true);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     // get vip coding record
     async function dispatchVipRebateHistory(data: Vip.VipRebateHistoryRequest) {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_REBATE_HISTORY
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_REBATE_HISTORY;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipRebateHistoryResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipRebateHistory(response.data)
+          setSuccess(true);
+          setVipRebateHistory(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     // Obtain VIP level reward record
     async function dispatchVipLevelRewardHistory(
-      data: Vip.VipLevelRewardHistoryRequest,
+      data: Vip.VipLevelRewardHistoryRequest
     ) {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVEL_AWARD_HISTORY
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVEL_AWARD_HISTORY;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelRewardHistoryResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipLevelRewardHistory(response.data)
+          setSuccess(true);
+          setVipLevelRewardHistory(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     // Get VIP weekly and monthly reward records
     async function dispatchVipTimesHistory(data: Vip.VipTimesHistoryRequest) {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_TIMES_HISTORY
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_TIMES_HISTORY;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipTimesHistoryResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipTimesHistory(response.data)
+          setSuccess(true);
+          setVipTimesHistory(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     // Get VIP upgrade reward information
     async function dispatchVipLevelUpList() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVELUP_LIST
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVELUP_LIST;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelUpListResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipLevelUpList(response.data)
+          setSuccess(true);
+          setVipLevelUpList(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     // Receive VIP upgrade rewards
     async function dispatchVipLevelUpReceive() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVELUP_RECEIVE
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVELUP_RECEIVE;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelUpReceiveResponse) => {
         if (response.code == 200) {
-          setSuccess(true)
-          setVipLevelUpReceive(response.data)
+          setSuccess(true);
+          setVipLevelUpReceive(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1)
+      };
+      await network.sendMsg(route, {}, next, 1);
     }
 
     /**
      * Get periodic rewards  获取周期性奖励
      */
     async function dispatchVipCycleawardList() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_CYCLEAWARD_LIST
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_CYCLEAWARD_LIST;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelAwardResponse) => {
         // Note: response type is Vip.GetVipLevelAwardResponse in original, check if correct
         if (response.code == 200) {
-          setSuccess(true)
-          setVipCycleawardList(response.data)
+          setSuccess(true);
+          setVipCycleawardList(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     /**
@@ -392,56 +392,56 @@ export const useVipStore = defineStore(
      * @param data 领取奖励类型 1: 会员日 2: 日奖励 3:周奖励 4: 月奖励
      */
     async function dispatchVipCycleawardReceive(
-      data: Vip.VipCycleawardReceiveRequest,
+      data: Vip.VipCycleawardReceiveRequest
     ) {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_CYCLEAWARD_RECEIVE
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_CYCLEAWARD_RECEIVE;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelAwardResponse) => {
         // Note: response type is Vip.GetVipLevelAwardResponse in original, check if correct
         if (response.code == 200) {
-          setSuccess(true)
+          setSuccess(true);
           alertMessage(
             {
               type: 1,
-              message: '',
+              message: "",
             },
-            'reward.success_text',
-          )
-          dispatchVipCycleawardList() // Call the action
+            "reward.success_text"
+          );
+          dispatchVipCycleawardList(); // Call the action
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
           alertMessage(
             {
               type: 0,
-              message: '',
+              message: "",
             },
-            response.message,
-          )
+            response.message
+          );
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     /**
      * Get level-related rewards  获取等级相关奖励
      */
     async function dispatchVipLevelAward() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVEL_AWARD
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.VIP_LEVEL_AWARD;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelAwardResponse) => {
         // Note: response type is Vip.GetVipLevelAwardResponse in original, check if correct
         if (response.code == 200) {
-          setSuccess(true)
-          setVipLevelAward(response.data)
+          setSuccess(true);
+          setVipLevelAward(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     /**
@@ -450,56 +450,56 @@ export const useVipStore = defineStore(
      * @param data 领取奖励类型 5: 升级奖励 6: 升段奖励
      */
     async function dispatchVipLevelAwardReceive(
-      data: Vip.VipLevelAwardReceiveRequest,
+      data: Vip.VipLevelAwardReceiveRequest
     ) {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_LEVELAWARD_RECEIVE
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_LEVELAWARD_RECEIVE;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelAwardResponse) => {
         // Note: response type is Vip.GetVipLevelAwardResponse in original, check if correct
         if (response.code == 200) {
-          setSuccess(true)
+          setSuccess(true);
           alertMessage(
             {
               type: 1,
-              message: '',
+              message: "",
             },
-            'reward.success_text',
-          )
-          dispatchVipLevelAward() // Call the action
+            "reward.success_text"
+          );
+          dispatchVipLevelAward(); // Call the action
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
           alertMessage(
             {
               type: 0,
-              message: '',
+              message: "",
             },
-            response.message,
-          )
+            response.message
+          );
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     /**
      * Get coding rebates  获取打码返利
      */
     async function dispatchVipBetawardList() {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_BETAWARD_LIST
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_BETAWARD_LIST;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelAwardResponse) => {
         // Note: response type is Vip.GetVipLevelAwardResponse in original, check if correct
         if (response.code == 200) {
-          setSuccess(true)
-          setVipBetawardList(response.data)
+          setSuccess(true);
+          setVipBetawardList(response.data);
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
         }
-      }
-      await network.sendMsg(route, {}, next, 1, 4)
+      };
+      await network.sendMsg(route, {}, next, 1, 4);
     }
 
     /**
@@ -508,36 +508,36 @@ export const useVipStore = defineStore(
      * @param data 领取奖励类型 7: 打码奖励
      */
     async function dispatchVipBetawardReceive(
-      data: Vip.VipBetawardReceiveRequest,
+      data: Vip.VipBetawardReceiveRequest
     ) {
-      setSuccess(false)
-      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_BETAWARD_RECEIVE
-      const network: Network = Network.getInstance()
+      setSuccess(false);
+      const route: string = NETWORK_CONFIG.VIP_INFO.USER_VIP_BETAWARD_RECEIVE;
+      const network: Network = Network.getInstance();
 
       const next = (response: Vip.GetVipLevelAwardResponse) => {
         // Note: response type is Vip.GetVipLevelAwardResponse in original, check if correct
         if (response.code == 200) {
-          setSuccess(true)
+          setSuccess(true);
           alertMessage(
             {
               type: 1,
-              message: '',
+              message: "",
             },
-            'reward.success_text',
-          )
-          dispatchVipBetawardList() // Call the action
+            "reward.success_text"
+          );
+          dispatchVipBetawardList(); // Call the action
         } else {
-          setErrorMessage(handleException(response.code))
+          setErrorMessage(handleException(response.code));
           alertMessage(
             {
               type: 0,
-              message: '',
+              message: "",
             },
-            response.message,
-          )
+            response.message
+          );
         }
-      }
-      await network.sendMsg(route, data, next, 1)
+      };
+      await network.sendMsg(route, data, next, 1);
     }
 
     // Return all state, getters, and actions
@@ -611,9 +611,9 @@ export const useVipStore = defineStore(
       dispatchVipLevelAwardReceive,
       dispatchVipBetawardList,
       dispatchVipBetawardReceive,
-    }
+    };
   },
   {
     persist: true,
-  },
-)
+  }
+);
