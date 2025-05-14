@@ -21,7 +21,7 @@
 
   const spritesheet = props.spritesheet;
   function init() {
-    if (canvas.value !== undefined) {
+    if (canvas.value !== undefined && canvas.value !== null) {
       ctx.value = canvas.value.getContext("2d");
     }
     play(0);

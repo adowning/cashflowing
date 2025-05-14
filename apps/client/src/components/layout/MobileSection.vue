@@ -3,11 +3,20 @@
   import { useUserStore } from "@/stores/user";
   import { useDepositStore } from "@/stores/deposit";
 
-  const { authenticated } = useAuthStore();
-  const { currentUser } = useUserStore();
+  const authStore = useAuthStore();
+  const userStore = useUserStore();
   const depositStore = useDepositStore();
-
-  const isAuthenticated = computed(() => authenticated.loggedIn);
+  const {
+    isAuthenticated, // Computed property from authStore (single source of truth)
+    // isLoading: authLoading, // If you need to show auth-specific loading in App.vue
+    // error: authError, // Auth store errors
+  } = storeToRefs(authStore);
+  const {
+    currentUser, // State from userStore
+    // isLoading: userLoading, // If you need to show user-specific loading in App.vue
+    // error: userError, // User store errors
+  } = storeToRefs(userStore);
+  // const isAuthenticated = computed(() => authenticated.loggedIn);
 </script>
 
 <template>

@@ -6,58 +6,47 @@ import {
   type ApiAuthError,
   type AuthCredentials,
   type SignUpPayload,
-  type User,
-  type Profile,
   NETWORK_CONFIG,
-  AuthenticatedState,
-} from "@cashflow/types"; // Ensure these types are correctly imported from your @cashflow/types package
+  type GetSession, // Assuming this is used for the /auth/session response
+  type ProfileStatsUpdateData, // Assuming this might be returned sometimes
+} from "@cashflow/types"; // Ensure these types are correctly imported
 import { useNotificationStore } from "./notifications";
 import { logToPage } from "@/utils/logger";
-import type * as ApiTypes from "@cashflow/types";
-import { UserData, useUserStore, useUserStoreOutside } from "./user";
-import { ProfileData } from "./profile";
-import { store } from "@/stores";
 import { handleException } from "./exception";
 import { Network } from "@/utils/Network";
+import { useUserStore } from "./user"; // Import user store to trigger user data fetching
 
 export const useAuthStore = defineStore(
   "auth",
   () => {
     // --- State ---
+    // Use sessionState as the single source of truth for the current session data
     const sessionState = ref<ClientSession | null>(null);
-    const success = ref(false);
     const loadingState = ref<boolean>(false);
-    const isAuthenticated = ref<boolean>(false);
-    const authenticated = ref<AuthenticatedState>({ loggedIn: false });
     const errorState = ref<ApiAuthError | null>(null);
+    // Tracks if the initial check (on app load) has completed
     const initialAuthCheckCompleteState = ref<boolean>(false);
-    const token = ref<string | null>(null);
-    const userStore = useUserStoreOutside();
+
     // --- Getters (Computed properties) ---
     const session = computed(() => sessionState.value);
-    // const isAuthenticated = computed(() => !!sessionState.value?.user);
-    // const isAuthenticated = ref<boolean>(false);
-
     const isLoading = computed(() => loadingState.value);
     const error = computed(() => errorState.value);
-    const getToken = computed(() => token.value);
+
+    // Single source of truth for authentication status
+    const isAuthenticated = computed(() => !!sessionState.value?.token);
     const initialAuthCheckComplete = computed(
       () => initialAuthCheckCompleteState.value
     );
-    const getSuccess = computed(() => success.value);
-    const setSuccess = (isSuccess: boolean) => {
-      success.value = isSuccess;
-    };
-    function setAuthenticated(val: boolean) {
-      authenticated.value = { loggedIn: val };
-    }
+
     // --- Actions (Functions) ---
+
+    // Helper to set the session state
     function setSession(newSession: ClientSession | null) {
       sessionState.value = newSession;
-    }
-
-    function setToken(newToken: string | null) {
-      token.value = newToken;
+      // When session changes, clear any lingering auth error
+      if (newSession !== null) {
+        clearAuthError();
+      }
     }
 
     function setLoading(loading: boolean) {
@@ -68,6 +57,8 @@ export const useAuthStore = defineStore(
       const notificationStore = useNotificationStore();
       errorState.value = newError;
       if (newError !== null) {
+        logToPage("error", "Auth Error:", newError.message);
+        // Optionally only show notification for certain errors
         notificationStore.addNotification("error", newError.message);
       }
     }
@@ -80,428 +71,295 @@ export const useAuthStore = defineStore(
       errorState.value = null;
     }
 
-    // async function fetchPublicUserData(
-    //   userId: string
-    // ): Promise<Partial<User> | null> {
-    const fetchPublicUserData = async (userId: string) => {
-      if (!userId) {
-        logToPage("warn", "fetchPublicUserData: No userId provided.");
-        return null;
-      }
-      logToPage("debug", `Workspaceing public user data for ${userId}...`);
-      // Adjust endpoint as per your Hono API structure
-      const route: string = NETWORK_CONFIG.LOGIN.ME;
-      const network: Network = Network.getInstance();
-      // try {
-      // const sessionData = (await fetchApi("/auth/login", {
-      //   method: "POST",
-      //   body: JSON.stringify(credentials),
-      // })) as ClientSession | null;
-      setSuccess(false);
-      const next = (response: ApiTypes.GetSession) => {
-        if (response.code === 200) {
-          console.log(response.token);
-          setSuccess(true);
-          userStore.setUser(response.session as Partial<User>);
-          logToPage("info", `User data fetched and set for ${userId}`);
-          console.log(success.value);
-          return response.session as Partial<User>;
-        } else {
-          setError({
-            message: handleException(response.code),
-            code: response.code,
-          });
-          return null;
-        }
-      };
-      await network.sendMsg(route, undefined, next, 1);
-      return userStore.getCurrentUser;
-      // if (userData) {
-      //   userStore.setUser(userData as Partial<User>); // Update store
-      //   logToPage("info", `User data fetched and set for ${userId}`);
-      // }
-      // return userData as Partial<User> | null;
-    };
+    /**
+     * @description Initializes the authentication state on app startup.
+     * Checks for an existing session/token and fetches user data if found.
+     */
+    async function initializeAuth() {
+      logToPage("info", "Initializing authentication...");
+      setLoading(true);
+      setInitialAuthCheckComplete(false);
+      clearAuthError();
 
-    const fetchUserProfile = async (activeProfileId: string) => {
-      if (!activeProfileId) {
-        logToPage("warn", "fetchUserProfile: No userId provided.");
-        return null;
-      }
-      logToPage("debug", `Workspaceing user profile from`);
-      const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
-      const network: Network = Network.getInstance();
-      // const sessionData = (await fetchApi("/auth/login", {
-      //   method: "POST",
-      //   body: JSON.stringify(credentials),
-      // })) as ClientSession | null;
-      setSuccess(false);
-      const next = (response: ApiTypes.ProfileStatsUpdateData) => {
-        if (response !== undefined) {
-          userStore.setCurrentProfile(response as Partial<Profile>); // Update store
-          logToPage(
-            "info",
-            `User profile fetched and set for ${activeProfileId}`
+      // Assuming the token is persisted (e.g., in local storage or cookies)
+      // Your current implementation seems to rely on sessionState being persisted by Pinia plugin
+      // If using local storage/cookies directly, read it here
+      // const token = readTokenFromStorage(); // Implement this utility if needed
+      const initialSession = sessionState.value; // Check session from persisted state
+
+      if (initialSession?.token) {
+        logToPage(
+          "debug",
+          "Found existing token, attempting to validate session and fetch user data."
+        );
+        // Attempt to fetch/validate the session and get fresh user data
+        try {
+          // Use the Network class to call the session endpoint
+          const network = Network.getInstance();
+          const route: string = NETWORK_CONFIG.LOGIN.ME; // Or your session validation endpoint
+
+          // Assuming the session endpoint returns user/profile data if token is valid
+          const response = await network.sendMsg(
+            route,
+            undefined,
+            (res: GetSession) => res,
+            1
           );
-          setSuccess(true);
-          console.log(success.value);
-          return response as Partial<Profile>;
-        } else {
-          setError({
-            message: handleException(500),
-            code: 500,
-          });
-          return null;
-        }
-      };
-      await network.sendMsg(route, activeProfileId, next, 1);
-      return userStore.getCurrentProfile;
-    };
 
-    // --- WebSocket Auth Event Handlers ---
-    async function handleAuthStateChange(sessionPayload: ClientSession | null) {
-      logToPage(
-        "event",
-        `Handling Auth State Change. New session user: ${sessionPayload?.user?.id || "None"}`
-      );
-      setLoading(true); // Indicate loading while processing state change
-      setSession(sessionPayload);
+          if (response?.code === 200 && response.session) {
+            // Update session state with potentially fresh data from the server
+            setSession(response.session);
+            logToPage("info", "Session validated and state updated.");
 
-      if (sessionPayload?.user) {
-        const userId = sessionPayload.user.id;
-        // It's often good to re-fetch user/profile data to ensure freshness,
-        // even if some data is in sessionPayload.user.
-        const publicUserData = await fetchPublicUserData(userId);
-        if (publicUserData !== null && publicUserData.activeProfileId) {
-          // User store is updated by fetchPublicUserData
-          await fetchUserProfile(publicUserData.activeProfileId); // Profile store updated by fetchUserProfile
-        } else {
-          logToPage(
-            "warn",
-            `User data not found for authenticated user ${userId} after auth state change. Clearing local user/profile.`
-          );
-          userStore.clearUser();
-          userStore.clearProfile();
-          // Optionally, set an error or log out if essential data is missing post-auth
-          // setError({ message: "User data inconsistent after authentication." });
-          // await signOut(); // Drastic measure
+            // *** User data fetching is now handled by userStore subscription ***
+            // The userStore will react to sessionState.value being set and fetch user data
+          } else {
+            // Token was invalid or expired
+            logToPage(
+              "warn",
+              "Existing token invalid or expired. Clearing session."
+            );
+            await signOut(false); // Clear session locally, don't call logout API again
+          }
+        } catch (e: any) {
+          logToPage("error", "Error during initial session validation:", e);
+          // Assume token is invalid on network error during validation
+          await signOut(false); // Clear session locally
+          setError({ message: "Failed to validate session.", code: 500 }); // Or a more specific error
         }
       } else {
-        // No user in session (logged out or invalid session)
+        logToPage(
+          "info",
+          "No existing token found. User is not authenticated."
+        );
+        // Ensure session and user data are cleared if no token was found
+        setSession(null);
+        const userStore = useUserStore(); // Access user store to clear its state
         userStore.clearUser();
         userStore.clearProfile();
-        logToPage("info", "Session cleared, user and profile stores cleared.");
       }
-      setInitialAuthCheckComplete(true); // Mark check complete after processing first significant auth event
+
+      setInitialAuthCheckComplete(true);
       setLoading(false);
+      logToPage("info", "Authentication initialization complete.");
     }
-
-    // async function handleUserUpdate(userPayload: Partial<ClientAuthUser>) {
-    //   logToPage(
-    //     "event",
-    //     "Handling User Update event for user ID:",
-    //     userPayload?.id
-    //   );
-    //   if (
-    //     userPayload &&
-    //     userPayload.id &&
-    //     userStore.currentUser?.id === userPayload.id
-    //   ) {
-    //     setLoading(true);
-    //     // Re-fetch for full consistency is safer than merging partials
-    //     const fullUserData = await fetchPublicUserData(userPayload.id);
-    //     if (fullUserData) {
-    //       // userStore.setUser(fullUserData); // fetchPublicUserData already does this
-    //       // If ClientAuthUser structure (in session) needs updating based on UserData
-    //       if (
-    //         session.value?.user &&
-    //         session.value.user.id === fullUserData.id
-    //       ) {
-    //         setSession(
-    //           session,
-    //           // user: {
-    //           //   // Map fields from UserData to ClientAuthUser as needed
-    //           //   ...session.value.user, // Keep existing ClientAuthUser fields
-    //           //   id: fullUserData.id, // from UserData
-    //           //   email: fullUserData.email as string, // from UserData
-    //           //   username: fullUserData.username, // from UserData
-    //           //   avatarUrl: fullUserData.avatar, // from UserData
-    //           //   // ... other fields from UserData that map to ClientAuthUser
-    //           // },
-    //         // }
-    //       );
-    //       }
-    //     }
-    //     setLoading(false);
-    //   }
-    // }
-
-    // async function handleProfileUpdate(profilePayload: Partial<ProfileData>) {
-    //   logToPage(
-    //     "event",
-    //     "Handling Profile Update event for profile ID:",
-    //     profilePayload?.id
-    //   );
-    //   if (
-    //     profilePayload &&
-    //     profilePayload.id &&
-    //     userStore.currentProfile?.id === profilePayload.id &&
-    //     userStore.currentUser?.id
-    //   ) {
-    //     setLoading(true);
-    //     // Re-fetch for full consistency
-    //     await fetchUserProfile(profilePayload.id);
-    //     // userStore.setProfile(fullProfileData); // fetchUserProfile already does this
-    //     setLoading(false);
-    //   }
-    // }
-
-    // // --- Auth Actions ---
-    // async function commonPostAuthActions(
-    //   sessionData: ClientSession | null,
-    //   isInitialAuth: boolean = false
-    // ) {
-    //   const oldToken = session.value?.token;
-    //   setSession(sessionData); // Update store immediately
-    //   const newToken = sessionData?.token;
-
-    //   // Re-establish WebSocket only if token status actually changes or if it's an initial auth process
-    //   // if (newToken !== oldToken || isInitialAuth || !isWebSocketConnected.value) {
-    //   //   logToPage(
-    //   //     "debug",
-    //   //     `Token status changed or initial auth. Old: ${oldToken ? "yes" : "no"}, New: ${newToken ? "yes" : "no"}. Re-establishing WS.`
-    //   //   );
-    //   //   await establishWebSocketConnection();
-    //   // }
-
-    //   // After setting session and potentially reconnecting WS, process the state
-    //   // Server should push AUTH_STATE_CHANGE via WebSocket after successful login/logout/session update.
-    //   // If immediate data update is critical and server push might be delayed, can call handleAuthStateChange.
-    //   // However, relying on server push promotes a single source of truth for state updates.
-    //   if (isInitialAuth && sessionData?.user) {
-    //     // For initial load with a valid session
-    //     await handleAuthStateChange(sessionData);
-    //   } else if (!sessionData?.user && (oldToken || isInitialAuth)) {
-    //     // For logout or initial load with no session
-    //     await handleAuthStateChange(null);
-    //   }
-    //   // For login/signup, handleAuthStateChange will be triggered by the server's WebSocket push.
-    // }
 
     async function signInWithPassword(credentials: AuthCredentials) {
       logToPage("info", `Attempting sign in for ${credentials.email}...`);
-      const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
-      const network: Network = Network.getInstance();
+      setLoading(true);
+      clearAuthError();
       try {
-        // const sessionData = (await fetchApi("/auth/login", {
-        //   method: "POST",
-        //   body: JSON.stringify(credentials),
-        // })) as ClientSession | null;
-        setSuccess(false);
-        const next = (response: ClientSession) => {
-          if (response.code === 200) {
-            console.log(response.token);
-            setToken(response.token);
-            setSuccess(true);
-            console.log(success.value);
-            return {
-              user: response?.user || null,
-              session: response,
-              error: null,
-            };
-          } else {
-            setError({
-              message: handleException(response.code),
-              code: response.code,
-            });
-            return success.value;
-          }
-        };
-        await network.sendMsg(route, credentials, next, 1);
-        // await commonPostAuthActions(sessionData);
+        const route: string = NETWORK_CONFIG.LOGIN.LOGIN;
+        const network: Network = Network.getInstance();
+
+        const response = await network.sendMsg(
+          route,
+          credentials,
+          (res: ClientSession) => res,
+          1
+        );
+
+        if (response?.code === 200 && response.session) {
+          logToPage("info", "Sign in successful.");
+          setSession(response.session);
+          // The userStore subscription will automatically fetch user data now
+          return { success: true, error: null };
+        } else {
+          const errorMessage = handleException(response?.code || 500);
+          setError({
+            message: errorMessage,
+            code: response?.code || 500,
+          });
+          setSession(null); // Ensure session is null on failure
+          logToPage("error", "Sign in failed:", errorMessage);
+          return { success: false, error: errorState.value };
+        }
       } catch (e: any) {
-        await commonPostAuthActions(null); // Ensure WS disconnects or connects without token
-        return { user: null, session: null, error: e as ApiAuthError };
+        logToPage("error", "Sign in network error:", e);
+        setError({ message: "Network error during sign in.", code: 500 }); // Or refine error handling
+        setSession(null); // Ensure session is null on network error
+        return { success: false, error: errorState.value };
       } finally {
-        setInitialAuthCheckComplete(true);
+        setLoading(false);
       }
     }
 
-    async function signUpNewUser(credentials: SignUpPayload) {
-      logToPage("info", `Attempting sign up for ${credentials.email}...`);
+    async function signUpNewUser(payload: SignUpPayload) {
+      logToPage("info", `Attempting sign up for ${payload.email}...`);
+      setLoading(true);
+      clearAuthError();
       try {
-        // Assuming your /auth/register endpoint creates user, profile, and returns a session
-        // const sessionData = (await fetchApi("/auth/register", {
-        //   method: "POST",
-        //   body: JSON.stringify(payload),
-        // })) as ClientSession | null;
         const route: string = NETWORK_CONFIG.LOGIN.REGISTER;
         const network: Network = Network.getInstance();
-        setSuccess(false);
-        const next = (response: ClientSession) => {
-          if (response.code !== 200) {
-            console.log(response.token);
-            setToken(response.token);
-            setSuccess(true);
-            console.log(success.value);
-            return {
-              user: response?.user || null,
-              session: response,
-              error: null,
-            };
-          } else {
-            setError({
-              message: handleException(response.code),
-              code: response.code,
-            });
-            return success.value;
-          }
-        };
-        await network.sendMsg(route, credentials, next, 1);
+
+        // Assuming register endpoint also logs in the user and returns a session
+        const response = await network.sendMsg(
+          route,
+          payload,
+          (res: ClientSession) => res,
+          1
+        );
+
+        if (response?.code === 200 && response.session) {
+          logToPage("info", "Sign up successful and user logged in.");
+          setSession(response.session);
+          // The userStore subscription will automatically fetch user data now
+          return { success: true, error: null };
+        } else {
+          const errorMessage = handleException(response?.code || 500);
+          setError({
+            message: errorMessage,
+            code: response?.code || 500,
+          });
+          setSession(null); // Ensure session is null on failure
+          logToPage("error", "Sign up failed:", errorMessage);
+          return { success: false, error: errorState.value };
+        }
       } catch (e: any) {
-        await commonPostAuthActions(null);
-        return { user: null, session: null, error: e as ApiAuthError };
+        logToPage("error", "Sign up network error:", e);
+        setError({ message: "Network error during sign up.", code: 500 }); // Or refine error handling
+        setSession(null); // Ensure session is null on network error
+        return { success: false, error: errorState.value };
+      } finally {
+        setLoading(false);
       }
     }
 
     async function signInWithGoogleIdToken(idToken: string) {
-      const userStore = useUserStore();
-      logToPage("info", "Attempting Google Sign In... ");
+      logToPage("info", "Attempting Google Sign In...");
+      setLoading(true);
+      clearAuthError();
       try {
-        const route: string = "/auth/google";
+        const route: string = "/auth/google"; // Adjust if your Google auth endpoint is different
         const network: Network = Network.getInstance();
-        setSuccess(false);
-        const next = async (response: ClientSession) => {
-          // console.log("next ", response);
-          if (response.code === 200) {
-            await userStore.dispatchUpdateCurrentUser();
-            setToken(response.token);
-            setSession(response);
-            setAuthenticated(true);
-            isAuthenticated.value = true;
-            console.log(authenticated.value);
-            setSuccess(true);
 
-            return {
-              user: response?.user || null,
-              session: response,
-              error: null,
-            };
-          } else {
-            setError({
-              message: handleException(response.code),
-              code: response.code,
-            });
-            return success.value;
-          }
-        };
-        await network.sendMsg(route, { token: idToken }, next, 1);
-        return session;
-      } catch (e: any) {
-        await commonPostAuthActions(null);
-        return { user: null, session: null, error: e as ApiAuthError };
-      } finally {
-        setInitialAuthCheckComplete(true);
-      }
-    }
-
-    async function signOut() {
-      logToPage("info", "Attempting sign out...");
-      const currentToken = session.value?.token;
-      try {
-        // Pass token if your logout endpoint requires it for invalidation
-        // await fetchApi("/auth/logout", { method: "POST" });
-        const route: string = NETWORK_CONFIG.LOGIN.LOGOUT;
-        const network: Network = Network.getInstance();
-        setSuccess(false);
-        const next = (response: ClientSession) => {
-          if (response.code !== 200) {
-            console.log(response.token);
-            setToken(response.token);
-            setSuccess(true);
-            console.log(success.value);
-            return {
-              user: response?.user || null,
-              session: response,
-              error: null,
-            };
-          } else {
-            setError({
-              message: handleException(response.code),
-              code: response.code,
-            });
-            return success.value;
-          }
-        };
-        await network.sendMsg(route, undefined, next, 1);
-      } catch (e: any) {
-        logToPage(
-          "error",
-          "Sign out API call failed, but clearing local session anyway.",
-          e
+        const response = await network.sendMsg(
+          route,
+          { token: idToken },
+          (res: ClientSession) => res,
+          1
         );
-        // Still proceed to clear local state and update WS
+
+        if (response?.code === 200 && response.session) {
+          logToPage("info", "Google Sign In successful.");
+          setSession(response.session);
+          // The userStore subscription will automatically fetch user data now
+          return { success: true, error: null };
+        } else {
+          const errorMessage = handleException(response?.code || 500);
+          setError({
+            message: errorMessage,
+            code: response?.code || 500,
+          });
+          setSession(null); // Ensure session is null on failure
+          logToPage("error", "Google Sign In failed:", errorMessage);
+          return { success: false, error: errorState.value };
+        }
+      } catch (e: any) {
+        logToPage("error", "Google Sign In network error:", e);
+        setError({
+          message: "Network error during Google Sign In.",
+          code: 500,
+        }); // Or refine error handling
+        setSession(null); // Ensure session is null on network error
+        return { success: false, error: errorState.value };
       } finally {
-        await commonPostAuthActions(null); // Crucial: clear session, this triggers WS re-evaluation
-        setInitialAuthCheckComplete(true);
+        setLoading(false);
+        // Note: initialAuthCheckComplete is set in initializeAuth on app load,
+        // Login/Signup success doesn't reset this flag.
       }
-      return { error: error }; // Return any error that might have been set by fetchApi
-    }
-    function logout() {
-      sessionState.value = null;
-      errorState.value = null;
-      // It's good practice to also reset related user/profile states here
-      // import { useUserStore } from './user'; // Assuming you have these
-      // import { useProfileStore } from './profile';
-      // const userStore = useUserStore();
-      // userStore.clearUser(); // Example action
-      // const profileStore = useProfileStore();
-      // userStore.clearProfile(); // Example action
     }
 
+    /**
+     * @description Signs out the user. Optionally calls the logout API.
+     * @param callApi - Whether to call the server's logout endpoint. Defaults to true.
+     */
+    async function signOut(callApi: boolean = true) {
+      logToPage("info", "Attempting sign out...");
+      setLoading(true); // Maybe a separate logout loading state is useful?
+      clearAuthError(); // Clear any previous errors on sign out attempt
+
+      if (callApi) {
+        try {
+          const route: string = NETWORK_CONFIG.LOGIN.LOGOUT;
+          const network: Network = Network.getInstance();
+          // Assuming logout is a POST request, potentially with token in headers (handled by Network)
+          const response = await network.sendMsg(
+            route,
+            undefined,
+            (res: any) => res,
+            1
+          );
+
+          if (response?.code === 200) {
+            logToPage("info", "Server logout successful.");
+          } else {
+            // Log server-side logout error, but proceed with client-side clear
+            logToPage("warn", "Server logout failed:", response?.code);
+            setError({
+              message: handleException(response?.code || 500),
+              code: response?.code || 500,
+            });
+          }
+        } catch (e: any) {
+          logToPage("error", "Sign out network error:", e);
+          setError({ message: "Network error during sign out.", code: 500 }); // Or refine
+        }
+      }
+
+      // Always clear client-side state regardless of API call success/failure
+      setSession(null); // This will trigger userStore to clear its state via subscription
+      // Clear token from storage if not handled by setSession/persistence plugin
+      // removeTokenFromStorage(); // Implement this utility if needed
+
+      setLoading(false);
+      logToPage("info", "Client-side sign out complete.");
+
+      // Redirecting after logout is handled by App.vue watcher or navigation guard
+    }
+
+    // Return state, getters, and actions
     return {
-      // State (exposed as refs)
+      // State (exposed as refs for use with storeToRefs)
       sessionState,
-      token,
       loadingState,
       errorState,
       initialAuthCheckCompleteState,
-      signInWithGoogleIdToken,
-      // Getters
-      session,
-      getToken,
-      authenticated,
+
+      // Getters (computed properties)
+      session, // Provides the full session object reactively
       isLoading,
       error,
-      isAuthenticated,
+      isAuthenticated, // Primary auth status indicator
+      initialAuthCheckComplete, // Primary initial check indicator
+
       // Actions
-      setToken,
+      initializeAuth, // New action for app bootstrap
       signInWithPassword,
-      setSession,
-      setLoading,
-      setError,
-      setInitialAuthCheckComplete,
+      signUpNewUser,
+      signInWithGoogleIdToken,
+      signOut,
       clearAuthError,
 
-      logout,
-      signOut,
-      signUpNewUser,
-      setAuthenticated,
+      // Internal setters (only expose if strictly necessary for external use,
+      // prefer actions for state changes)
+      // setSession, // Keep private, managed by actions
+      // setLoading, // Keep private, managed by actions
+      // setError, // Keep private, managed by actions
+      setInitialAuthCheckComplete, // Might be needed if another part of the app confirms initialization externally? Review usage.
     };
   },
   {
-    // Configuration for pinia-plugin-persistedstate (if you use it)
-    persist: true,
-    // Persist the entire state by default.
-    // You can customize which parts of the state to persist:
-    // paths: ['sessionState', 'initialAuthCheckCompleteState'],
-    // storage: localStorage, // or sessionStorage
+    // Pinia persistence configuration (if used)
+    persist: {
+      paths: ["sessionState"], // Only persist the session data
+      storage: localStorage, // or sessionStorage, choose based on requirements
+    },
   }
 );
-/**
- * @description In SPA applications, allows the store to be used before the Pinia instance becomes active.
- * @descriptionn SSR applications, allows the store to be used outside of a component'ssetup()context.
- */
-export function useAuthStoreOutside() {
-  return useAuthStore(store);
-}
+
+// Removed useAuthStoreOutside as it encourages bypassing Pinia's provide/inject,
+// which is generally not needed in typical Vue 3 + Pinia applications.
+// If you strictly need to access the store outside setup(), ensure Pinia is installed
+// and imported correctly before use. If using in a router guard or similar,
+// you can import and use it directly after Pinia initialization in main.ts.
